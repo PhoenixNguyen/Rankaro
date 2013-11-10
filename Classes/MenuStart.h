@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "Config.h"
+#include "CheckinLayer.h"
 
 class MenuStart : public cocos2d::MenuItem
 {
@@ -23,6 +24,7 @@ public:
   virtual bool init(cocos2d::Object* pTarget);
 
   void startGame(Object* pSender);
+
 };
 
 #endif

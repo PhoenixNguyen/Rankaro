@@ -44,12 +44,8 @@ bool MapScene::init()
   mMapLayer = MapLayer::create(this);
   addChild(mMapLayer, 1);
 
-  /*mMenuStart = MenuStart::create(this);
-  mMenuStart->setPosition(100, 100);
+  
 
-  Menu* pMenu = Menu::create(mMenuStart, NULL);
-  pMenu->setPosition(300, 100);
-  addChild(pMenu, 2);*/
 
   return true;
 }

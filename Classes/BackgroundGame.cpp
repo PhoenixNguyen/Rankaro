@@ -19,10 +19,10 @@ BackgroundGame::~BackgroundGame(void)
 {
 }
 
-BackgroundGame* BackgroundGame::create(MapLayer* pMapLayer)
+BackgroundGame* BackgroundGame::create(Layer* pLayer)
 {
   BackgroundGame* pBackgroundGame = new BackgroundGame();
-  if(pBackgroundGame && pBackgroundGame->init(pMapLayer))
+  if(pBackgroundGame && pBackgroundGame->init(pLayer))
   {
     pBackgroundGame->autorelease();
     return pBackgroundGame;
@@ -34,7 +34,7 @@ BackgroundGame* BackgroundGame::create(MapLayer* pMapLayer)
     return NULL;
   }
 }
-bool BackgroundGame::init(MapLayer* pMapLayer)
+bool BackgroundGame::init(Layer* pLayer)
 {
   if(!CCSprite::initWithFile("background.jpg"))
   {

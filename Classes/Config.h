@@ -12,6 +12,8 @@
 #define WIDTH 800
 #define HEIGHT 480
 
+
+
 class Config
 {
 public:

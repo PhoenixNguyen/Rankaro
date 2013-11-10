@@ -1,0 +1,83 @@
+//============================================================================
+// Name        : CheckinLayer.cpp
+// Author      : HP
+// Version     :
+// Copyright   : Your copyright notice
+// Description : CheckinLayer in cocos2dx C++, Ansi-style
+//============================================================================
+
+
+#include "CheckinLayer.h"
+
+USING_NS_CC;
+USING_NS_CC_EXT;
+
+CheckinLayer::CheckinLayer(void)
+{
+}
+
+
+CheckinLayer::~CheckinLayer(void)
+{
+}
+
+Scene* CheckinLayer::scene()
+{
+  Scene* scene = Scene::create();
+  CheckinLayer* layer = CheckinLayer::create();
+
+  scene->addChild(layer);
+  return scene;
+}
+
+CheckinLayer* CheckinLayer::create()
+{
+  CheckinLayer* layer = new CheckinLayer();
+  if( layer && layer->init())
+  {
+    layer->autorelease();
+    return layer;
+  }
+  else
+  {
+    CC_SAFE_DELETE(layer);
+    return NULL;
+  }
+}
+
+bool CheckinLayer::init()
+{
+  if(!Layer::create())
+    return false;
+
+  addChild(BackgroundGame::create(this), 1);
+
+  mEditBox = EditBox::create(Size(300, 50), Scale9Sprite::create("input/Input.png"));
+  mEditBox->setPosition(Point(WIDTH/2, HEIGHT/3));
+  mEditBox->setFontColor(ccRED);
+
+  mEditBox->setPlaceHolder("Your name ...");
+  mEditBox->setMaxLength(20);
+  //mEditBox->setReturnType(1);
+  //mEditBox->setDelegate(this);
+  addChild(mEditBox, 2);
+
+  MenuItem* send = MenuItemImage::create("input/send.png",
+                                         "input/sent.png",
+                                         this,
+                                         menu_selector(CheckinLayer::sendName));
+  send->setPosition(WIDTH/2, HEIGHT/4 - 30);
+
+  Menu* menu = Menu::create(send, NULL);
+  menu->setPosition(CCPointZero);
+  addChild(menu, 2);
+  
+  return true;
+
+}
+
+void CheckinLayer::sendName(Object* pSender)
+{
+  const char* name = mEditBox->getText();
+  CCLog("%s", name);
+}

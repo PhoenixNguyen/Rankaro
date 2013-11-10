@@ -46,5 +46,6 @@ bool MapLayer::init(MapScene* pMapScene)
   addChild(BackgroundGame::create(this), 1);
 
   addChild(MenuStart::create(this), 2);
+
   return true;
 }

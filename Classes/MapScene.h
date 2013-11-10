@@ -12,12 +12,12 @@
 #include "cocos2d.h"
 #include "MapLayer.h"
 #include "MenuStart.h"
+#include "CheckinLayer.h"
 
 class MapLayer;
 class MapScene : public cocos2d::Scene
 {
   MapLayer* mMapLayer;
-  MenuStart* mMenuStart;
 
 public:
   MapScene(void);

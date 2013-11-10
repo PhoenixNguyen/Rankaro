@@ -87,5 +87,13 @@ bool MenuStart::init(Object* pTarget)
 
 void MenuStart::startGame(Object* pSender)
 {
+  //Replace Scene to input name layer
+  
+    CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
+      0.5, CheckinLayer::scene()
+    );
+    
+    CCDirector::sharedDirector()->replaceScene(transition);
   
 }
+
