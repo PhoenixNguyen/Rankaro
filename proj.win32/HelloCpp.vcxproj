@@ -136,10 +136,12 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\BackgroundGame.cpp" />
     <ClCompile Include="..\Classes\CheckinLayer.cpp" />
     <ClCompile Include="..\Classes\Config.cpp" />
+    <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\MapLayer.cpp" />
     <ClCompile Include="..\Classes\MapScene.cpp" />
     <ClCompile Include="..\Classes\MenuStart.cpp" />
+    <ClCompile Include="..\Classes\RoomLayer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,10 +149,12 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\BackgroundGame.h" />
     <ClInclude Include="..\Classes\CheckinLayer.h" />
     <ClInclude Include="..\Classes\Config.h" />
+    <ClInclude Include="..\Classes\GameLayer.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\MapLayer.h" />
     <ClInclude Include="..\Classes\MapScene.h" />
     <ClInclude Include="..\Classes\MenuStart.h" />
+    <ClInclude Include="..\Classes\RoomLayer.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

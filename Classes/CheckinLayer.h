@@ -12,12 +12,13 @@
 #include "cocos2d.h"
 #include "BackgroundGame.h"
 #include "GUI\CCEditBox\CCEditBox.h"
-
+#include "RoomLayer.h"
 #include "Config.h"
 
 class CheckinLayer : public cocos2d::Layer
 {
   cocos2d::extension::EditBox* mEditBox;
+  cocos2d::MenuItem* mSend;
 public:
   CheckinLayer(void);
   ~CheckinLayer(void);

@@ -62,13 +62,14 @@ bool CheckinLayer::init()
   //mEditBox->setDelegate(this);
   addChild(mEditBox, 2);
 
-  MenuItem* send = MenuItemImage::create("input/send.png",
+  mSend = MenuItemImage::create("input/send.png",
+                                         "input/sent.png",
                                          "input/sent.png",
                                          this,
                                          menu_selector(CheckinLayer::sendName));
-  send->setPosition(WIDTH/2, HEIGHT/4 - 30);
+  mSend->setPosition(WIDTH/2, HEIGHT/4 - 30);
 
-  Menu* menu = Menu::create(send, NULL);
+  Menu* menu = Menu::create(mSend, NULL);
   menu->setPosition(CCPointZero);
   addChild(menu, 2);
   
@@ -78,6 +79,14 @@ bool CheckinLayer::init()
 
 void CheckinLayer::sendName(Object* pSender)
 {
+  mSend->setEnabled(false);
   const char* name = mEditBox->getText();
   CCLog("%s", name);
+
+  //Replace Scene
+  CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
+      1.5, RoomLayer::scene()
+    );
+    
+    CCDirector::sharedDirector()->replaceScene(transition);
 }
