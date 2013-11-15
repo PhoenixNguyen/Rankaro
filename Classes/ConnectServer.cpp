@@ -1,4 +1,4 @@
-//
+﻿//
 //  SocketIOTest.cpp
 //  TestCpp
 //
@@ -93,22 +93,38 @@ void ConnectionLayer::sendPosition(cocos2d::Object *sender)
 void ConnectionLayer::receiverUsername(SIOClient *client, const std::string& data) {
 
 	log("ALL USERNAME CONNECTED: %s", data.c_str());
+  //Init lấy các user đăng ký trước nên phải khởi tạo đầu tiên đặt ở RoomLayer class!
+  if(!data.empty())
+  {
+    //std::map<std::string, std::string> username;
+    exportListData(data, mUsername);
 
+    //for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
+	   //{
+	   //    //cout << (*ii).first << ": " << (*ii).second << endl;
+		  // log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+    //   RoomLayer::setLastUsername((*ii).second.c_str());
+	   //}
+    //CCLog("Name: %s",(*username.begin()).second.c_str());
+    
+  }
 
 }
 
 void ConnectionLayer::lastUsername(SIOClient *client, const std::string& data) {
 
-	log("LAST USERNAME CONNECTED: %s", data.c_str());
+	//log("LAST USERNAME CONNECTED: %s", data.c_str());
   if(!data.empty())
-    RoomLayer::setLastUsername(data);
-  
-  
-  setLastUsername(data);
-	std::map<std::string, std::string> username;
+  {
+    std::map<std::string, std::string> username;
+    exportLastData(data, username);
 
-	exportList("", username);
-	exportLast("", username);
+    //CCLog("Name: %s",(*username.begin()).second.c_str());
+    RoomLayer::setLastUsername((*username.begin()).second.c_str());
+  }
+  
+	//exportList("", username);
+	//exportLast("", username);
 	
 }
 
@@ -243,16 +259,83 @@ void runSocketIOTest()
 *
 *Return list
 **/
-void ConnectionLayer::exportList(std::string pData, std::map<std::string, std::string>& pList)
+//void ConnectionLayer::exportList(std::string pData, std::map<std::string, std::string>& pList)
+//{
+//	std::map<std::string, std::string> username;
+//	Document doc;
+//	pData = " {\"name\":\"init\",\"args\":[[{\"name\":\"Duy Phuong\",\"id\":\"jDG33J_vilx5RHWvkLan\"},{\"name\":\"Hoang Phuong\",\"id\":\"TUd5gXsInDnxt_COkLao\"},{\"name\":\"Duy Phuong\",\"id\":\"_DYMTQjePZsAImTRkLap\"}]]} " ;
+//	std::size_t n = std::count(pData.begin(), pData.end(), ':');
+//	log("So lan lap nam la: %d", n/2 - 1);
+//	
+//	//std::count_if (s.begin(), s.end(), _1 == '_') 
+//		//doc.Parse<0>(data.c_str()); //
+//	doc.Parse<0>(pData.c_str() );
+//	
+//	SizeType j = 0;
+//	for (SizeType i = 0; i < (n/2 - 1); i++){
+//		//Gia tri 0 cua mang
+//		Value& name = doc["args"][j][i]["name"];
+//		log("NAME %d: %s", i + 1, name.GetString() );
+//		Value& id = doc["args"][j][i]["id"];
+//		log("ID %d: %s", i + 1, id.GetString() );
+//
+//		username.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
+//		
+//	}
+//
+//	for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
+//	   {
+//	       //cout << (*ii).first << ": " << (*ii).second << endl;
+//		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+//	   }
+//}
+
+//void ConnectionLayer::exportLast(std::string pData, std::map<std::string, std::string>& pList)
+//{
+//	std::map<std::string, std::string> username;
+//	Document doc;
+//	pData = " {\"name\":\"username\",\"args\":[{\"name\":\"Duy Phuong\",\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
+//	//std::size_t n = std::count(pData.begin(), pData.end(), ':');
+//	//log("So lan lap nam la: %d", n/2 - 1);
+//	
+//	//std::count_if (s.begin(), s.end(), _1 == '_') 
+//		//doc.Parse<0>(data.c_str()); //
+//	doc.Parse<0>(pData.c_str() );
+//	
+//	SizeType j = 0;
+//	//for (SizeType i = 0; i < (n/2 - 1); i++){
+//		//Gia tri 0 cua mang
+//		Value& name = doc["args"][j]["name"];
+//		log("LAST THE NAME %s", name.GetString() );
+//		Value& id = doc["args"][j]["id"];
+//		log("LAST THE ID %s", id.GetString() );
+//
+//		username.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
+//		
+//	//}
+//
+//	for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
+//	   {
+//	       //cout << (*ii).first << ": " << (*ii).second << endl;
+//		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+//	   }
+//}
+
+
+/**
+*
+*
+*Return list
+**/
+
+void ConnectionLayer::exportListData(std::string pData, std::map<std::string, std::string>& pList)
 {
-	std::map<std::string, std::string> username;
+	//std::map<std::string, std::string> username;
 	Document doc;
-	pData = " {\"name\":\"init\",\"args\":[[{\"name\":\"Duy Phuong\",\"id\":\"jDG33J_vilx5RHWvkLan\"},{\"name\":\"Hoang Phuong\",\"id\":\"TUd5gXsInDnxt_COkLao\"},{\"name\":\"Duy Phuong\",\"id\":\"_DYMTQjePZsAImTRkLap\"}]]} " ;
+	//pData = " {\"name\":\"init\",\"args\":[[{\"name\":\"Duy Phuong\",\"id\":\"jDG33J_vilx5RHWvkLan\"},{\"name\":\"Hoang Phuong\",\"id\":\"TUd5gXsInDnxt_COkLao\"},{\"name\":\"Duy Phuong\",\"id\":\"_DYMTQjePZsAImTRkLap\"}]]} " ;
 	std::size_t n = std::count(pData.begin(), pData.end(), ':');
-	log("So lan lap nam la: %d", n/2 - 1);
+	log("So lan lap name la: %d", n/2 - 1);
 	
-	//std::count_if (s.begin(), s.end(), _1 == '_') 
-		//doc.Parse<0>(data.c_str()); //
 	doc.Parse<0>(pData.c_str() );
 	
 	SizeType j = 0;
@@ -263,32 +346,23 @@ void ConnectionLayer::exportList(std::string pData, std::map<std::string, std::s
 		Value& id = doc["args"][j][i]["id"];
 		log("ID %d: %s", i + 1, id.GetString() );
 
-		username.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
+		pList.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
 		
 	}
 
-	for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
-	   {
-	       //cout << (*ii).first << ": " << (*ii).second << endl;
-		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
-	   }
+	//for( std::map<std::string, std::string>::iterator ii=pList.begin(); ii!=pList.end(); ++ii)
+	//   {
+	//       //cout << (*ii).first << ": " << (*ii).second << endl;
+	//	   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+	//   }
 }
 
-/**
-*
-*
-*Return list
-**/
-void ConnectionLayer::exportLast(std::string pData, std::map<std::string, std::string>& pList)
+
+void ConnectionLayer::exportLastData(std::string pData, std::map<std::string, std::string>& pList)
 {
-	std::map<std::string, std::string> username;
 	Document doc;
-	pData = " {\"name\":\"username\",\"args\":[{\"name\":\"Duy Phuong\",\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
-	//std::size_t n = std::count(pData.begin(), pData.end(), ':');
-	//log("So lan lap nam la: %d", n/2 - 1);
+	//pData = " {\"name\":\"username\",\"args\":[{\"name\":\"Duy Phuong\",\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
 	
-	//std::count_if (s.begin(), s.end(), _1 == '_') 
-		//doc.Parse<0>(data.c_str()); //
 	doc.Parse<0>(pData.c_str() );
 	
 	SizeType j = 0;
@@ -299,13 +373,13 @@ void ConnectionLayer::exportLast(std::string pData, std::map<std::string, std::s
 		Value& id = doc["args"][j]["id"];
 		log("LAST THE ID %s", id.GetString() );
 
-		username.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
-		
+		pList.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
+    
 	//}
 
-	for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
-	   {
-	       //cout << (*ii).first << ": " << (*ii).second << endl;
-		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
-	   }
+	//for( std::map<std::string, std::string>::iterator ii=pList.begin(); ii!=pList.end(); ++ii)
+	//   {
+	//       //cout << (*ii).first << ": " << (*ii).second << endl;
+	//	   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+	//   }
 }

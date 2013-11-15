@@ -17,14 +17,16 @@
 
 class RoomLayer : public cocos2d::Layer
 {
+  int mUser;
   static cocos2d::MenuItem* mMenuPlayer1;
   cocos2d::MenuItem* mMenuPlayer2;
   cocos2d::MenuItem* mMenuPlayer3;
   cocos2d::MenuItem* mMenuPlayer4;
 
   static cocos2d::Menu* mMenu;
-  static RoomLayer* mLayer;
+  
 public:
+  static RoomLayer* mLayer;
   RoomLayer(void);
   ~RoomLayer(void);
 
@@ -35,6 +37,8 @@ public:
   void sendState(cocos2d::Object* pSender);
 
   static void setLastUsername(std::string pName);
+  void setFirstUsername();
+
   void addToMenu(std::string pName);
 };
 

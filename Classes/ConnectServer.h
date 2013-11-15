@@ -19,7 +19,9 @@ class ConnectionLayer
 {
 
   CC_SYNTHESIZE(std::string, mLastUsername, LastUsername);
+  
 public:
+  std::map<std::string, std::string> mUsername;
   //static std::string mLastUsername;
 	ConnectionLayer(void);
 	virtual ~ConnectionLayer(void);
@@ -69,10 +71,12 @@ public:
 	void endGame(cocos2d::extension::SIOClient *client, const std::string& data);
 
 	//return List data
-	void exportList(std::string pData, std::map<std::string, std::string>& pList);
+  void exportListData(std::string pData, std::map<std::string, std::string>& pList);
+	//void exportList(std::string pData, std::map<std::string, std::string>& pList);
 
 	//return last data
-	void exportLast(std::string pData, std::map<std::string, std::string>& pList);
+  void exportLastData(std::string pData, std::map<std::string, std::string>& pList);
+	//void exportLast(std::string pData, std::map<std::string, std::string>& pList);
 
 	CC_SYNTHESIZE(int, mNumber, Number);
 };

@@ -53,18 +53,11 @@ bool RoomLayer::init()
   if(!Layer::create())
     return false;
   
+  mUser = 0;
   addChild(BackgroundGame::create(this), 1);
 
   ////////////////////////////////////////////////////////////////////
   //Get User just connected
-  std::string data;
-  //do{
-    //Sleep(5000);
-    //MapScene::mConnect->lastUsername(MapScene::mConnect->mClient, data);
-  //}while (data.c_str());
-  
-
-  
 
  // ////////////////////////////////////////////////////////////////////
  // //Player 2
@@ -130,28 +123,46 @@ bool RoomLayer::init()
   mMenu->setPosition(CCPointZero);
   mLayer->addChild(mMenu, 2);
  
+  setFirstUsername();
   return true;
 }
 
 void RoomLayer::setLastUsername(std::string pName)
 {
-  log("GET LAST USERNAME CONNECTED: %s", pName.c_str());
-  //mLayer = new RoomLayer();
+  //log("GET LAST USERNAME CONNECTED: %s", pName.c_str());
   mLayer->addToMenu(pName);
+
+  
+}
+
+void RoomLayer::setFirstUsername()
+{
+  //log("GET LAST USERNAME CONNECTED: %s", pName.c_str());
+  for( std::map<std::string, std::string>::iterator ii=MapScene::mConnect->mUsername.begin(); 
+    ii!=MapScene::mConnect->mUsername.end(); ++ii)
+	   {
+	       //cout << (*ii).first << ": " << (*ii).second << endl;
+		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+       //RoomLayer::setLastUsername((*ii).second.c_str());
+       mLayer->addToMenu((*ii).second.c_str());
+	   }
+  
 
   
 }
 
 void RoomLayer::addToMenu(std::string pName)
 {
+  
   //////////////////////////////////////////////////////////////////
   //Player 1
-  const char* player1 = "HP001";
+  const char* player1 = pName.c_str();
+  
   LabelBMFont* label;
 	label = LabelBMFont::create(player1, "fonts/Arial.fnt");
-	label->setScale(0.1);
+	label->setScale(0.5);
 
-  label->setPosition(Point(WIDTH/2, HEIGHT/4));
+  label->setPosition(Point(WIDTH/4, 3*HEIGHT/4 - mUser*100));
   this->addChild(label, 2);
   label->runAction(ScaleTo::create(0.5, 1.0) );
 
@@ -160,10 +171,13 @@ void RoomLayer::addToMenu(std::string pName)
                                          "room/Readyed.png",
                                          this,
                                          menu_selector(RoomLayer::sendState));
-  RoomLayer::mMenuPlayer1->setPosition(WIDTH/2, HEIGHT/4 - 50);
+  RoomLayer::mMenuPlayer1->setPosition(3* WIDTH/4, 3*HEIGHT/4 - mUser*100);
 
   ////////////////////////////////////////////////////////////////////
   mMenu->addChild(RoomLayer::mMenuPlayer1);
+
+  //
+  mUser ++;
 }
 void RoomLayer::sendState(Object* pSender)
 {
