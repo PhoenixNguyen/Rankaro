@@ -83,6 +83,11 @@ void CheckinLayer::sendName(Object* pSender)
   const char* name = mEditBox->getText();
   CCLog("%s", name);
 
+  //Send to server
+  MapScene::mConnect->regUsername(name);
+  //
+  std::string data;
+  MapScene::mConnect->lastUsername(MapScene::mConnect->mClient, data);
   //Replace Scene
   CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
       1.5, RoomLayer::scene()

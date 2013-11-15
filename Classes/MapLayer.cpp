@@ -10,6 +10,8 @@
 
 USING_NS_CC;
 
+
+
 MapLayer::MapLayer(void)
 {
 }
@@ -37,6 +39,8 @@ MapLayer* MapLayer::create(MapScene* pMapScene)
 
 bool MapLayer::init(MapScene* pMapScene)
 {
+  
+  /////////////////////////
   if(!Layer::create())
   {
     return false;
@@ -49,3 +53,4 @@ bool MapLayer::init(MapScene* pMapScene)
 
   return true;
 }
+

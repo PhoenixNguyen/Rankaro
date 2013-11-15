@@ -14,6 +14,7 @@
 #include "GUI\CCEditBox\CCEditBox.h"
 #include "RoomLayer.h"
 #include "Config.h"
+#include "MapLayer.h"
 
 class CheckinLayer : public cocos2d::Layer
 {

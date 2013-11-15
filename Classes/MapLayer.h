@@ -13,11 +13,13 @@
 #include "MapScene.h"
 #include "BackgroundGame.h"
 #include "MenuStart.h"
+#include "ConnectServer.h"
 
 class MapScene;
 class MapLayer : public cocos2d::Layer
 {
   MapScene* mMapScene;
+  
 
 public:
   MapLayer(void);
@@ -25,6 +27,7 @@ public:
   
   static MapLayer* create(MapScene* pMapScene);
   virtual bool init(MapScene* pMapScene);
+  
 };
 
 #endif
