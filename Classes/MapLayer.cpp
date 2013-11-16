@@ -51,6 +51,8 @@ bool MapLayer::init(MapScene* pMapScene)
 
   addChild(MenuStart::create(this), 2);
 
+  
+
   return true;
 }
 

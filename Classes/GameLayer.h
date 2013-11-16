@@ -14,6 +14,8 @@
 
 class GameLayer : public cocos2d::Layer
 {
+  cocos2d::TMXTiledMap* mTileMap;
+  cocos2d::TMXLayer* mTileLayer;
 public:
   GameLayer(void);
   ~GameLayer(void);

@@ -52,5 +52,12 @@ bool GameLayer::init()
 
   addChild(BackgroundGame::create(this), 1);
 
+  //mTileMap = new TMXTiledMap();
+  mTileMap = TMXTiledMap::create("tilemap/map.tmx");
+  mTileMap->setPosition(48, 24);
+
+  //mTileLayer = mTileMap->layerNamed("Layer1");
+  this->addChild(mTileMap, 2);
+
   return true;
 }
