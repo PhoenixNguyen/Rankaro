@@ -22,6 +22,7 @@ class ConnectionLayer
   
 public:
   std::map<std::string, std::string> mUsername;
+  std::map<std::string, std::string> mState;
   //static std::string mLastUsername;
 	ConnectionLayer(void);
 	virtual ~ConnectionLayer(void);
@@ -55,7 +56,7 @@ public:
 	void lastUsername(cocos2d::extension::SIOClient *client, const std::string& data);
 
 	//state
-	void sendState(cocos2d::Object *sender);
+	void sendState(std::string pName);
 	void receiverState(cocos2d::extension::SIOClient *client, const std::string& data);
 	void lastState(cocos2d::extension::SIOClient *client, const std::string& data);
 

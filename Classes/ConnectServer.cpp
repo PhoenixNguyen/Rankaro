@@ -71,11 +71,12 @@ void ConnectionLayer::regUsername(std::string pName)
 
 }
 
-void ConnectionLayer::sendState(cocos2d::Object *sender)
+void ConnectionLayer::sendState(std::string pID)
 {
 	//Send username to server
 	if(mClient != NULL) 
-		mClient->emit("state","[{\"id\":\"923\",\"state\":\"1\"}]");
+    //name: state, id: id
+		mClient->emit("state","[{\"name\":\"1\",\"id\":\""+pID+"\"}]");
 		
 }
 
@@ -92,20 +93,11 @@ void ConnectionLayer::sendPosition(cocos2d::Object *sender)
 //////// USER ///////////////////////////////////////////////////////////
 void ConnectionLayer::receiverUsername(SIOClient *client, const std::string& data) {
 
-	log("ALL USERNAME CONNECTED: %s", data.c_str());
+	//log("ALL USERNAME CONNECTED: %s", data.c_str());
   //Init lấy các user đăng ký trước nên phải khởi tạo đầu tiên đặt ở RoomLayer class!
   if(!data.empty())
   {
-    //std::map<std::string, std::string> username;
     exportListData(data, mUsername);
-
-    //for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
-	   //{
-	   //    //cout << (*ii).first << ": " << (*ii).second << endl;
-		  // log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
-    //   RoomLayer::setLastUsername((*ii).second.c_str());
-	   //}
-    //CCLog("Name: %s",(*username.begin()).second.c_str());
     
   }
 
@@ -120,11 +112,8 @@ void ConnectionLayer::lastUsername(SIOClient *client, const std::string& data) {
     exportLastData(data, username);
 
     //CCLog("Name: %s",(*username.begin()).second.c_str());
-    RoomLayer::setLastUsername((*username.begin()).second.c_str());
+    RoomLayer::setLastUsername((*username.begin()).second.c_str(), (*username.begin()).first.c_str());
   }
-  
-	//exportList("", username);
-	//exportLast("", username);
 	
 }
 
@@ -134,13 +123,25 @@ void ConnectionLayer::lastUsername(SIOClient *client, const std::string& data) {
 void ConnectionLayer::receiverState(SIOClient *client, const std::string& data) {
 
 	log("ALL STATE USERNAME: %s", data.c_str());
-
+  //Init lấy các user đăng ký trước nên phải khởi tạo đầu tiên đặt ở RoomLayer class!
+  if(!data.empty())
+  {
+    exportListData(data, mState);
+    
+  }
 }
 
 void ConnectionLayer::lastState(SIOClient *client, const std::string& data) {
 
 	log("LAST STATE USERNAME: %s", data.c_str());
+  if(!data.empty())
+  {
+    std::map<std::string, std::string> state;
+    exportLastData(data, state);
 
+    //CCLog("Name: %s",(*username.begin()).second.c_str());
+    RoomLayer::setLastState((*state.begin()).first.c_str());
+  }
 }
 
 ////////  Receiver number ///////////////////////////////////////////////////////////
@@ -334,12 +335,12 @@ void ConnectionLayer::exportListData(std::string pData, std::map<std::string, st
 	Document doc;
 	//pData = " {\"name\":\"init\",\"args\":[[{\"name\":\"Duy Phuong\",\"id\":\"jDG33J_vilx5RHWvkLan\"},{\"name\":\"Hoang Phuong\",\"id\":\"TUd5gXsInDnxt_COkLao\"},{\"name\":\"Duy Phuong\",\"id\":\"_DYMTQjePZsAImTRkLap\"}]]} " ;
 	std::size_t n = std::count(pData.begin(), pData.end(), ':');
-	log("So lan lap name la: %d", n/2 - 1);
+	//log("So lan lap name la: %d", n/2 - 1);
 	
 	doc.Parse<0>(pData.c_str() );
 	
-	SizeType j = 0;
-	for (SizeType i = 0; i < (n/2 - 1); i++){
+	int j = 0;
+	for (int i = (n/2 - 1)-1; i > -1 ; i--){
 		//Gia tri 0 cua mang
 		Value& name = doc["args"][j][i]["name"];
 		log("NAME %d: %s", i + 1, name.GetString() );

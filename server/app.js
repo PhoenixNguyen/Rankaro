@@ -59,6 +59,9 @@ var countPosition =  0;
 
 io.sockets.on('connection', function (socket) {
 	countUser ++;
+	if(countUser >= 5)
+		return;
+	
     console.log('connection', socket.id);
 
     //testing simple message
@@ -94,14 +97,15 @@ io.sockets.on('connection', function (socket) {
 		console.log(data);
 		
 		//Neu sate = 1 thi cong them 1, neu = 0 thi tru 1
-		if( data.state == 1){
-			console.log('Dem state');
-			countReady ++;
-			console.log(countReady);
-		}
-		else
-			countReady --;
-			
+		// if( data.state == 1){
+		// 	console.log('Dem state');
+		// 	countReady ++;
+		// 	console.log(countReady);
+		// }
+		// else
+		// 	countReady --;
+		
+		countReady ++;
 		listState.inject(data);
 		io.sockets.emit("state", data);
 		

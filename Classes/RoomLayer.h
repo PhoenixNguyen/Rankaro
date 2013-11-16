@@ -18,14 +18,17 @@
 class RoomLayer : public cocos2d::Layer
 {
   int mUser;
-  static cocos2d::MenuItem* mMenuPlayer1;
-  cocos2d::MenuItem* mMenuPlayer2;
-  cocos2d::MenuItem* mMenuPlayer3;
-  cocos2d::MenuItem* mMenuPlayer4;
+  
+  static cocos2d::MenuItem* mMenuPlayer[];
 
   static cocos2d::Menu* mMenu;
   
+  CC_SYNTHESIZE(bool, mMyself, Myself);
+  CC_SYNTHESIZE(std::string, mMyID, MyID);
 public:
+  //Set player map with ID
+  std::map<std::string, int> mPlayer;
+
   static RoomLayer* mLayer;
   RoomLayer(void);
   ~RoomLayer(void);
@@ -36,10 +39,13 @@ public:
 
   void sendState(cocos2d::Object* pSender);
 
-  static void setLastUsername(std::string pName);
+  static void setLastUsername(std::string pName, std::string pID);
   void setFirstUsername();
 
-  void addToMenu(std::string pName);
+  void addToMenu(std::string pName, std::string pID, bool pMyself );
+
+  static void setLastState(std::string pID);
+  void setFirstState();
 };
 
 #endif

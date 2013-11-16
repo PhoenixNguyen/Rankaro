@@ -11,7 +11,8 @@
 USING_NS_CC;
 
 Menu* RoomLayer::mMenu = NULL;
-MenuItem* RoomLayer::mMenuPlayer1 = NULL;
+MenuItem* RoomLayer::mMenuPlayer[4] = {NULL};
+
 RoomLayer* RoomLayer::mLayer = NULL;
 
 RoomLayer::RoomLayer(void)
@@ -54,68 +55,8 @@ bool RoomLayer::init()
     return false;
   
   mUser = 0;
+  setMyself(true);
   addChild(BackgroundGame::create(this), 1);
-
-  ////////////////////////////////////////////////////////////////////
-  //Get User just connected
-
- // ////////////////////////////////////////////////////////////////////
- // //Player 2
- // const char* player2 = "HP002";
- // LabelBMFont* label2;
-	//label2 = LabelBMFont::create(player2, "fonts/Arial.fnt");
-	//label2->setScale(0.1);
-
- // label2->setPosition(Point(WIDTH/2, 3*HEIGHT/4 +50 ));
-	//this->addChild(label2, 2);
- // label2->runAction(ScaleTo::create(0.5, 1.0) );
-
- // mMenuPlayer2 = MenuItemImage::create("room/Ready.png",
- //                                        "room/Readyed.png",
- //                                        "room/Readyed.png",
- //                                        this,
- //                                        menu_selector(RoomLayer::sendState));
- // mMenuPlayer2->setPosition(WIDTH/2, 3*HEIGHT/4);
-
- // ////////////////////////////////////////////////////////////////////
-
- // ////////////////////////////////////////////////////////////////////
- // //Player 3
- // const char* player3 = "HP003";
- // LabelBMFont* label3;
-	//label3 = LabelBMFont::create(player3, "fonts/Arial.fnt");
-	//label3->setScale(0.1);
-
- // label3->setPosition(Point(WIDTH/4, HEIGHT/2 ));
-	//this->addChild(label3, 2);
- // label3->runAction(ScaleTo::create(0.5, 1.0) );
-
- // mMenuPlayer3 = MenuItemImage::create("room/Ready.png",
- //                                        "room/Readyed.png",
- //                                        "room/Readyed.png",
- //                                        this,
- //                                        menu_selector(RoomLayer::sendState));
- // mMenuPlayer3->setPosition(WIDTH/4, HEIGHT/2 - 50);
-
- // ////////////////////////////////////////////////////////////////////
-
- // ////////////////////////////////////////////////////////////////////
- // //Player 3
- // const char* player4 = "HP004";
- // LabelBMFont* label4;
-	//label4 = LabelBMFont::create(player4, "fonts/Arial.fnt");
-	//label4->setScale(0.1);
-
- // label4->setPosition(Point(3*WIDTH/4, HEIGHT/2 ));
-	//this->addChild(label4, 2);
- // label4->runAction(ScaleTo::create(0.5, 1.0) );
-
- // mMenuPlayer4 = MenuItemImage::create("room/Ready.png",
- //                                        "room/Readyed.png",
- //                                        "room/Readyed.png",
- //                                        this,
- //                                        menu_selector(RoomLayer::sendState));
- // mMenuPlayer4->setPosition(3*WIDTH/4, HEIGHT/2 - 50);
 
  // ////////////////////////////////////////////////////////////////////
 
@@ -124,14 +65,18 @@ bool RoomLayer::init()
   mLayer->addChild(mMenu, 2);
  
   setFirstUsername();
+  setFirstState();
   return true;
 }
 
-void RoomLayer::setLastUsername(std::string pName)
+void RoomLayer::setLastUsername(std::string pName, std::string pID)
 {
   //log("GET LAST USERNAME CONNECTED: %s", pName.c_str());
-  mLayer->addToMenu(pName);
+  if(mLayer->getMyself())
+    mLayer->setMyID(pID);
 
+  mLayer->addToMenu(pName, pID, mLayer->getMyself());
+  mLayer->setMyself(false);
   
 }
 
@@ -139,23 +84,23 @@ void RoomLayer::setFirstUsername()
 {
   //log("GET LAST USERNAME CONNECTED: %s", pName.c_str());
   for( std::map<std::string, std::string>::iterator ii=MapScene::mConnect->mUsername.begin(); 
-    ii!=MapScene::mConnect->mUsername.end(); ++ii)
+    ii != MapScene::mConnect->mUsername.end(); ++ii)
 	   {
-	       //cout << (*ii).first << ": " << (*ii).second << endl;
-		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
-       //RoomLayer::setLastUsername((*ii).second.c_str());
-       mLayer->addToMenu((*ii).second.c_str());
+		   //log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+       //CCLog("%s", (*ii).second.c_str());
+       mLayer->addToMenu((*ii).second.c_str(), (*ii).first.c_str(), false);
 	   }
   
 
   
 }
 
-void RoomLayer::addToMenu(std::string pName)
+void RoomLayer::addToMenu(std::string pName, std::string pID, bool pMySelf = false)
 {
   
   //////////////////////////////////////////////////////////////////
-  //Player 1
+  //Player mUser + 1
+  //mMyself = false;
   const char* player1 = pName.c_str();
   
   LabelBMFont* label;
@@ -166,24 +111,71 @@ void RoomLayer::addToMenu(std::string pName)
   this->addChild(label, 2);
   label->runAction(ScaleTo::create(0.5, 1.0) );
 
-  RoomLayer::mMenuPlayer1 = MenuItemImage::create("room/Ready.png",
+  //String * player = String::createWithFormat("mMenuPlayer%d", mUser);
+  //Map Player with ID
+  mPlayer.insert(std::pair<std::string, int>(pID, mUser));
+  //CCLog("1. IDDDDDD %s", pID.c_str());
+  RoomLayer::mMenuPlayer[mUser] = MenuItemImage::create("room/Ready.png",
                                          "room/Readyed.png",
                                          "room/Readyed.png",
                                          this,
                                          menu_selector(RoomLayer::sendState));
-  RoomLayer::mMenuPlayer1->setPosition(3* WIDTH/4, 3*HEIGHT/4 - mUser*100);
+  RoomLayer::mMenuPlayer[mUser]->setPosition(3* WIDTH/4, 3*HEIGHT/4 - mUser*100);
 
+  if(!pMySelf)
+    mMenuPlayer[mUser]->setVisible(false);
   ////////////////////////////////////////////////////////////////////
-  mMenu->addChild(RoomLayer::mMenuPlayer1);
+  mMenu->addChild(RoomLayer::mMenuPlayer[mUser]);
 
   //
   mUser ++;
 }
-void RoomLayer::sendState(Object* pSender)
+void RoomLayer::sendState(cocos2d::Object* pSender)
 {
-  CCTransitionCrossFade* transition = CCTransitionCrossFade::create(1,
+  
+  //CCLog("2. IDDDDDD %s", mLayer->getMyID().c_str());
+  MapScene::mConnect->sendState(mLayer->getMyID().c_str());
+
+  /*CCTransitionCrossFade* transition = CCTransitionCrossFade::create(1,
                       GameLayer::scene());
 
-  CCDirector::sharedDirector()->replaceScene(transition);
+  CCDirector::sharedDirector()->replaceScene(transition);*/
 
+}
+
+
+void RoomLayer::setLastState(std::string pID)
+{
+  for( std::map<std::string, int>::iterator ii=mLayer->mPlayer.begin(); 
+    ii != mLayer->mPlayer.end(); ++ii)
+	   {
+	      
+       if((*ii).first == pID)
+       {
+         mMenuPlayer[(*ii).second]->setVisible(true);
+         mMenuPlayer[(*ii).second]->setEnabled(false);
+       }
+	   }
+}
+
+void RoomLayer::setFirstState()
+{
+  for( std::map<std::string, std::string>::iterator i=MapScene::mConnect->mState.begin(); 
+    i != MapScene::mConnect->mState.end(); ++i)
+	{  
+      for( std::map<std::string, int>::iterator ii=mLayer->mPlayer.begin(); 
+        ii != mLayer->mPlayer.end(); ++ii)
+	    {
+	           //cout << (*ii).first << ": " << (*ii).second << endl;
+		       //log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
+           //CCLog("%s", (*ii).second.c_str());
+           //mLayer->addToMenu((*ii).second.c_str(), (*ii).first.c_str(), false);
+           if((*ii).first == (*i).first)
+           {
+             mMenuPlayer[(*ii).second]->setVisible(true);
+             mMenuPlayer[(*ii).second]->setEnabled(false);
+             continue;
+           }
+	    }
+  }
 }
