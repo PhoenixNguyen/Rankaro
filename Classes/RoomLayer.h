@@ -44,8 +44,12 @@ public:
 
   void addToMenu(std::string pName, std::string pID, bool pMyself );
 
+  //State
   static void setLastState(std::string pID);
   void setFirstState();
+
+  //Start game
+  static void startGame();
 };
 
 #endif

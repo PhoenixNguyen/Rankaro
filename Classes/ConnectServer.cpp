@@ -148,7 +148,8 @@ void ConnectionLayer::lastState(SIOClient *client, const std::string& data) {
 void ConnectionLayer::receiverNumber(SIOClient *client, const std::string& data) {
 
 	log("START GAME AND RECEIVER NUMBER: %s", data.c_str());
-	ConnectionLayer::setNumber(1);
+  RoomLayer::startGame();
+	setNumber(1);
 
 }
 

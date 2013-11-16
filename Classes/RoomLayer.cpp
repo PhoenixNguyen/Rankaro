@@ -136,11 +136,7 @@ void RoomLayer::sendState(cocos2d::Object* pSender)
   //CCLog("2. IDDDDDD %s", mLayer->getMyID().c_str());
   MapScene::mConnect->sendState(mLayer->getMyID().c_str());
 
-  /*CCTransitionCrossFade* transition = CCTransitionCrossFade::create(1,
-                      GameLayer::scene());
-
-  CCDirector::sharedDirector()->replaceScene(transition);*/
-
+  
 }
 
 
@@ -174,8 +170,17 @@ void RoomLayer::setFirstState()
            {
              mMenuPlayer[(*ii).second]->setVisible(true);
              mMenuPlayer[(*ii).second]->setEnabled(false);
-             continue;
+             break;
            }
 	    }
   }
+}
+
+void RoomLayer::startGame()
+{
+  CCTransitionCrossFade* transition = CCTransitionCrossFade::create(1,
+                      GameLayer::scene());
+
+  CCDirector::sharedDirector()->replaceScene(transition);
+
 }
