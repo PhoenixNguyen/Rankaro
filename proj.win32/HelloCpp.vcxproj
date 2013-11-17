@@ -134,6 +134,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BackgroundGame.cpp" />
+    <ClCompile Include="..\Classes\CaculateScore.cpp" />
     <ClCompile Include="..\Classes\CheckinLayer.cpp" />
     <ClCompile Include="..\Classes\Config.cpp" />
     <ClCompile Include="..\Classes\ConnectServer.cpp" />
@@ -148,6 +149,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BackgroundGame.h" />
+    <ClInclude Include="..\Classes\CaculateScore.h" />
     <ClInclude Include="..\Classes\CheckinLayer.h" />
     <ClInclude Include="..\Classes\Config.h" />
     <ClInclude Include="..\Classes\ConnectServer.h" />
