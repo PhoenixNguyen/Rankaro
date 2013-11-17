@@ -12,7 +12,11 @@
 #define WIDTH 800
 #define HEIGHT 480
 
+#define MAP_X 9
+#define MAP_Y 9
 
+#define TILE_X 48
+#define TILE_Y 48
 
 class Config
 {
