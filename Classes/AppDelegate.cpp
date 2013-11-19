@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "MapScene.h"
+#include "GameLayer.h"
 
 USING_NS_CC;
 
@@ -27,8 +28,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     //Scene *scene = HelloWorld::scene();
-    Scene *scene = MapScene::create();
-
+    //Scene *scene = MapScene::create();
+    Scene *scene = GameLayer::scene();
     // run
     director->runWithScene(scene);
 

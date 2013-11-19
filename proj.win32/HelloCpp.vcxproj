@@ -134,6 +134,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BackgroundGame.cpp" />
+    <ClCompile Include="..\Classes\CaculateScore.cpp" />
     <ClCompile Include="..\Classes\CheckinLayer.cpp" />
     <ClCompile Include="..\Classes\Config.cpp" />
     <ClCompile Include="..\Classes\ConnectServer.cpp" />
@@ -142,12 +143,14 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\MapLayer.cpp" />
     <ClCompile Include="..\Classes\MapScene.cpp" />
     <ClCompile Include="..\Classes\MenuStart.cpp" />
+    <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="..\Classes\RoomLayer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BackgroundGame.h" />
+    <ClInclude Include="..\Classes\CaculateScore.h" />
     <ClInclude Include="..\Classes\CheckinLayer.h" />
     <ClInclude Include="..\Classes\Config.h" />
     <ClInclude Include="..\Classes\ConnectServer.h" />
@@ -156,6 +159,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\MapLayer.h" />
     <ClInclude Include="..\Classes\MapScene.h" />
     <ClInclude Include="..\Classes\MenuStart.h" />
+    <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="..\Classes\RoomLayer.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
