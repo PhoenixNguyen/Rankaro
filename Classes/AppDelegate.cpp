@@ -28,8 +28,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     //Scene *scene = HelloWorld::scene();
-    //Scene *scene = MapScene::create();
-    Scene *scene = GameLayer::scene();
+    Scene *scene = MapScene::create();
+    //Scene *scene = GameLayer::scene();
+    
     // run
     director->runWithScene(scene);
 

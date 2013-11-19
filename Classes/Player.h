@@ -14,9 +14,12 @@
 
 class Player
 {
-  CC_SYNTHESIZE(const char*, mName, Name);
-  CC_SYNTHESIZE(const char*, mID, ID);
+  CC_SYNTHESIZE(std::string, mName, Name);
+  CC_SYNTHESIZE(std::string, mID, ID);
   CC_SYNTHESIZE(int, mScore, Score);
+  CC_SYNTHESIZE(bool, mMySelf, MySelf);
+  CC_SYNTHESIZE(int, mNumber, Number);
+
   static int mPlayerScoreArray[MAP_X][MAP_Y];
 
 public:

@@ -14,20 +14,24 @@
 #include "Config.h"
 #include "GameLayer.h"
 #include "MapScene.h"
+#include "Player.h"
 
 class RoomLayer : public cocos2d::Layer
 {
-  int mUser;
+  //List Player
+  static Player* mPlayerList[];
+
+  static int mUser;
   
   static cocos2d::MenuItem* mMenuPlayer[];
 
   static cocos2d::Menu* mMenu;
   
   CC_SYNTHESIZE(bool, mMyself, Myself);
-  CC_SYNTHESIZE(std::string, mMyID, MyID);
+  //CC_SYNTHESIZE(std::string, mMyID, MyID);
 public:
   //Set player map with ID
-  std::map<std::string, int> mPlayer;
+  //std::map<std::string, int> mPlayer;
 
   static RoomLayer* mLayer;
   RoomLayer(void);

@@ -14,6 +14,8 @@ Menu* RoomLayer::mMenu = NULL;
 MenuItem* RoomLayer::mMenuPlayer[4] = {NULL};
 
 RoomLayer* RoomLayer::mLayer = NULL;
+Player* RoomLayer::mPlayerList[4] = {NULL};
+int RoomLayer::mUser = 0;
 
 RoomLayer::RoomLayer(void)
 {
@@ -72,8 +74,8 @@ bool RoomLayer::init()
 void RoomLayer::setLastUsername(std::string pName, std::string pID)
 {
   //log("GET LAST USERNAME CONNECTED: %s", pName.c_str());
-  if(mLayer->getMyself())
-    mLayer->setMyID(pID);
+  /*if(mLayer->getMyself())
+    mLayer->setMyID(pID);*/
 
   mLayer->addToMenu(pName, pID, mLayer->getMyself());
   mLayer->setMyself(false);
@@ -100,7 +102,13 @@ void RoomLayer::addToMenu(std::string pName, std::string pID, bool pMySelf = fal
   
   //////////////////////////////////////////////////////////////////
   //Player mUser + 1
-  //mMyself = false;
+  //Init Player
+  mPlayerList[mUser] = new Player();
+  mPlayerList[mUser]->setID(pID);
+  mPlayerList[mUser]->setName(pName);
+  mPlayerList[mUser]->setMySelf(pMySelf);
+  mPlayerList[mUser]->setNumber(mUser);
+
   const char* player1 = pName.c_str();
   
   LabelBMFont* label;
@@ -113,7 +121,8 @@ void RoomLayer::addToMenu(std::string pName, std::string pID, bool pMySelf = fal
 
   //String * player = String::createWithFormat("mMenuPlayer%d", mUser);
   //Map Player with ID
-  mPlayer.insert(std::pair<std::string, int>(pID, mUser));
+  //mPlayer.insert(std::pair<std::string, int>(pID, mUser));
+
   //CCLog("1. IDDDDDD %s", pID.c_str());
   RoomLayer::mMenuPlayer[mUser] = MenuItemImage::create("room/Ready.png",
                                          "room/Readyed.png",
@@ -134,7 +143,13 @@ void RoomLayer::sendState(cocos2d::Object* pSender)
 {
   
   //CCLog("2. IDDDDDD %s", mLayer->getMyID().c_str());
-  MapScene::mConnect->sendState(mLayer->getMyID().c_str());
+  for(int i= 0; i< mUser; i++){
+    if(mPlayerList[i]->getMySelf()){
+      //CCLog("%d :: %s", i, mPlayerList[i]->getID().c_str());
+      MapScene::mConnect->sendState(mPlayerList[i]->getID());
+      
+    }
+  }
 
   
 }
@@ -142,14 +157,15 @@ void RoomLayer::sendState(cocos2d::Object* pSender)
 
 void RoomLayer::setLastState(std::string pID)
 {
-  for( std::map<std::string, int>::iterator ii=mLayer->mPlayer.begin(); 
-    ii != mLayer->mPlayer.end(); ++ii)
+  for(int i= 0; i< mUser; i++)
 	   {
 	      
-       if((*ii).first == pID)
+       if(mPlayerList[i]->getID() == pID)
        {
-         mMenuPlayer[(*ii).second]->setVisible(true);
-         mMenuPlayer[(*ii).second]->setEnabled(false);
+         mMenuPlayer[mPlayerList[i]->getNumber()]->setVisible(true);
+         mMenuPlayer[mPlayerList[i]->getNumber()]->setEnabled(false);
+
+         break;
        }
 	   }
 }
@@ -159,17 +175,16 @@ void RoomLayer::setFirstState()
   for( std::map<std::string, std::string>::iterator i=MapScene::mConnect->mState.begin(); 
     i != MapScene::mConnect->mState.end(); ++i)
 	{  
-      for( std::map<std::string, int>::iterator ii=mLayer->mPlayer.begin(); 
-        ii != mLayer->mPlayer.end(); ++ii)
+      for(int ii= 0; ii< mUser; ii++)
 	    {
 	           //cout << (*ii).first << ": " << (*ii).second << endl;
 		       //log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
            //CCLog("%s", (*ii).second.c_str());
            //mLayer->addToMenu((*ii).second.c_str(), (*ii).first.c_str(), false);
-           if((*ii).first == (*i).first)
+        if(mPlayerList[ii]->getID() == (*i).first)
            {
-             mMenuPlayer[(*ii).second]->setVisible(true);
-             mMenuPlayer[(*ii).second]->setEnabled(false);
+             mMenuPlayer[mPlayerList[ii]->getNumber()]->setVisible(true);
+             mMenuPlayer[mPlayerList[ii]->getNumber()]->setEnabled(false);
              break;
            }
 	    }
