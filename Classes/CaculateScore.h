@@ -16,6 +16,6 @@ public:
 	//Init
 	bool init();
 	//detection block
-	int detection(int pArray[MAP_X][MAP_Y]);
+	int detection(int** pArray);
 };
 

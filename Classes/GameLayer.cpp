@@ -18,6 +18,7 @@ USING_NS_CC;
  int GameLayer::mMyScore[MAP_X][MAP_Y] = {NULL};
 
  LabelBMFont* GameLayer::mLabel = NULL;
+ Player* GameLayer::mPlayer = NULL;
 
 GameLayer::GameLayer(void)
 {
@@ -63,6 +64,11 @@ bool GameLayer::init()
   p = (int*)mMyScore;
   for(int i= 0; i< MAP_X*MAP_Y; i++)
     *(p+i) = -1;
+  mPlayer = new Player();
+  mPlayer->setName("HP");
+  mPlayer->setID("123");
+  
+  CCLog("ID %s", mPlayer->getID());
 
   mCal = new CaculateScore();
   /*int score = mCal->detection(mMyScore);
@@ -99,9 +105,11 @@ void GameLayer::setNumber(int pNumber)
 
 void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
 {
-  if(mMyScore[pRow][pColumn] != -1)
+  if(mPlayer->getPlayerScoreArray(pRow, pColumn) != -1/*mMyScore[pRow][pColumn] != -1*/)
     return;
-  mMyScore[pRow][pColumn] = pNumber;
+  //mMyScore[pRow][pColumn] = pNumber;
+  mPlayer->setPlayerScoreArray(pNumber, pRow, pColumn);
+
   String* name = String::createWithFormat("number/node%d.png", pNumber);
   Sprite* sprite = Sprite::create(name->getCString());
   sprite->setPosition(mTileLayer->getPositionAt(Point(pRow + 1.5, pColumn - 1)));
@@ -110,9 +118,11 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
 
   mLayer->addChild(sprite, 3);
 
-  int score = mCal->detection(mMyScore);
-  //CCLog("SCORE: %d", score);
-  viewScore("HP", score);
+  int score = mCal->detection(mPlayer->getPlayerScoreArray());
+  mPlayer->setScore(score);
+
+  CCLog("SCORE: %d", mPlayer->getScore());
+  viewScore(mPlayer/*"HP", score*/);
 }
 
 void GameLayer::ccTouchesBegan(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
@@ -182,11 +192,11 @@ void GameLayer::createRect()
   }
 }
 
-void GameLayer::viewScore(const char* pName, int pScore)
+void GameLayer::viewScore(Player* pPlayer)
 {
   
   mLayer->removeChild(mLabel);
-  String* player = String::createWithFormat("%s :: %d", pName, pScore);
+  String* player = String::createWithFormat("%s :: %d", mPlayer->getName(), mPlayer->getScore());
   //CCLog("SCORE: %s", player->getCString());
 
   mLabel = LabelBMFont::create(player->getCString(), "fonts/Arial.fnt");

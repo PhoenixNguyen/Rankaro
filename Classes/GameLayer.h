@@ -13,6 +13,7 @@
 #include "BackgroundGame.h"
 #include "Config.h"
 #include "CaculateScore.h"
+#include "Player.h"
 
 class GameLayer : public cocos2d::Layer
 {
@@ -24,6 +25,8 @@ class GameLayer : public cocos2d::Layer
   static CaculateScore* mCal;
 
   static cocos2d::LabelBMFont* mLabel;
+
+  static Player* mPlayer;
 public:
   GameLayer(void);
   ~GameLayer(void);
@@ -46,7 +49,7 @@ public:
   void createRect();
 
   //View Score and sort
-  static void viewScore(const char* pName, int pScore);
+  static void viewScore(Player* pPlayer/*const char* pName, int pScore*/);
 };
 
 #endif

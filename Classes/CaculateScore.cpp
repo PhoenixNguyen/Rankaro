@@ -18,7 +18,7 @@ bool CaculateScore::init()
 	return true;
 }
 
-int CaculateScore::detection(int pArray[MAP_X][MAP_Y])
+int CaculateScore::detection(int** pArray)
 {
 	
 	int MAP[MAP_X][MAP_Y];
