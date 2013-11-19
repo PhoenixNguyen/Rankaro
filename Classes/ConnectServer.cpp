@@ -124,6 +124,7 @@ void ConnectionLayer::lastUsername(SIOClient *client, const std::string& data) {
 ///////  STATE ////////////////////////////////////////////////////////
 void ConnectionLayer::receiverState(SIOClient *client, const std::string& data) {
 
+
 	log("ALL STATE USERNAME: %s", data.c_str());
   //Init lấy các user đăng ký trước nên phải khởi tạo đầu tiên đặt ở RoomLayer class!
   if(!data.empty())
@@ -155,14 +156,10 @@ void ConnectionLayer::receiverNumber(SIOClient *client, const std::string& data)
     int number;
     exportLastData(data, number);
 
-    if(mTurn == 0){
+    if(mTurn == 0)
       RoomLayer::startGame();
-	    GameLayer::setNumber(number);
-    }
-    else
-    {
-      GameLayer::setNumber(number);
-    }
+	   
+    GameLayer::setNumber(number);
 
     //Tang so turn. turn hien tai = mTurn -1
     mTurn++;
@@ -405,14 +402,14 @@ void ConnectionLayer::exportLastData(std::string pData, std::map<std::string, st
 void ConnectionLayer::exportLastData(std::string pData, int& pReturn)
 {
   Document doc;
-	//pData = " {\"name\":\"username\",\"args\":[{\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
+	//pData = " {\"name\":\"username\",\"args\":[123]} " ;
 	//{"name":"randomNumber","args":[510]}
 	doc.Parse<0>(pData.c_str() );
 	
 	SizeType j = 0;
 	//for (SizeType i = 0; i < (n/2 - 1); i++){
 		//Gia tri 0 cua mang
-		Value& data = doc["args"][j]["id"];
+		Value& data = doc["args"][j];
     log("Number %d", data.GetInt() );
 
     pReturn = data.GetInt();
