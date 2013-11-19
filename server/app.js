@@ -129,8 +129,13 @@ io.sockets.on('connection', function (socket) {
 		console.log("POSITION:");
 		console.log(data.pos);
 		
-		io.sockets.emit("position",data);
+		socket.broadcast.emit("position",data);
 		
+		//Send number next turn
+		if(countPosition%countUser == 0){
+			var number = Math.floor((Math.random()*899)+100);
+			io.sockets.emit("randomNumber",  number);
+		}
 		//End game
 		if (countPosition == 108){
 			var end = 1;
