@@ -20,6 +20,7 @@ class ConnectionLayer
 
   CC_SYNTHESIZE(std::string, mLastUsername, LastUsername);
   CC_SYNTHESIZE(int, mNumber, Number);
+  static int mTurn;
 public:
   std::map<std::string, std::string> mUsername;
   std::map<std::string, std::string> mState;
@@ -79,7 +80,8 @@ public:
   void exportLastData(std::string pData, std::map<std::string, std::string>& pList);
 	//void exportLast(std::string pData, std::map<std::string, std::string>& pList);
 
-	
+	//return last data - Number
+  void exportLastData(std::string pData, int& pReturn);
 };
 
 void runSocketIOTest();

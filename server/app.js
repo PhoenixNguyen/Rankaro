@@ -115,7 +115,8 @@ io.sockets.on('connection', function (socket) {
 		//start game
 		if(countUser > 1 && countReady == countUser){
 			//countReady = 0;
-			var number = Math.floor((Math.random()*899)+100);
+			var number = new Object();
+			number.id = Math.floor((Math.random()*899)+100);
 			
 			io.sockets.emit("randomNumber",  number);
 		}

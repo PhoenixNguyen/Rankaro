@@ -14,6 +14,8 @@
 #include "Config.h"
 #include "CaculateScore.h"
 #include "Player.h"
+#include "RoomLayer.h"
+#include "MapScene.h"
 
 class GameLayer : public cocos2d::Layer
 {
@@ -21,21 +23,26 @@ class GameLayer : public cocos2d::Layer
   static cocos2d::TMXLayer* mTileLayer;
   static GameLayer* mLayer;
   cocos2d::Rect mListRect[27];
-  static int mMyScore[MAP_X][MAP_Y];
   static CaculateScore* mCal;
 
   static cocos2d::LabelBMFont* mLabel;
 
   static Player* mPlayer;
+
+  //Number sent from server
+  static int mNumber;
+
+  //Turn number
+  static int mTurn;
 public:
   GameLayer(void);
   ~GameLayer(void);
 
+  
   static cocos2d::Scene* scene();
   static GameLayer* create();
   virtual bool init();
 
-  static void setNumber(int pNumber);
   static void setPositionNumber(int pNumber, int pRow, int pColumn);
 
   //Touch begin
@@ -50,6 +57,11 @@ public:
 
   //View Score and sort
   static void viewScore(Player* pPlayer/*const char* pName, int pScore*/);
+
+  //Get and set number from server
+  static int getNumber();
+  static void setNumber(int);
+
 };
 
 #endif

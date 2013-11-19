@@ -17,6 +17,8 @@ using namespace rapidjson;
 USING_NS_CC;
 USING_NS_CC_EXT;
 
+int ConnectionLayer::mTurn = 0;
+
 ConnectionLayer::ConnectionLayer(void)
 	: mClient(NULL)
 	, _sioEndpoint(NULL)
@@ -148,9 +150,23 @@ void ConnectionLayer::lastState(SIOClient *client, const std::string& data) {
 void ConnectionLayer::receiverNumber(SIOClient *client, const std::string& data) {
 
 	log("START GAME AND RECEIVER NUMBER: %s", data.c_str());
-  RoomLayer::startGame();
-	setNumber(1);
+  if(!data.empty())
+  {
+    int number;
+    exportLastData(data, number);
 
+    if(mTurn == 0){
+      RoomLayer::startGame();
+	    GameLayer::setNumber(number);
+    }
+    else
+    {
+      GameLayer::setNumber(number);
+    }
+
+    //Tang so turn. turn hien tai = mTurn -1
+    mTurn++;
+  }
 }
 
 ////////  Receiver position ///////////////////////////////////////////////////////////
@@ -384,4 +400,20 @@ void ConnectionLayer::exportLastData(std::string pData, std::map<std::string, st
 	//       //cout << (*ii).first << ": " << (*ii).second << endl;
 	//	   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
 	//   }
+}
+
+void ConnectionLayer::exportLastData(std::string pData, int& pReturn)
+{
+  Document doc;
+	//pData = " {\"name\":\"username\",\"args\":[{\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
+	//{"name":"randomNumber","args":[510]}
+	doc.Parse<0>(pData.c_str() );
+	
+	SizeType j = 0;
+	//for (SizeType i = 0; i < (n/2 - 1); i++){
+		//Gia tri 0 cua mang
+		Value& data = doc["args"][j]["id"];
+    log("Number %d", data.GetInt() );
+
+    pReturn = data.GetInt();
 }

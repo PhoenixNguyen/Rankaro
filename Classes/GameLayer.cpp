@@ -15,10 +15,12 @@ USING_NS_CC;
  TMXLayer* GameLayer::mTileLayer = NULL;
  TMXTiledMap* GameLayer::mTileMap = NULL;
  CaculateScore* GameLayer::mCal = NULL;
- int GameLayer::mMyScore[MAP_X][MAP_Y] = {NULL};
 
  LabelBMFont* GameLayer::mLabel = NULL;
  Player* GameLayer::mPlayer = NULL;
+
+ int GameLayer::mTurn = 0;
+ int GameLayer::mNumber = 0;
 
 GameLayer::GameLayer(void)
 {
@@ -58,25 +60,19 @@ bool GameLayer::init()
 {
   if(!Layer::create())
     return false;
-  
+
+  mNumber = 0;
   //Khoi tao mang score
-  int* p;
-  p = (int*)mMyScore;
-  for(int i= 0; i< MAP_X*MAP_Y; i++)
-    *(p+i) = -1;
   mPlayer = new Player();
-  mPlayer->setName("HP");
-  mPlayer->setID("123");
+  mPlayer->setName(std::string("HP"));
+  mPlayer->setID(std::string("123"));
   
-  CCLog("ID %s", mPlayer->getID());
+  CCLog("ID %s", mPlayer->getID().c_str());
 
   mCal = new CaculateScore();
-  /*int score = mCal->detection(mMyScore);
-  CCLog("SCORE: %d", score);*/
 
   addChild(BackgroundGame::create(this), 1);
 
-  //mTileMap = new TMXTiledMap();
   mTileMap = TMXTiledMap::create("tilemap/map.tmx");
   mTileMap->setPosition(48, 24);
 
@@ -84,14 +80,23 @@ bool GameLayer::init()
   this->addChild(mTileMap, 2);
 
   createRect();
-  setNumber(456);
+  
+  //Khoi tao number dau tien
+  //setNumber(MapScene::mConnect->getNumber());
 
   setTouchEnabled(true);
   return true;
 }
 
+int GameLayer::getNumber()
+{
+  return mNumber;
+}
 void GameLayer::setNumber(int pNumber)
 {
+  mNumber = pNumber;
+  
+
   //Tach number
   int number1 = pNumber/100;
   int number2 = (pNumber%100)/10;
@@ -107,7 +112,6 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
 {
   if(mPlayer->getPlayerScoreArray(pRow, pColumn) != -1/*mMyScore[pRow][pColumn] != -1*/)
     return;
-  //mMyScore[pRow][pColumn] = pNumber;
   mPlayer->setPlayerScoreArray(pNumber, pRow, pColumn);
 
   String* name = String::createWithFormat("number/node%d.png", pNumber);
@@ -117,12 +121,14 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
   
 
   mLayer->addChild(sprite, 3);
+  //Tang so turn. turn hien tai = mTurn -1
+  mTurn++;
 
   int score = mCal->detection(mPlayer->getPlayerScoreArray());
   mPlayer->setScore(score);
 
   CCLog("SCORE: %d", mPlayer->getScore());
-  viewScore(mPlayer/*"HP", score*/);
+  viewScore(mPlayer);
 }
 
 void GameLayer::ccTouchesBegan(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
@@ -136,8 +142,16 @@ void GameLayer::ccTouchesMoved(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 
 void GameLayer::ccTouchesEnded(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 {
+  if(mTurn == (MapScene::mConnect->mTurn)*3)
+    return;
+
   Touch* touch = (Touch*)pTouches->anyObject();
   Point point = touch->getLocation();
+
+  //Tach number
+  int number1 = getNumber()/100;
+  int number2 = (getNumber()%100)/10;
+  int number3 = (getNumber()%100)%10;
 
   for(int i= 0; i< MAP_X*3; i++)
   {
@@ -145,23 +159,23 @@ void GameLayer::ccTouchesEnded(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
     {
       if(i< MAP_X)
       {
-        setPositionNumber(6, i, 0);
-        setPositionNumber(7, i, 1);
-        setPositionNumber(9, i, 2);
+        setPositionNumber(number1, i, 0);
+        setPositionNumber(number2, i, 1);
+        setPositionNumber(number3, i, 2);
       }
       
       if(i>= MAP_X && i< 2*MAP_X)
       {
-        setPositionNumber(6, i-9, 3);
-        setPositionNumber(7, i-9, 4);
-        setPositionNumber(9, i-9, 5);
+        setPositionNumber(number1, i-9, 3);
+        setPositionNumber(number2, i-9, 4);
+        setPositionNumber(number3, i-9, 5);
       }
         
       if(i>= 2*MAP_X && i< 3*MAP_X)
       {
-        setPositionNumber(6, i-18, 6);
-        setPositionNumber(7, i-18, 7);
-        setPositionNumber(9, i-18, 8);
+        setPositionNumber(number1, i-18, 6);
+        setPositionNumber(number2, i-18, 7);
+        setPositionNumber(number3, i-18, 8);
       }
       
     }
@@ -196,7 +210,7 @@ void GameLayer::viewScore(Player* pPlayer)
 {
   
   mLayer->removeChild(mLabel);
-  String* player = String::createWithFormat("%s :: %d", mPlayer->getName(), mPlayer->getScore());
+  String* player = String::createWithFormat("%s :: %d", mPlayer->getName().c_str(), mPlayer->getScore());
   //CCLog("SCORE: %s", player->getCString());
 
   mLabel = LabelBMFont::create(player->getCString(), "fonts/Arial.fnt");
