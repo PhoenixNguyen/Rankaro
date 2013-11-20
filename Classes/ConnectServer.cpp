@@ -188,6 +188,10 @@ void ConnectionLayer::receiverPosition(SIOClient *client, const std::string& dat
 void ConnectionLayer::endGame(SIOClient *client, const std::string& data) {
 
 	log("END GAME: %s", data.c_str());
+  if(!data.empty())
+  {
+    GameLayer::setEndGame();
+  }
 
 }
 void ConnectionLayer::echotest(SIOClient *client, const std::string& data) {
@@ -202,18 +206,13 @@ void ConnectionLayer::echotest(SIOClient *client, const std::string& data) {
 }
 
 
-
-
-
-
-
-
-
 void ConnectionLayer::onMenuTestClientDisconnectClicked(cocos2d::Object *sender)
 {
 
-	if(mClient != NULL) mClient->disconnect();
-
+	if(mClient != NULL){
+    mClient->emit("disconnect","[{\"id\":\"1\"}]");
+    mClient->disconnect();
+  }
 }
 
 

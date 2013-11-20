@@ -11,8 +11,6 @@
 USING_NS_CC;
 
 
-ConnectionLayer* MapScene::mConnect = NULL;
-
 MapScene::MapScene(void)
 {
 }
@@ -39,9 +37,7 @@ MapScene* MapScene::create()
 
 bool MapScene::init()
 {
-  //Connect server
-  mConnect = new ConnectionLayer();
-
+  
   if(!Scene::create())
   {
     return false;

@@ -12,6 +12,8 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
+ConnectionLayer* CheckinLayer::mConnect = NULL;
+
 CheckinLayer::CheckinLayer(void)
 {
 }
@@ -50,6 +52,9 @@ bool CheckinLayer::init()
   if(!Layer::create())
     return false;
 
+  //Connect server
+  mConnect = new ConnectionLayer();
+
   addChild(BackgroundGame::create(this), 1);
 
   mEditBox = EditBox::create(Size(300, 50), Scale9Sprite::create("input/Input.png"));
@@ -84,7 +89,7 @@ void CheckinLayer::sendName(Object* pSender)
   CCLog("%s", name);
 
   //Send to server
-  MapScene::mConnect->regUsername(name);
+  mConnect->regUsername(name);
   //
   /*std::string data;
   MapScene::mConnect->lastUsername(MapScene::mConnect->mClient, data);*/

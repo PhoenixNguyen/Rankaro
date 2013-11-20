@@ -15,6 +15,7 @@
 #include "GameLayer.h"
 #include "MapScene.h"
 #include "Player.h"
+#include "CheckinLayer.h"
 
 class RoomLayer : public cocos2d::Layer
 {

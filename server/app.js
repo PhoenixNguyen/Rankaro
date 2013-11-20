@@ -56,6 +56,7 @@ Array.prototype.inject = function(element) {
 var countUser = 0;
 var countReady = 0;
 var countPosition =  0;
+var countDis = 0;
 
 io.sockets.on('connection', function (socket) {
 	countUser ++;
@@ -96,15 +97,6 @@ io.sockets.on('connection', function (socket) {
 		console.log("STATE: ");
 		console.log(data);
 		
-		//Neu sate = 1 thi cong them 1, neu = 0 thi tru 1
-		// if( data.state == 1){
-		// 	console.log('Dem state');
-		// 	countReady ++;
-		// 	console.log(countReady);
-		// }
-		// else
-		// 	countReady --;
-		
 		countReady ++;
 		listState.inject(data);
 		io.sockets.emit("state", data);
@@ -126,8 +118,8 @@ io.sockets.on('connection', function (socket) {
 	socket.on('position', function(data) {
 		countPosition ++;
 		
-		console.log("POSITION:");
-		console.log(data.pos);
+		// console.log("POSITION:");
+		// console.log(data.pos);
 		
 		socket.broadcast.emit("position",data);
 		
@@ -137,13 +129,32 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.emit("randomNumber",  number);
 		}
 		//End game
+		//console.log("POSITION:", countPosition);
 		if (countPosition == (27*3*countUser) ){
+			//console.log("End game POSITION:", countPosition);
 			var end = 1;
 			io.sockets.emit("endGame", end);
+
+			//RESET
+			listUser.length = 0;
+			listState.length = 0;
+			countUser = 0;
+			countReady = 0;
+			countPosition =  0;
 		}
 	});
 	
     socket.on('disconnect', function () {
+    	countDis++;
+    	if(countDis == countUser){
+    		//RESET
+			listUser.length = 0;
+			listState.length = 0;
+			countUser = 0;
+			countReady = 0;
+			countPosition =  0;
+			countDis = 0;
+    	}
         console.log('disconnect socket');
         socket.broadcast.emit('announcement', 'disconnect');
     });

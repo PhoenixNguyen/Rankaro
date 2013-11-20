@@ -85,8 +85,8 @@ void RoomLayer::setLastUsername(std::string pName, std::string pID)
 void RoomLayer::setFirstUsername()
 {
   //log("GET LAST USERNAME CONNECTED: %s", pName.c_str());
-  for( std::map<std::string, std::string>::iterator ii=MapScene::mConnect->mUsername.begin(); 
-    ii != MapScene::mConnect->mUsername.end(); ++ii)
+  for( std::map<std::string, std::string>::iterator ii=CheckinLayer::mConnect->mUsername.begin(); 
+    ii != CheckinLayer::mConnect->mUsername.end(); ++ii)
 	   {
 		   //log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
        //CCLog("%s", (*ii).second.c_str());
@@ -149,7 +149,7 @@ void RoomLayer::sendState(cocos2d::Object* pSender)
   for(int i= 0; i< mUser; i++){
     if(mPlayerList[i]->getMySelf()){
       //CCLog("%d :: %s", i, mPlayerList[i]->getID().c_str());
-      MapScene::mConnect->sendState(mPlayerList[i]->getID());
+      CheckinLayer::mConnect->sendState(mPlayerList[i]->getID());
       
     }
   }
@@ -175,8 +175,8 @@ void RoomLayer::setLastState(std::string pID)
 
 void RoomLayer::setFirstState()
 {
-  for( std::map<std::string, std::string>::iterator i=MapScene::mConnect->mState.begin(); 
-    i != MapScene::mConnect->mState.end(); ++i)
+  for( std::map<std::string, std::string>::iterator i=CheckinLayer::mConnect->mState.begin(); 
+    i != CheckinLayer::mConnect->mState.end(); ++i)
 	{  
       for(int ii= 0; ii< mUser; ii++)
 	    {

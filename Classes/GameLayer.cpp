@@ -1,4 +1,4 @@
-//============================================================================
+﻿//============================================================================
 // Name        : GameLayer.h
 // Author      : HP
 // Version     :
@@ -77,7 +77,7 @@ bool GameLayer::init()
   
   //Khoi tao number dau tien
   //setNumber(MapScene::mConnect->getNumber());
-
+  exitGame();
   setTouchEnabled(true);
   return true;
 }
@@ -142,7 +142,7 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
       viewScore();
 
       //Send MyPosition
-      MapScene::mConnect->sendPosition(RoomLayer::mPlayerList[i]->getID(), 
+      CheckinLayer::mConnect->sendPosition(RoomLayer::mPlayerList[i]->getID(), 
         std::to_string(pNumber), std::to_string(pRow), std::to_string(pColumn));
 
       //Thoat
@@ -162,7 +162,7 @@ void GameLayer::ccTouchesMoved(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 
 void GameLayer::ccTouchesEnded(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 {
-  if(mTurn == (MapScene::mConnect->mTurn)*3)
+  if(mTurn == (CheckinLayer::mConnect->mTurn)*3)
     return;
 
   Touch* touch = (Touch*)pTouches->anyObject();
@@ -214,15 +214,15 @@ void GameLayer::createRect()
   {
     //Hang 1
     mListRect[i] = CCRectMake(mTileLayer->getPositionAt(Point(i + 1.5, 0 - 1)).x - TILE_X/2, 
-      mTileLayer->getPositionAt(Point(i + 1.5, 0 - 1)).y - TILE_Y/2 - TILE_Y*2, TILE_X, TILE_Y*3);
+      mTileLayer->getPositionAt(Point(i + 1.5, 0 - 1)).y - TILE_Y/2 - TILE_Y*2, TILE_X-1, TILE_Y*3-1);
   
     //Hang 2
     mListRect[i+MAP_X] = CCRectMake(mTileLayer->getPositionAt(Point(i + 1.5, 3 - 1)).x - TILE_X/2, 
-      mTileLayer->getPositionAt(Point(i + 1.5, 3 - 1)).y - TILE_Y/2 - TILE_Y*2, TILE_X, TILE_Y*3);
+      mTileLayer->getPositionAt(Point(i + 1.5, 3 - 1)).y - TILE_Y/2 - TILE_Y*2, TILE_X-1, TILE_Y*3-1);
  
     //Hang 3
     mListRect[i+2*MAP_X] = CCRectMake(mTileLayer->getPositionAt(Point(i + 1.5, 6 - 1)).x - TILE_X/2, 
-      mTileLayer->getPositionAt(Point(i + 1.5, 6 - 1)).y - TILE_Y/2 - TILE_Y*2, TILE_X, TILE_Y*3);
+      mTileLayer->getPositionAt(Point(i + 1.5, 6 - 1)).y - TILE_Y/2 - TILE_Y*2, TILE_X-1, TILE_Y*3-1);
   }
 }
 
@@ -347,4 +347,68 @@ void GameLayer::setSTT()
        RoomLayer::mPlayerList[i+1]->setSTT(i+1);
   }
 
+}
+
+void GameLayer::setEndGame()
+{
+  for(int i= 0; i < (RoomLayer::mUser) ; i++)
+  {
+    if(RoomLayer::mPlayerList[i]->getMySelf()){
+      String* status;
+      if(RoomLayer::mPlayerList[i]->getSTT() == 0)
+        status = String::createWithFormat("YOU WIN ^^");
+      else
+        status = String::createWithFormat("YOU LOSE :(");
+
+      //CCLog("SCORE: %s", player->getCString());
+      LabelBMFont* label = NULL;
+      //mLayer->removeChild(label);
+      label = LabelBMFont::create(status->getCString(), "fonts/Arial.fnt");
+	    label->setScale(0.5);
+
+      label->setPosition(Point(TILE_X*(MAP_X+ 5.5), TILE_Y + TILE_Y*2));
+
+      mLayer->addChild(label, 2);
+      label->runAction(ScaleTo::create(0.5, 1.0) );
+    }
+  }
+
+  
+}
+
+void GameLayer::exitGame()
+{
+
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Point origin = Director::getInstance()->getVisibleOrigin();
+
+    /////////////////////////////
+    // 2. add a menu item with "X" image, which is clicked to quit the program
+    //    you may modify it.
+
+    // add a "close" icon to exit the progress. it's an autorelease object
+    MenuItemImage *closeItem = MenuItemImage::create(
+                                        "CloseNormal.png",
+                                        "CloseSelected.png",
+                                        CC_CALLBACK_1(GameLayer::switchLayer, this));
+    
+	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+                                origin.y + closeItem->getContentSize().height/2));
+
+    // create menu, it's an autorelease object
+    Menu* menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Point::ZERO);
+    this->addChild(menu, 2);
+}
+
+void GameLayer::switchLayer(Object* pSender)
+{
+  //Disconnect server
+  CheckinLayer::mConnect->onMenuTestClientDisconnectClicked(NULL);
+
+  Director::getInstance()->end();
+  //Director::getInstance()->resume();
+  
+  /*CCScene* scene = MapScene::create();
+	CCDirector::sharedDirector()->replaceScene(scene);*/
 }

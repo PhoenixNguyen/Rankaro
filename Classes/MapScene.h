@@ -27,7 +27,7 @@ public:
 
   static MapScene* create();
   virtual bool init();
-  static ConnectionLayer* mConnect;
+  
 };
 
 #endif

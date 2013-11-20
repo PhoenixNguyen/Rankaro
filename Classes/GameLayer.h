@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "RoomLayer.h"
 #include "MapScene.h"
+#include "proj.win32\main.h"
 
 class GameLayer : public cocos2d::Layer
 {
@@ -67,6 +68,12 @@ public:
   //Set STT
   static void setSTT();
 
+  //End game
+  static void setEndGame();
+
+  //Exit game
+  void exitGame();
+  void switchLayer(Object* pSender);
 };
 
 #endif

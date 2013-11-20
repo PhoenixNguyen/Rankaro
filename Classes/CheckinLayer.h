@@ -15,7 +15,9 @@
 #include "RoomLayer.h"
 #include "Config.h"
 #include "MapLayer.h"
+#include "ConnectServer.h"
 
+class ConnectionLayer;
 class CheckinLayer : public cocos2d::Layer
 {
   cocos2d::extension::EditBox* mEditBox;
@@ -29,6 +31,10 @@ public:
   virtual bool init();
 
   void sendName(Object* pSender);
+
+  //Init Connection
+  static ConnectionLayer* mConnect;
+
 };
 
 #endif
