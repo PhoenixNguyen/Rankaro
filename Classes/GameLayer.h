@@ -19,13 +19,15 @@
 
 class GameLayer : public cocos2d::Layer
 {
+  static cocos2d::LabelBMFont* mLabel[];
+
   static cocos2d::TMXTiledMap* mTileMap;
   static cocos2d::TMXLayer* mTileLayer;
   static GameLayer* mLayer;
   cocos2d::Rect mListRect[27];
   static CaculateScore* mCal;
 
-  static cocos2d::LabelBMFont* mLabel;
+  //static cocos2d::LabelBMFont* mLabel;
 
   //Number sent from server
   static int mNumber;

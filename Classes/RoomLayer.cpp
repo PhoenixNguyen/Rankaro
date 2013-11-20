@@ -108,6 +108,8 @@ void RoomLayer::addToMenu(std::string pName, std::string pID, bool pMySelf = fal
   mPlayerList[mUser]->setName(pName);
   mPlayerList[mUser]->setMySelf(pMySelf);
   mPlayerList[mUser]->setNumber(mUser);
+  mPlayerList[mUser]->setSTT(mUser);
+  mPlayerList[mUser]->setScore(0);
   mPlayerList[mUser]->createScoreArray();
 
   const char* player1 = pName.c_str();

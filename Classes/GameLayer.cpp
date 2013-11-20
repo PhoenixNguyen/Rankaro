@@ -15,9 +15,9 @@ USING_NS_CC;
  TMXTiledMap* GameLayer::mTileMap = NULL;
  GameLayer* GameLayer::mLayer = NULL;
 
- CaculateScore* GameLayer::mCal = NULL;
+ LabelBMFont* GameLayer::mLabel[4] = {NULL};
 
- LabelBMFont* GameLayer::mLabel = NULL;
+ CaculateScore* GameLayer::mCal = NULL;
 
  int GameLayer::mTurn = 0;
  int GameLayer::mNumber = 0;
@@ -218,15 +218,10 @@ void GameLayer::viewScore()
 {
   //Sort with score
   setSTT();
-  String* player0;
-  String* player1;
-  String* player2;
-  String* player3;
-
-  LabelBMFont* label0;
-  LabelBMFont* label1;
-  LabelBMFont* label2;
-  LabelBMFont* label3;
+  String* player0 = NULL;
+  String* player1 = NULL;
+  String* player2 = NULL;
+  String* player3 = NULL;
 
   for(int i= 0; i< RoomLayer::mUser; i++)
   {
@@ -239,14 +234,14 @@ void GameLayer::viewScore()
                                                             RoomLayer::mPlayerList[i]->getScore());
       //CCLog("SCORE: %s", player->getCString());
       //LabelBMFont* label0;
-      mLayer->removeChild(label0);
-      label0 = LabelBMFont::create(player0->getCString(), "fonts/Arial.fnt");
-	    label0->setScale(0.5);
+      mLayer->removeChild(mLabel[0]);
+      mLabel[0] = LabelBMFont::create(player0->getCString(), "fonts/Arial.fnt");
+	    mLabel[0]->setScale(0.5);
 
-      label0->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
+      mLabel[0]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
 
-      mLayer->addChild(label0, 2);
-      label0->runAction(ScaleTo::create(0.5, 1.0) );
+      mLayer->addChild(mLabel[0], 2);
+      mLabel[0]->runAction(ScaleTo::create(0.5, 1.0) );
 
       break;
 
@@ -255,14 +250,14 @@ void GameLayer::viewScore()
                                                             RoomLayer::mPlayerList[i]->getScore());
       //CCLog("SCORE: %s", player->getCString());
       //LabelBMFont* label1;
-      mLayer->removeChild(label1);
-      label1 = LabelBMFont::create(player1->getCString(), "fonts/Arial.fnt");
-	    label1->setScale(0.5);
+      mLayer->removeChild(mLabel[1]);
+      mLabel[1] = LabelBMFont::create(player1->getCString(), "fonts/Arial.fnt");
+	    mLabel[1]->setScale(0.5);
 
-      label1->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 -100));
+      mLabel[1]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 -100));
 
-      mLayer->addChild(label1, 2);
-      label1->runAction(ScaleTo::create(0.5, 1.0) );
+      mLayer->addChild(mLabel[1], 2);
+      mLabel[1]->runAction(ScaleTo::create(0.5, 1.0) );
 
       break;
     case 2:
@@ -270,14 +265,14 @@ void GameLayer::viewScore()
                                                             RoomLayer::mPlayerList[i]->getScore());
       //CCLog("SCORE: %s", player->getCString());
       //LabelBMFont* label2;
-      mLayer->removeChild(label2);
-      label2 = LabelBMFont::create(player2->getCString(), "fonts/Arial.fnt");
-	    label2->setScale(0.5);
+      mLayer->removeChild(mLabel[2]);
+      mLabel[2] = LabelBMFont::create(player2->getCString(), "fonts/Arial.fnt");
+	    mLabel[2]->setScale(0.5);
 
-      label2->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 200));
+      mLabel[2]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 200));
 
-      mLayer->addChild(label2, 2);
-      label2->runAction(ScaleTo::create(0.5, 1.0) );
+      mLayer->addChild(mLabel[2], 2);
+      mLabel[2]->runAction(ScaleTo::create(0.5, 1.0) );
 
       break;
     case 3:
@@ -285,14 +280,14 @@ void GameLayer::viewScore()
                                                             RoomLayer::mPlayerList[i]->getScore());
       //CCLog("SCORE: %s", player->getCString());
       //LabelBMFont* label3;
-      mLayer->removeChild(label3);
-      label3 = LabelBMFont::create(player3->getCString(), "fonts/Arial.fnt");
-	    label3->setScale(0.5);
+      mLayer->removeChild(mLabel[3]);
+      mLabel[3] = LabelBMFont::create(player3->getCString(), "fonts/Arial.fnt");
+	    mLabel[3]->setScale(0.5);
 
-      label3->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 300));
+      mLabel[3]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 300));
 
-      mLayer->addChild(label3, 2);
-      label3->runAction(ScaleTo::create(0.5, 1.0) );
+      mLayer->addChild(mLabel[3], 2);
+      mLabel[3]->runAction(ScaleTo::create(0.5, 1.0) );
 
       break;
     }
