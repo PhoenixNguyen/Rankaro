@@ -10,14 +10,8 @@
 
 USING_NS_CC;
 
-int Player::mPlayerScoreArray[MAP_X][MAP_Y] = {NULL};
-
 Player::Player(void)
 {
-  int* p;
-  p = (int*)mPlayerScoreArray;
-  for(int i= 0; i< MAP_X*MAP_Y; i++)
-    *(p+i) = -1;
 }
 
 
@@ -48,4 +42,13 @@ int Player::getPlayerScoreArray(int pRow, int pColumn)
 void Player::setPlayerScoreArray(int pScore, int pRow, int pColumn)
 {
   mPlayerScoreArray[pRow][pColumn] = pScore;
+}
+
+void Player::createScoreArray()
+{
+  for(int i = 0; i< MAP_X; i++)
+    for(int j= 0; j< MAP_Y; j++)
+    {
+      mPlayerScoreArray[i][j] = -1;
+    }
 }

@@ -178,6 +178,7 @@ void ConnectionLayer::receiverPosition(SIOClient *client, const std::string& dat
     std::string column;
 
     exportLastData(data, id, number, row, column);
+    GameLayer::setPositionPlayer(id, number, row, column);
 
   }
 	

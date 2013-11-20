@@ -132,12 +132,12 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.emit("position",data);
 		
 		//Send number next turn
-		if(countPosition%countUser == 0){
+		if(((countPosition/3)%countUser == 0) && (countPosition%3 == 0) ){
 			var number = Math.floor((Math.random()*899)+100);
 			io.sockets.emit("randomNumber",  number);
 		}
 		//End game
-		if (countPosition == 108){
+		if (countPosition == (27*3*countUser) ){
 			var end = 1;
 			io.sockets.emit("endGame", end);
 		}

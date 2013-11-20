@@ -54,13 +54,16 @@ public:
   void createRect();
 
   //View Score and sort
-  static void viewScore(Player* pPlayer/*const char* pName, int pScore*/);
+  static void viewScore();
 
   //Get and set number from server
   static int getNumber();
   static void setNumber(int);
 
   static void setPositionPlayer(std::string pID, std::string pNumber, std::string pRow, std::string pColumn);
+
+  //Set STT
+  static void setSTT();
 
 };
 

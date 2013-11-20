@@ -19,16 +19,18 @@ class Player
   CC_SYNTHESIZE(int, mScore, Score);
   CC_SYNTHESIZE(bool, mMySelf, MySelf);
   CC_SYNTHESIZE(int, mNumber, Number);
+  CC_SYNTHESIZE(int, mSTT, STT);
 
-  static int mPlayerScoreArray[MAP_X][MAP_Y];
+  int mPlayerScoreArray[MAP_X][MAP_Y];
 
 public:
   Player(void);
   ~Player(void);
 
-  static int** getPlayerScoreArray();
-  static int getPlayerScoreArray(int pRow, int pColumn);
-  static void setPlayerScoreArray(int pScore, int pRow, int pColumn);
+  int** getPlayerScoreArray();
+  int getPlayerScoreArray(int pRow, int pColumn);
+  void setPlayerScoreArray(int pNumber, int pRow, int pColumn);
+  void createScoreArray();
 };
 
 #endif
