@@ -96,9 +96,21 @@ void GameLayer::setNumber(int pNumber)
   int number2 = (pNumber%100)/10;
   int number3 = (pNumber%100)%10;
 
-  /*setPositionNumber(number1, 0, 0);
-  setPositionNumber(number2, 0, 1);
-  setPositionNumber(number3, 0, 2);*/
+  String* name1 = String::createWithFormat("number/node%d.png", number1);
+  Sprite* sprite1 = Sprite::create(name1->getCString());
+  sprite1->setPosition(Point(TILE_X*(MAP_X+2.5), TILE_Y + TILE_Y*2));
+
+  String* name2 = String::createWithFormat("number/node%d.png", number2);
+  Sprite* sprite2 = Sprite::create(name2->getCString());
+  sprite2->setPosition(Point(TILE_X*(MAP_X+2.5), TILE_Y + TILE_Y*1));
+  
+  String* name3 = String::createWithFormat("number/node%d.png", number3);
+  Sprite* sprite3 = Sprite::create(name3->getCString());
+  sprite3->setPosition(Point(TILE_X*(MAP_X+2.5), TILE_Y + TILE_Y*0));
+
+  mLayer->addChild(sprite1, 3);
+  mLayer->addChild(sprite2, 3);
+  mLayer->addChild(sprite3, 3);
 
 }
 
@@ -238,7 +250,7 @@ void GameLayer::viewScore()
       mLabel[0] = LabelBMFont::create(player0->getCString(), "fonts/Arial.fnt");
 	    mLabel[0]->setScale(0.5);
 
-      mLabel[0]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
+      mLabel[0]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 +50));
 
       mLayer->addChild(mLabel[0], 2);
       mLabel[0]->runAction(ScaleTo::create(0.5, 1.0) );
@@ -254,7 +266,7 @@ void GameLayer::viewScore()
       mLabel[1] = LabelBMFont::create(player1->getCString(), "fonts/Arial.fnt");
 	    mLabel[1]->setScale(0.5);
 
-      mLabel[1]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 -100));
+      mLabel[1]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
 
       mLayer->addChild(mLabel[1], 2);
       mLabel[1]->runAction(ScaleTo::create(0.5, 1.0) );
@@ -269,7 +281,7 @@ void GameLayer::viewScore()
       mLabel[2] = LabelBMFont::create(player2->getCString(), "fonts/Arial.fnt");
 	    mLabel[2]->setScale(0.5);
 
-      mLabel[2]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 200));
+      mLabel[2]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 50));
 
       mLayer->addChild(mLabel[2], 2);
       mLabel[2]->runAction(ScaleTo::create(0.5, 1.0) );
@@ -284,7 +296,7 @@ void GameLayer::viewScore()
       mLabel[3] = LabelBMFont::create(player3->getCString(), "fonts/Arial.fnt");
 	    mLabel[3]->setScale(0.5);
 
-      mLabel[3]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 300));
+      mLabel[3]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 100));
 
       mLayer->addChild(mLabel[3], 2);
       mLabel[3]->runAction(ScaleTo::create(0.5, 1.0) );
@@ -315,18 +327,22 @@ void GameLayer::setPositionPlayer(std::string pID, std::string pNumber, std::str
 void GameLayer::setSTT()
 {
 
-  for(int i= 0; i < RoomLayer::mUser-2 ; i++)
+  for(int i= 0; i < (RoomLayer::mUser-1) ; i++)
   {
     int max = i;
-    for(int j = i+1; j < RoomLayer::mUser-1; j++)
+    for(int j = i+1; j < RoomLayer::mUser; j++)
+    {
       if(RoomLayer::mPlayerList[j]->getScore() > RoomLayer::mPlayerList[max]->getScore())
       {
         max = j;
       }
-      
+    }
       
      RoomLayer::mPlayerList[max]->setSTT(i);
      RoomLayer::mPlayerList[i]->setSTT(max);
+     CCLog("Name %s", RoomLayer::mPlayerList[max]->getName().c_str());
+     CCLog("Score %d", RoomLayer::mPlayerList[max]->getScore());
+     CCLog("STT %d", RoomLayer::mPlayerList[max]->getSTT());
      if(i == max)
        RoomLayer::mPlayerList[i+1]->setSTT(i+1);
   }
