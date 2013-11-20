@@ -66,7 +66,7 @@ public:
 
 
 	//receiver position
-	void sendPosition(cocos2d::Object *sender);
+	void sendPosition(std::string pID, std::string pNumber, std::string pRow, std::string pCoLumn);
 	void receiverPosition(cocos2d::extension::SIOClient *client, const std::string& data);
 
 	//receiver End game
@@ -82,6 +82,10 @@ public:
 
 	//return last data - Number
   void exportLastData(std::string pData, int& pReturn);
+
+  //return last data - position
+  void exportLastData(std::string pData, std::string& pID, std::string& pNumber, std::string& pRow, std::string& pColumn);
+
 };
 
 void runSocketIOTest();

@@ -82,11 +82,11 @@ void ConnectionLayer::sendState(std::string pID)
 		
 }
 
-void ConnectionLayer::sendPosition(cocos2d::Object *sender)
+void ConnectionLayer::sendPosition(std::string pID, std::string pNumber, std::string pRow, std::string pCoLumn)
 {
 	//Send username to server
 	if(mClient != NULL) 
-		mClient->emit("position","[{\"id\":\"923\",\"pos\":\"654\"}]");
+    mClient->emit("position","[{\"id\":\""+pID+"\",\"number\":\""+pNumber+"\",\"row\":\""+pRow+"\",\"column\":\""+pCoLumn+"\"}]");
 		
 
 }
@@ -170,6 +170,16 @@ void ConnectionLayer::receiverNumber(SIOClient *client, const std::string& data)
 void ConnectionLayer::receiverPosition(SIOClient *client, const std::string& data) {
 
 	log("RECEIVER POSITION: %s", data.c_str());
+  if(!data.empty())
+  {
+    std::string id;
+    std::string number;
+    std::string row;
+    std::string column;
+
+    exportLastData(data, id, number, row, column);
+
+  }
 	
 }
 
@@ -410,7 +420,34 @@ void ConnectionLayer::exportLastData(std::string pData, int& pReturn)
 	//for (SizeType i = 0; i < (n/2 - 1); i++){
 		//Gia tri 0 cua mang
 		Value& data = doc["args"][j];
-    log("Number %d", data.GetInt() );
+    CCLog("Number %d", data.GetInt() );
 
     pReturn = data.GetInt();
 }
+
+void ConnectionLayer::exportLastData(std::string pData, std::string& pID, std::string& pNumber, 
+                                     std::string& pRow, std::string& pColumn)
+{
+	Document doc;
+	//pData = " {\"name\":\"username\",\"args\":[{\"name\":\"Duy Phuong\",\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
+	
+	doc.Parse<0>(pData.c_str() );
+	
+	SizeType j = 0;
+
+	//Gia tri 0 cua mang
+	Value& id = doc["args"][j]["id"];
+	log("LAST THE ID %s", id.GetString() );
+	Value& number = doc["args"][j]["number"];
+	log("LAST THE NUMBER %s", id.GetString() );
+  Value& row = doc["args"][j]["row"];
+	log("LAST THE Row %s", row.GetString() );
+	Value& column = doc["args"][j]["column"];
+	log("LAST THE column %s", column.GetString() );
+
+  pID = id.GetString();
+  pNumber = number.GetString();
+  pRow = row.GetString();
+  pColumn = column.GetString();
+}
+

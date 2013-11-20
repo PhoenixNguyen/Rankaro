@@ -130,6 +130,10 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
       CCLog("SCORE: %d", RoomLayer::mPlayerList[i]->getScore());
       viewScore(RoomLayer::mPlayerList[i]);
 
+      //Send MyPosition
+      MapScene::mConnect->sendPosition(RoomLayer::mPlayerList[i]->getID, 
+        std::to_string(pNumber), std::to_string(pRow), std::to_string(pColumn));
+
       //Thoat
       break;
     }
@@ -237,4 +241,9 @@ void GameLayer::viewScore(Player* pPlayer)
       break;
     }
   }
+}
+
+void GameLayer::setPositionPlayer(std::string pID, std::string pNumber, std::string pRow, std::string pColumn)
+{
+  
 }

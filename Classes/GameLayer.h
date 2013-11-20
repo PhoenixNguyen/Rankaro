@@ -60,6 +60,8 @@ public:
   static int getNumber();
   static void setNumber(int);
 
+  static void setPositionPlayer(std::string pID, std::string pNumber, std::string pRow, std::string pColumn);
+
 };
 
 #endif
