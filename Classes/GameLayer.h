@@ -27,8 +27,6 @@ class GameLayer : public cocos2d::Layer
 
   static cocos2d::LabelBMFont* mLabel;
 
-  static Player* mPlayer;
-
   //Number sent from server
   static int mNumber;
 

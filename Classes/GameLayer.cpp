@@ -11,13 +11,13 @@
 
 USING_NS_CC;
 
- GameLayer* GameLayer::mLayer = NULL;
  TMXLayer* GameLayer::mTileLayer = NULL;
  TMXTiledMap* GameLayer::mTileMap = NULL;
+ GameLayer* GameLayer::mLayer = NULL;
+
  CaculateScore* GameLayer::mCal = NULL;
 
  LabelBMFont* GameLayer::mLabel = NULL;
- Player* GameLayer::mPlayer = NULL;
 
  int GameLayer::mTurn = 0;
  int GameLayer::mNumber = 0;
@@ -63,12 +63,6 @@ bool GameLayer::init()
 
   mNumber = 0;
   //Khoi tao mang score
-  mPlayer = new Player();
-  mPlayer->setName(std::string("HP"));
-  mPlayer->setID(std::string("123"));
-  
-  CCLog("ID %s", mPlayer->getID().c_str());
-
   mCal = new CaculateScore();
 
   addChild(BackgroundGame::create(this), 1);
@@ -110,25 +104,36 @@ void GameLayer::setNumber(int pNumber)
 
 void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
 {
-  if(mPlayer->getPlayerScoreArray(pRow, pColumn) != -1/*mMyScore[pRow][pColumn] != -1*/)
-    return;
-  mPlayer->setPlayerScoreArray(pNumber, pRow, pColumn);
+  for(int i= 0; i< RoomLayer::mUser; i++)
+  {
+    //Get MySelf
+    if(RoomLayer::mPlayerList[i]->getMySelf())
+    {
+ 
+      if(RoomLayer::mPlayerList[i]->getPlayerScoreArray(pRow, pColumn) != -1)
+        return;
+      RoomLayer::mPlayerList[i]->setPlayerScoreArray(pNumber, pRow, pColumn);
 
-  String* name = String::createWithFormat("number/node%d.png", pNumber);
-  Sprite* sprite = Sprite::create(name->getCString());
-  sprite->setPosition(mTileLayer->getPositionAt(Point(pRow + 1.5, pColumn - 1)));
-  //CCLog("SPRITE: %f %f", mTileLayer->getPositionAt(Point(pRow + 1.5, pColumn - 1)).x, mTileLayer->getPositionAt(Point(pRow + 1.5, pColumn - 1)).y);
+      String* name = String::createWithFormat("number/node%d.png", pNumber);
+      Sprite* sprite = Sprite::create(name->getCString());
+      sprite->setPosition(mTileLayer->getPositionAt(Point(pRow + 1.5, pColumn - 1)));
+      //CCLog("SPRITE: %f %f", mTileLayer->getPositionAt(Point(pRow + 1.5, pColumn - 1)).x, mTileLayer->getPositionAt(Point(pRow + 1.5, pColumn - 1)).y);
   
 
-  mLayer->addChild(sprite, 3);
-  //Tang so turn. turn hien tai = mTurn -1
-  mTurn++;
+      mLayer->addChild(sprite, 3);
+      //Tang so turn. turn hien tai = mTurn/3 -1
+      mTurn++;
 
-  int score = mCal->detection(mPlayer->getPlayerScoreArray());
-  mPlayer->setScore(score);
+      int score = mCal->detection(RoomLayer::mPlayerList[i]->getPlayerScoreArray());
+      RoomLayer::mPlayerList[i]->setScore(score);
 
-  CCLog("SCORE: %d", mPlayer->getScore());
-  viewScore(mPlayer);
+      CCLog("SCORE: %d", RoomLayer::mPlayerList[i]->getScore());
+      viewScore(RoomLayer::mPlayerList[i]);
+
+      //Thoat
+      break;
+    }
+  }
 }
 
 void GameLayer::ccTouchesBegan(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
@@ -208,16 +213,28 @@ void GameLayer::createRect()
 
 void GameLayer::viewScore(Player* pPlayer)
 {
+  for(int i= 0; i< RoomLayer::mUser; i++)
+  {
+    //Get MySelf
+    if(RoomLayer::mPlayerList[i]->getMySelf())
+    {
+ 
   
-  mLayer->removeChild(mLabel);
-  String* player = String::createWithFormat("%s :: %d", mPlayer->getName().c_str(), mPlayer->getScore());
-  //CCLog("SCORE: %s", player->getCString());
+      String* player = String::createWithFormat("%s :: %d", RoomLayer::mPlayerList[i]->getName().c_str(), 
+                                                            RoomLayer::mPlayerList[i]->getScore());
+      //CCLog("SCORE: %s", player->getCString());
+  
+      mLayer->removeChild(mLabel);
+      mLabel = LabelBMFont::create(player->getCString(), "fonts/Arial.fnt");
+	    mLabel->setScale(0.5);
 
-  mLabel = LabelBMFont::create(player->getCString(), "fonts/Arial.fnt");
-	mLabel->setScale(0.5);
+      mLabel->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
 
-  mLabel->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
+      mLayer->addChild(mLabel, 2);
+      mLabel->runAction(ScaleTo::create(0.5, 1.0) );
 
-  mLayer->addChild(mLabel, 2);
-  mLabel->runAction(ScaleTo::create(0.5, 1.0) );
+      //Thoat
+      break;
+    }
+  }
 }

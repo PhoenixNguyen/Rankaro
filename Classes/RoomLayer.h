@@ -18,21 +18,18 @@
 
 class RoomLayer : public cocos2d::Layer
 {
-  //List Player
-  static Player* mPlayerList[];
-
-  static int mUser;
   
   static cocos2d::MenuItem* mMenuPlayer[];
 
   static cocos2d::Menu* mMenu;
   
   CC_SYNTHESIZE(bool, mMyself, Myself);
-  //CC_SYNTHESIZE(std::string, mMyID, MyID);
-public:
-  //Set player map with ID
-  //std::map<std::string, int> mPlayer;
 
+public:
+  //List Player
+  static Player* mPlayerList[];
+
+  static int mUser;
   static RoomLayer* mLayer;
   RoomLayer(void);
   ~RoomLayer(void);
