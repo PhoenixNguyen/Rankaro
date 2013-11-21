@@ -59,6 +59,9 @@ void ConnectionLayer::newConnect(cocos2d::Object *sender)
 
 	//Receiver End game
 	mClient->on("endGame", CC_CALLBACK_2(ConnectionLayer::endGame, this));
+
+  //Receiver player disconnect
+	mClient->on("disconnect", CC_CALLBACK_2(ConnectionLayer::receiverDisconnect, this));
 	
 }
 
@@ -220,7 +223,26 @@ void ConnectionLayer::onMenuTestClientDisconnectClicked(cocos2d::Object *sender)
   }
 }
 
+void ConnectionLayer::disconnectPlayer(std::string pName, std::string pID)
+{
 
+	if(mClient != NULL){
+    mClient->disconnect();
+  }
+}
+
+void ConnectionLayer::receiverDisconnect(cocos2d::extension::SIOClient *client, const std::string& data)
+{
+  log("----------Receiver Disconnect: %s", data.c_str());
+  if(!data.empty())
+  {
+    std::string id;
+    exportLastData(data, id);
+
+    GameLayer::setPlayerDisconnect(id);
+
+  }
+}
 
 // Delegate methods
 
@@ -428,6 +450,22 @@ void ConnectionLayer::exportLastData(std::string pData, int& pReturn)
     CCLog("Number %d", data.GetInt() );
 
     pReturn = data.GetInt();
+}
+
+void ConnectionLayer::exportLastData(std::string pData, std::string& pReturn)
+{
+  Document doc;
+	//pData = " {\"name\":\"username\",\"args\":[123]} " ;
+	//{"name":"randomNumber","args":[510]}
+	doc.Parse<0>(pData.c_str() );
+	
+	SizeType j = 0;
+	//for (SizeType i = 0; i < (n/2 - 1); i++){
+		//Gia tri 0 cua mang
+		Value& data = doc["args"][j];
+    CCLog("Number %d", data.GetString() );
+
+    pReturn = data.GetString();
 }
 
 void ConnectionLayer::exportLastData(std::string pData, std::string& pID, std::string& pNumber, 

@@ -20,6 +20,7 @@ class Player
   CC_SYNTHESIZE(bool, mMySelf, MySelf);
   CC_SYNTHESIZE(int, mNumber, Number);
   CC_SYNTHESIZE(int, mSTT, STT);
+  CC_SYNTHESIZE(bool, mDisconnect, Disconnect);
 
   int mPlayerScoreArray[MAP_X][MAP_Y];
 

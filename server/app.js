@@ -151,14 +151,19 @@ io.sockets.on('connection', function (socket) {
 			countEnd = 0;
 		}
 	});
-	
+	//Receiver disconnected command
+	socket.on('discn', function(data) {
+		console.log('discn', data);
+		io.sockets.emit("discn", data);
+	});
+
     socket.on('disconnect', function () {
     	console.log('disconnect socket');
-        socket.broadcast.emit('announcement', 'disconnect');
+        socket.broadcast.emit('disconnect', socket.id);
 
         if(countUser == 0)
         	return;
-        
+
     	countUser--;
 
     	if(countUser == 0){

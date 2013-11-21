@@ -246,6 +246,9 @@ void GameLayer::viewScore()
       //LabelBMFont* label0;
       mLayer->removeChild(mLabel[0]);
       mLabel[0] = LabelBMFont::create(player0->getCString(), "fonts/Arial.fnt");
+      if(RoomLayer::mPlayerList[i]->getDisconnect())
+        mLabel[0]->setOpacity(50);
+
 	    mLabel[0]->setScale(0.5);
 
       mLabel[0]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 +50));
@@ -262,6 +265,9 @@ void GameLayer::viewScore()
       //LabelBMFont* label1;
       mLayer->removeChild(mLabel[1]);
       mLabel[1] = LabelBMFont::create(player1->getCString(), "fonts/Arial.fnt");
+      if(RoomLayer::mPlayerList[i]->getDisconnect())
+        mLabel[1]->setOpacity(50);
+
 	    mLabel[1]->setScale(0.5);
 
       mLabel[1]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
@@ -277,6 +283,9 @@ void GameLayer::viewScore()
       //LabelBMFont* label2;
       mLayer->removeChild(mLabel[2]);
       mLabel[2] = LabelBMFont::create(player2->getCString(), "fonts/Arial.fnt");
+      if(RoomLayer::mPlayerList[i]->getDisconnect())
+        mLabel[2]->setOpacity(50);
+
 	    mLabel[2]->setScale(0.5);
 
       mLabel[2]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 50));
@@ -292,6 +301,9 @@ void GameLayer::viewScore()
       //LabelBMFont* label3;
       mLayer->removeChild(mLabel[3]);
       mLabel[3] = LabelBMFont::create(player3->getCString(), "fonts/Arial.fnt");
+      if(RoomLayer::mPlayerList[i]->getDisconnect())
+        mLabel[3]->setOpacity(50);
+
 	    mLabel[3]->setScale(0.5);
 
       mLabel[3]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 100));
@@ -402,7 +414,15 @@ void GameLayer::exitGame()
 void GameLayer::switchLayer(Object* pSender)
 {
   //Disconnect server
-  CheckinLayer::mConnect->onMenuTestClientDisconnectClicked(NULL);
+  for(int i = 0; i< RoomLayer::mUser; i++)
+    if(RoomLayer::mPlayerList[i]->getMySelf())
+    {
+      CheckinLayer::mConnect->disconnectPlayer(RoomLayer::mPlayerList[i]->getName(), 
+      RoomLayer::mPlayerList[i]->getID());
+
+      //Thoat
+      break;
+    }
 
   //Delete connection
   GameLayer::mTurn = 0;
@@ -438,6 +458,20 @@ void GameLayer::setName()
       label->runAction(ScaleTo::create(0.5, 1.0) );
 
       //Thoat
+      break;
+    }
+  }
+}
+
+void GameLayer::setPlayerDisconnect(std::string pID)
+{
+  for(int i= 0; i < (RoomLayer::mUser) ; i++)
+  {
+    if(RoomLayer::mPlayerList[i]->getID() == pID)
+    {
+      RoomLayer::mPlayerList[i]->setDisconnect(true);
+      viewScore();
+      //
       break;
     }
   }

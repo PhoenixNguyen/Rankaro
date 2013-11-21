@@ -51,6 +51,11 @@ public:
 
 	cocos2d::extension::SIOClient *mClient, *_sioEndpoint;
 	
+  //Disconnect player
+  void disconnectPlayer(std::string pName, std::string pID);
+  //Receiver player disconnect
+  void receiverDisconnect(cocos2d::extension::SIOClient *client, const std::string& data);
+
   //Send End game
   void sendEndGame();
 
@@ -85,6 +90,8 @@ public:
 
 	//return last data - Number
   void exportLastData(std::string pData, int& pReturn);
+  //Disconnect
+  void exportLastData(std::string pData, std::string& pReturn);
 
   //return last data - position
   void exportLastData(std::string pData, std::string& pID, std::string& pNumber, std::string& pRow, std::string& pColumn);

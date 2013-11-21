@@ -74,6 +74,9 @@ public:
   //Exit game
   void exitGame();
   void switchLayer(Object* pSender);
+
+  // set Player Disconnect
+  static void setPlayerDisconnect(std::string pID);
 };
 
 #endif
