@@ -138,6 +138,11 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
       CheckinLayer::mConnect->sendPosition(RoomLayer::mPlayerList[i]->getID(), 
         std::to_string(pNumber), std::to_string(pRow), std::to_string(pColumn));
 
+      //Send End game
+      CCLog("mTurn: %d", mTurn);
+      if(mTurn == 27*3)
+        CheckinLayer::mConnect->sendEndGame();
+
       //Thoat
       break;
     }

@@ -51,6 +51,9 @@ public:
 
 	cocos2d::extension::SIOClient *mClient, *_sioEndpoint;
 	
+  //Send End game
+  void sendEndGame();
+
 	//Send and receiver username
 	void regUsername(std::string pName);
 	void receiverUsername(cocos2d::extension::SIOClient *client, const std::string& data);

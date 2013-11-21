@@ -62,6 +62,11 @@ void ConnectionLayer::newConnect(cocos2d::Object *sender)
 	
 }
 
+void ConnectionLayer::sendEndGame()
+{
+  if(mClient != NULL) 
+		mClient->emit("endgame","{\"name\":\"1\"}");
+}
 void ConnectionLayer::regUsername(std::string pName)
 {
 	//Send username to server
