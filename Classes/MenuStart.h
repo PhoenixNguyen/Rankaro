@@ -24,6 +24,9 @@ public:
   virtual bool init(cocos2d::Object* pTarget);
 
   void startGame(Object* pSender);
+  void help(Object* pSender);
+  void contact(Object* pSender);
+  void exitGame(Object* pSender);
 
 };
 

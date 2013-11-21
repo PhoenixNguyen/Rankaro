@@ -55,7 +55,7 @@ bool MenuStart::init(Object* pTarget)
                                         "menu/Help.png",
                                         "menu/Help.png",
                                         this,
-                                        menu_selector(MenuStart::startGame));
+                                        menu_selector(MenuStart::help));
     
 	help->setPosition(Point(WIDTH/2, HEIGHT-200));
 
@@ -64,7 +64,7 @@ bool MenuStart::init(Object* pTarget)
                                         "menu/Contact.png",
                                         "menu/Contact.png",
                                         this,
-                                        menu_selector(MenuStart::startGame));
+                                        menu_selector(MenuStart::contact));
     
 	contact->setPosition(Point(WIDTH/2, HEIGHT-300));
 
@@ -73,7 +73,7 @@ bool MenuStart::init(Object* pTarget)
                                         "menu/Quit.png",
                                         "menu/Quit.png",
                                         this,
-                                        menu_selector(MenuStart::startGame));
+                                        menu_selector(MenuStart::exitGame));
     
 	quit->setPosition(Point(WIDTH/2, HEIGHT-400));
 
@@ -97,3 +97,13 @@ void MenuStart::startGame(Object* pSender)
   
 }
 
+void MenuStart::help(Object* pSender)
+{
+
+}
+void MenuStart::contact(Object* pSender)
+{}
+void MenuStart::exitGame(Object* pSender)
+{
+  CCDirector::sharedDirector()->end();
+}
