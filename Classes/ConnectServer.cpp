@@ -447,7 +447,7 @@ void ConnectionLayer::exportLastData(std::string pData, int& pReturn)
 	//for (SizeType i = 0; i < (n/2 - 1); i++){
 		//Gia tri 0 cua mang
 		Value& data = doc["args"][j];
-    CCLog("Number %d", data.GetInt() );
+    CCLog("Number-- %d", data.GetInt() );
 
     pReturn = data.GetInt();
 }
@@ -463,7 +463,7 @@ void ConnectionLayer::exportLastData(std::string pData, std::string& pReturn)
 	//for (SizeType i = 0; i < (n/2 - 1); i++){
 		//Gia tri 0 cua mang
 		Value& data = doc["args"][j];
-    CCLog("Number %d", data.GetString() );
+    CCLog("ID dis %s", data.GetString() );
 
     pReturn = data.GetString();
 }

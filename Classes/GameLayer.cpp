@@ -160,6 +160,7 @@ void GameLayer::ccTouchesMoved(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 
 void GameLayer::ccTouchesEnded(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 {
+  //Kiem tra da gui position chua
   if(mTurn == (CheckinLayer::mConnect->mTurn)*3)
     return;
 

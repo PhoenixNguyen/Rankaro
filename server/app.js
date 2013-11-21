@@ -43,6 +43,7 @@ io.set("log level", 3);
 /////////////////////////////////////////////////////////////////////////////////////////////////
 var listUser = new Array();
 var listState = new Array();
+var playerList = new Array();
 
 Array.prototype.inject = function(element) {
 
@@ -57,6 +58,8 @@ var countUser = 0;
 var countReady = 0;
 var countPosition =  0;
 var countEnd = 0;
+var mTurn = 0;
+var mCount = 0;
 
 io.sockets.on('connection', function (socket) {
 	countUser ++;
@@ -106,6 +109,8 @@ io.sockets.on('connection', function (socket) {
 		
 		//start game
 		if(countUser > 1 && countReady == countUser){
+			//Tang so turn
+			mTurn++;
 			//countReady = 0;
 			var number = Math.floor((Math.random()*899)+100);
 			
@@ -118,13 +123,28 @@ io.sockets.on('connection', function (socket) {
 	socket.on('position', function(data) {
 		countPosition ++;
 		
+		//Set player da gui position trong 1 turn
+		if(countPosition%3 ==0){
+
+			console.log("mTurn ", mTurn);
+			playerList[mCount++] = data.id;
+			console.log("player: ", mCount-1);
+			console.log("ID: ", data.id);
+		}
+
 		// console.log("POSITION:");
 		// console.log(data.pos);
 		
 		socket.broadcast.emit("position",data);
 		
 		//Send number next turn
-		if(((countPosition/3)%countUser == 0) && (countPosition%3 == 0) ){
+		if(mCount == countUser){
+			//Huy playerlist
+			playerList.length = 0;
+			//Tang so turn
+			mTurn++;
+			//Reset mCount
+			mCount = 0;
 			var number = Math.floor((Math.random()*899)+100);
 			io.sockets.emit("randomNumber",  number);
 		}
@@ -145,10 +165,13 @@ io.sockets.on('connection', function (socket) {
 			//RESET
 			listUser.length = 0;
 			listState.length = 0;
+			playerList.length = 0;
 			countUser = 0;
 			countReady = 0;
 			countPosition =  0;
 			countEnd = 0;
+			mTurn = 0;
+			mCount = 0;
 		}
 	});
 	//Receiver disconnected command
@@ -158,6 +181,36 @@ io.sockets.on('connection', function (socket) {
 	});
 
     socket.on('disconnect', function () {
+    	//Send number - truong hop deadlock khong gui duoc number khi player disconnect
+    	//so player gui len = so player -1 va 1 trong so do khong phai bi disconnect
+    	//So player gui len trong 1 turn: (countPosition/3)/mTurn va countPosition%3=0
+    	console.log("mTurn ", mTurn);
+    	console.log("So player gui len: ", mCount);
+    	console.log("So player -1:  ", countUser-1);
+    	console.log("countPosition:  ", countPosition);
+    	if(mCount == countUser-1){
+    		console.log("Thoa 1");
+    		var i;
+    		var tmp = 0;
+    		for(i =0; i< playerList.length; i++){
+    			if(playerList[i] == socket.id){
+    				tmp++;
+    			}
+    		}
+
+    		if(tmp == 0){
+    			console.log("Thoa 2");
+    			//Huy playerlist
+				playerList.length = 0;
+				//Tang so turn
+				mTurn++;
+				//Reset mCount
+				mCount = 0;
+				var number = Math.floor((Math.random()*899)+100);
+				io.sockets.emit("randomNumber",  number);
+    		}
+    	}
+
     	console.log('disconnect socket');
         socket.broadcast.emit('disconnect', socket.id);
 
@@ -170,10 +223,14 @@ io.sockets.on('connection', function (socket) {
     		//RESET
 			listUser.length = 0;
 			listState.length = 0;
+			playerList.length = 0;
 			countUser = 0;
 			countReady = 0;
 			countPosition =  0;
 			countEnd = 0;
+			mTurn = 0;
+			mCount = 0;
+
     	}
         
     });
