@@ -10,17 +10,6 @@
 
 USING_NS_CC;
 
-
-
-MapLayer::MapLayer(void)
-{
-}
-
-
-MapLayer::~MapLayer(void)
-{
-}
-
 MapLayer* MapLayer::create(MapScene* pMapScene)
 {
   MapLayer* pMapLayer = new MapLayer();

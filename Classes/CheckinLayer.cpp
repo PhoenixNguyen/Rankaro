@@ -14,13 +14,12 @@ USING_NS_CC_EXT;
 
 ConnectionLayer* CheckinLayer::mConnect = NULL;
 
-CheckinLayer::CheckinLayer(void)
-{
-}
-
 
 CheckinLayer::~CheckinLayer(void)
 {
+  if(mConnect != NULL)
+    CheckinLayer::mConnect->release();
+
 }
 
 Scene* CheckinLayer::scene()

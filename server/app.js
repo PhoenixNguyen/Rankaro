@@ -159,35 +159,3 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('announcement', 'disconnect');
     });
 });
-
-var testpoint = io.of('/testpoint').on('connection', function(socket) {
-    console.log('testpoint connection');
-
-    //testing simple message
-    socket.send('welcome to testpoint!');
-
-    socket.on('message', function (msg) {
-        console.log(msg);
-
-        socket.send(msg);
-
-    });
-
-    var msg = new Object();
-    msg.name = "myname";
-    msg.type = "mytype";
-    socket.emit("testevent",msg);
-    socket.on("echotest", function(data) {
-
-        console.log(data);
-
-        socket.emit("echotest", data);
-
-    });
-
-    socket.on('disconnect', function () {
-        console.log('disconnect testpoint');
-        socket.broadcast.emit('announcement', 'disconnect');
-    });
-
-});

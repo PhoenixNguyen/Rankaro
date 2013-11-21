@@ -10,16 +10,6 @@
 
 USING_NS_CC;
 
-
-MapScene::MapScene(void)
-{
-}
-
-
-MapScene::~MapScene(void)
-{
-}
-
 MapScene* MapScene::create()
 {
   MapScene* pMapScene = new MapScene();

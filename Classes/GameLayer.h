@@ -36,9 +36,6 @@ class GameLayer : public cocos2d::Layer
   //Turn number
   static int mTurn;
 public:
-  GameLayer(void);
-  ~GameLayer(void);
-
   
   static cocos2d::Scene* scene();
   static GameLayer* create();
@@ -70,6 +67,9 @@ public:
 
   //End game
   static void setEndGame();
+
+  //Set Name
+  void setName();
 
   //Exit game
   void exitGame();

@@ -22,8 +22,6 @@ class MapScene : public cocos2d::Scene
   MapLayer* mMapLayer;
 
 public:
-  MapScene(void);
-  ~MapScene(void);
 
   static MapScene* create();
   virtual bool init();

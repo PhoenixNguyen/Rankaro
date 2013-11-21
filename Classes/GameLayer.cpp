@@ -22,14 +22,6 @@ USING_NS_CC;
  int GameLayer::mTurn = 0;
  int GameLayer::mNumber = 0;
 
-GameLayer::GameLayer(void)
-{
-}
-
-
-GameLayer::~GameLayer(void)
-{
-}
 
 Scene* GameLayer::scene()
 {
@@ -77,6 +69,7 @@ bool GameLayer::init()
   
   //Khoi tao number dau tien
   //setNumber(MapScene::mConnect->getNumber());
+  setName();
   exitGame();
   setTouchEnabled(true);
   return true;
@@ -366,7 +359,7 @@ void GameLayer::setEndGame()
       label = LabelBMFont::create(status->getCString(), "fonts/Arial.fnt");
 	    label->setScale(0.5);
 
-      label->setPosition(Point(TILE_X*(MAP_X+ 5.5), TILE_Y + TILE_Y*2));
+      label->setPosition(Point(TILE_X*(MAP_X+ 5.5), TILE_Y + TILE_Y*1));
 
       mLayer->addChild(label, 2);
       label->runAction(ScaleTo::create(0.5, 1.0) );
@@ -406,9 +399,41 @@ void GameLayer::switchLayer(Object* pSender)
   //Disconnect server
   CheckinLayer::mConnect->onMenuTestClientDisconnectClicked(NULL);
 
-  Director::getInstance()->end();
-  //Director::getInstance()->resume();
-  
-  /*CCScene* scene = MapScene::create();
-	CCDirector::sharedDirector()->replaceScene(scene);*/
+  //Delete connection
+  GameLayer::mTurn = 0;
+  CheckinLayer::mConnect->mTurn = 0;
+  CheckinLayer::mConnect = NULL;
+  delete CheckinLayer::mConnect;
+
+  //Switch to main
+  CCScene* scene = CCScene::create();
+	MapScene* newconnect = MapScene::create();
+
+	scene->addChild(newconnect);
+	CCDirector::sharedDirector()->replaceScene(scene);
+}
+
+void GameLayer::setName()
+{
+  for(int i= 0; i < (RoomLayer::mUser) ; i++)
+  {
+    if(RoomLayer::mPlayerList[i]->getMySelf()){
+      String* status;
+      status = String::createWithFormat(RoomLayer::mPlayerList[i]->getName().c_str());
+
+      //CCLog("SCORE: %s", player->getCString());
+      LabelBMFont* label = NULL;
+      //mLayer->removeChild(label);
+      label = LabelBMFont::create(status->getCString(), "fonts/Arial.fnt");
+	    label->setScale(0.5);
+
+      label->setPosition(Point(TILE_X*(MAP_X+ 5.5), TILE_Y + TILE_Y*2));
+
+      mLayer->addChild(label, 2);
+      label->runAction(ScaleTo::create(0.5, 1.0) );
+
+      //Thoat
+      break;
+    }
+  }
 }

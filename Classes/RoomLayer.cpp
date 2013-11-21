@@ -25,6 +25,7 @@ RoomLayer::RoomLayer(void)
 
 RoomLayer::~RoomLayer(void)
 {
+
 }
 
 Scene* RoomLayer::scene()

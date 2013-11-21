@@ -23,7 +23,6 @@ class CheckinLayer : public cocos2d::Layer
   cocos2d::extension::EditBox* mEditBox;
   cocos2d::MenuItem* mSend;
 public:
-  CheckinLayer(void);
   ~CheckinLayer(void);
 
   static cocos2d::Scene* scene();
