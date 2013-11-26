@@ -81,6 +81,17 @@ void ConnectionLayer::regUsername(std::string pName)
 
 }
 
+void ConnectionLayer::regRoom(std::string pRoom)
+{
+	//Send username to server
+	if(mClient != NULL) 
+		mClient->emit("room","{\"room\":\"" + pRoom + "\"}");
+		//mClient->emit("username","[{\"ECHO\":\"Hello server\"}]");
+
+	
+
+}
+
 void ConnectionLayer::sendState(std::string pID)
 {
 	//Send username to server
@@ -103,15 +114,15 @@ void ConnectionLayer::sendPosition(std::string pID, std::string pNumber, std::st
 //////// USER ///////////////////////////////////////////////////////////
 void ConnectionLayer::receiverUsername(SIOClient *client, const std::string& data) {
 
-	//log("ALL USERNAME CONNECTED: %s", data.c_str());
+	log("ALL USERNAME CONNECTED: %s", data.c_str());
   //Init lấy các user đăng ký trước nên phải khởi tạo đầu tiên đặt ở RoomLayer class!
 
   //Add rommdisplay
-  /*if(!data.empty())
+  if(!data.empty())
   {
     exportListData(data, mUsername);
-    
-  }*/
+    RoomLayer::setFirstUsername();
+  }
 
 }
 
@@ -122,11 +133,11 @@ void ConnectionLayer::lastUsername(SIOClient *client, const std::string& data) {
   {
     //RoomDisplayLayer::createPlayer();
     //Add rommdisplay
-    //std::map<std::string, std::string> username;
-    //exportLastData(data, username);
+    std::map<std::string, std::string> username;
+    exportLastData(data, username);
 
-    ////CCLog("Name: %s",(*username.begin()).second.c_str());
-    //RoomLayer::setLastUsername((*username.begin()).second.c_str(), (*username.begin()).first.c_str());
+    //CCLog("Name: %s",(*username.begin()).second.c_str());
+    RoomLayer::setLastUsername((*username.begin()).second.c_str(), (*username.begin()).first.c_str());
   }
 	
 }

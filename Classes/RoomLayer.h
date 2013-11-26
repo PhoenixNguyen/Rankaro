@@ -42,7 +42,7 @@ public:
   void sendState(cocos2d::Object* pSender);
 
   static void setLastUsername(std::string pName, std::string pID);
-  void setFirstUsername();
+  static void setFirstUsername();
 
   void addToMenu(std::string pName, std::string pID, bool pMyself );
 

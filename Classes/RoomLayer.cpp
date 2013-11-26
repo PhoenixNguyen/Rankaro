@@ -67,7 +67,7 @@ bool RoomLayer::init()
   mMenu->setPosition(CCPointZero);
   mLayer->addChild(mMenu, 2);
  
-  setFirstUsername();
+  //setFirstUsername();
   setFirstState();
   return true;
 }

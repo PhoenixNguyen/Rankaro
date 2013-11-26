@@ -78,11 +78,16 @@ void RoomDisplayLayer::ccTouchesEnded(cocos2d::Set* pTouched, cocos2d::Event* pE
   {
     if(mSpriteList[i]->getBoundingBox().containsPoint(point))
     {
-      String* tmp = String::createWithFormat("room%d", i);
+      String* tmp = String::createWithFormat("%d", i);
       CCLog("Room: %d", i);
       //Send room
-
+      CheckinLayer::mConnect->regRoom(tmp->getCString());
       //Switch to RoomLayer
+      //Replace Scene
+      CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
+          1.0, RoomLayer::scene()
+        );
+      CCDirector::sharedDirector()->replaceScene(transition);
 
       break;
     }

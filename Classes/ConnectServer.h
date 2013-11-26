@@ -65,6 +65,9 @@ public:
 	void receiverUsername(cocos2d::extension::SIOClient *client, const std::string& data);
 	void lastUsername(cocos2d::extension::SIOClient *client, const std::string& data);
 
+  //Reg room
+  void regRoom(std::string pName);
+
 	//state
 	void sendState(std::string pName);
 	void receiverState(cocos2d::extension::SIOClient *client, const std::string& data);
