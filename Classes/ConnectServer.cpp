@@ -105,11 +105,13 @@ void ConnectionLayer::receiverUsername(SIOClient *client, const std::string& dat
 
 	//log("ALL USERNAME CONNECTED: %s", data.c_str());
   //Init lấy các user đăng ký trước nên phải khởi tạo đầu tiên đặt ở RoomLayer class!
-  if(!data.empty())
+
+  //Add rommdisplay
+  /*if(!data.empty())
   {
     exportListData(data, mUsername);
     
-  }
+  }*/
 
 }
 
@@ -118,11 +120,13 @@ void ConnectionLayer::lastUsername(SIOClient *client, const std::string& data) {
 	//log("LAST USERNAME CONNECTED: %s", data.c_str());
   if(!data.empty())
   {
-    std::map<std::string, std::string> username;
-    exportLastData(data, username);
+    //RoomDisplayLayer::createPlayer();
+    //Add rommdisplay
+    //std::map<std::string, std::string> username;
+    //exportLastData(data, username);
 
-    //CCLog("Name: %s",(*username.begin()).second.c_str());
-    RoomLayer::setLastUsername((*username.begin()).second.c_str(), (*username.begin()).first.c_str());
+    ////CCLog("Name: %s",(*username.begin()).second.c_str());
+    //RoomLayer::setLastUsername((*username.begin()).second.c_str(), (*username.begin()).first.c_str());
   }
 	
 }

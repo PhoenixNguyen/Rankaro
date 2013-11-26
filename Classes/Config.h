@@ -18,6 +18,8 @@
 #define TILE_X 48
 #define TILE_Y 48
 
+#define MAX_ROOM 9
+
 class Config
 {
 public:

@@ -81,6 +81,9 @@ io.sockets.on('connection', function (socket) {
         console.log(data);
 		//socket.json.send(data);
 		
+		//set name for client
+		socket.name = data.name;
+
 		var user = new Object();
 		user.name = data.name;
 		user.id = socket.id;

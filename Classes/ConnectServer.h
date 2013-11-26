@@ -12,6 +12,7 @@
 #include "cocos-ext.h"
 #include "network/SocketIO.h"
 #include "RoomLayer.h"
+#include "RoomDisplayLayer.h"
 
 class ConnectionLayer
 	: public cocos2d::Layer
