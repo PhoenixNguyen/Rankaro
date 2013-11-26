@@ -22,6 +22,8 @@ class ConnectionLayer
   CC_SYNTHESIZE(std::string, mLastUsername, LastUsername);
   CC_SYNTHESIZE(int, mNumber, Number);
   static int mTurn;
+  CC_SYNTHESIZE(bool, mRoomStatus, RoomStatus);
+  static bool* mListStatus;
 public:
   std::map<std::string, std::string> mUsername;
   std::map<std::string, std::string> mState;
@@ -73,6 +75,9 @@ public:
 	void receiverState(cocos2d::extension::SIOClient *client, const std::string& data);
 	void lastState(cocos2d::extension::SIOClient *client, const std::string& data);
 
+  //Room status
+  void roomStatus(cocos2d::extension::SIOClient *client, const std::string& data);
+
 	//receiver number
 	void receiverNumber(cocos2d::extension::SIOClient *client, const std::string& data);
 
@@ -99,6 +104,9 @@ public:
 
   //return last data - position
   void exportLastData(std::string pData, std::string& pID, std::string& pNumber, std::string& pRow, std::string& pColumn);
+
+  //return list status room
+  void exportListData(std::string pData, bool* &pReturn);
 
 };
 

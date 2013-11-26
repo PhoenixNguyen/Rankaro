@@ -2,6 +2,10 @@
 
 using namespace cocos2d;
 
+cocos2d::Sprite* RoomDisplayLayer::mSpriteList[9] = {NULL};
+RoomDisplayLayer* RoomDisplayLayer::mLayer = NULL;
+bool RoomDisplayLayer::mRoomStatus = false;
+
 RoomDisplayLayer::RoomDisplayLayer(void)
 {
 }
@@ -23,15 +27,15 @@ Scene* RoomDisplayLayer::scene()
 
 RoomDisplayLayer* RoomDisplayLayer::create()
 {
-  RoomDisplayLayer* layer = new RoomDisplayLayer();
-  if( layer && layer->init())
+  mLayer = new RoomDisplayLayer();
+  if( mLayer && mLayer->init())
   {
-    layer->autorelease();
-    return layer;
+    mLayer->autorelease();
+    return mLayer;
   }
   else
   {
-    CC_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(mLayer);
     return NULL;
   }
 }
@@ -71,6 +75,7 @@ void RoomDisplayLayer::addRoom()
 
 void RoomDisplayLayer::ccTouchesEnded(cocos2d::Set* pTouched, cocos2d::Event* pEvent)
 {
+
   Touch* touch = (Touch*)pTouched->anyObject();
   Point point = touch->getLocation();
 
@@ -78,10 +83,17 @@ void RoomDisplayLayer::ccTouchesEnded(cocos2d::Set* pTouched, cocos2d::Event* pE
   {
     if(mSpriteList[i]->getBoundingBox().containsPoint(point))
     {
+      //Neu room dang hoat dong thi khong vao duoc
+      if(CheckinLayer::mConnect->mListStatus[i])
+        return;
+
       String* tmp = String::createWithFormat("%d", i);
       CCLog("Room: %d", i);
       //Send room
       CheckinLayer::mConnect->regRoom(tmp->getCString());
+
+      //Running
+      setRoomStatus(true);
       //Switch to RoomLayer
       //Replace Scene
       CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
@@ -92,4 +104,56 @@ void RoomDisplayLayer::ccTouchesEnded(cocos2d::Set* pTouched, cocos2d::Event* pE
       break;
     }
   }
+}
+
+void RoomDisplayLayer::roomStatus(bool* pList)
+{
+  
+
+  for(int i= 0; i< MAX_ROOM; i++)
+  {
+    if(pList[i])
+      addSprite(i, false);
+    else
+      addSprite(i, true);
+  }
+}
+
+void RoomDisplayLayer::addSprite(int pNumber, bool pStatus)
+{
+  mLayer->removeChild(mSpriteList[pNumber], 1);
+
+  int row = pNumber/3+1 ;
+    if(row == 1)
+      row = 3;
+    else
+      if(row == 3)
+        row =1;
+  int column = pNumber%3+1;
+
+  if(pStatus)
+  {
+    String* tmp = String::createWithFormat("roomdisplay/room%d.png", pNumber+1);
+    mSpriteList[pNumber] = Sprite::create(tmp->getCString());
+    
+    mSpriteList[pNumber]->setPosition(Point(column *WIDTH/4 , row*HEIGHT/4));
+    mLayer->addChild(mSpriteList[pNumber], 1);
+  }
+  else
+  {
+    mSpriteList[pNumber] = Sprite::create("roomdisplay/running.png");
+
+    mSpriteList[pNumber]->setPosition(Point(column *WIDTH/4 , row*HEIGHT/4));
+    mLayer->addChild(mSpriteList[pNumber], 1);
+  }
+}
+
+bool RoomDisplayLayer::getRoomStatus()
+{
+  return mRoomStatus;
+}
+
+void RoomDisplayLayer::setRoomStatus(bool pStatus)
+{
+  mRoomStatus = pStatus;
 }

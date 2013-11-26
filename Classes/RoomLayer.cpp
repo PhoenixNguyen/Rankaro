@@ -68,7 +68,7 @@ bool RoomLayer::init()
   mLayer->addChild(mMenu, 2);
  
   //setFirstUsername();
-  setFirstState();
+  //setFirstState();
   return true;
 }
 
@@ -194,6 +194,13 @@ void RoomLayer::setFirstState()
            }
 	    }
   }
+}
+
+void RoomLayer::roomFull()
+{
+  Sprite* sprite = Sprite::create("room/full.png");
+  sprite->setPosition(Point(WIDTH/2, HEIGHT/2));
+  mLayer->addChild(sprite);
 }
 
 void RoomLayer::startGame()

@@ -48,10 +48,13 @@ public:
 
   //State
   static void setLastState(std::string pID);
-  void setFirstState();
+  static void setFirstState();
 
   //Start game
   static void startGame();
+
+  //Room full
+  static void roomFull();
 };
 
 #endif

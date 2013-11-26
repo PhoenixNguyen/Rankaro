@@ -57,6 +57,7 @@ var countPosition = new Array(9);
 var countEnd = new Array(9);
 var mTurn = new Array(9);
 var mCount = new Array(9);
+var mRoomstatus = new Array(9);
 
 for(var i= 0; i< 9; i++){
 	countUser[i] = 0;
@@ -65,8 +66,10 @@ for(var i= 0; i< 9; i++){
 	countEnd[i] = 0;
 	mTurn[i] = 0;
 	mCount[i] = 0;
+	mRoomstatus[i] = false;
 }
 
+//mRoomstatus[0] = true;
 //Define inject
 Array.prototype.inject = function(element) {
 
@@ -94,13 +97,18 @@ io.sockets.on('connection', function (socket) {
 		//set name for client
 		socket.name = data.name;
 
+		socket.emit("status", mRoomstatus);
+
     });
 	
 	
 	socket.on("room", function(data) {
-		countUser[data.room] ++;
-		if(countUser[data.room] >= 5)
+		
+		//Neu so player nhieu hon 4 hoac room full thi return
+		if(countUser[data.room] >= 4 || mRoomstatus[data.room]){
 			return;
+		}
+		countUser[data.room] ++;
 
 		console.log('ROOM: ');
         console.log(data.room);
@@ -110,9 +118,12 @@ io.sockets.on('connection', function (socket) {
 		socket.room = data.room;
 		socket.join(data.room);
 
+		//Send list user init
 		socket.emit("init", listUser[data.room]);
 		console.log("INIT LIST USER ", listUser[data.room]);
-		//Send list user init
+		//Send state init
+		socket.emit("initState", listState[socket.room]);
+		
 		
 
 		//Get new player
@@ -128,7 +139,6 @@ io.sockets.on('connection', function (socket) {
     });
 
 	//2. STATE
-	socket.emit("initState", listState[socket.room]);
 	
 	socket.on("state", function(data) {
 		console.log("STATE: ");
@@ -149,6 +159,8 @@ io.sockets.on('connection', function (socket) {
 			var number = Math.floor((Math.random()*899)+100);
 			
 			io.sockets.in(socket.room).emit("randomNumber",  number);
+			mRoomstatus[socket.room] = true;
+			io.sockets.emit("status", mRoomstatus);
 		}
 	
 	});
@@ -206,6 +218,8 @@ io.sockets.on('connection', function (socket) {
 			countEnd[socket.room] = 0;
 			mTurn[socket.room] = 0;
 			mCount[socket.room] = 0;
+			mRoomstatus[socket.room] = false;
+			io.sockets.emit("status", mRoomstatus);
 		}
 	});
 	//Receiver disconnected command
@@ -265,7 +279,8 @@ io.sockets.on('connection', function (socket) {
 			countEnd[socket.room] = 0;
 			mTurn[socket.room] = 0;
 			mCount[socket.room] = 0;
-
+			mRoomstatus[socket.room] = false;
+			io.sockets.emit("status", mRoomstatus);
     	}
         
     });

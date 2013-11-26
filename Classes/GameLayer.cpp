@@ -425,9 +425,14 @@ void GameLayer::switchLayer(Object* pSender)
       break;
     }
 
+  RoomDisplayLayer::setRoomStatus(false);
   //Delete connection
   GameLayer::mTurn = 0;
   CheckinLayer::mConnect->mTurn = 0;
+  
+  //free
+  CheckinLayer::mConnect->setRoomStatus(false);
+
   CheckinLayer::mConnect = NULL;
   delete CheckinLayer::mConnect;
 

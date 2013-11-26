@@ -18,6 +18,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 int ConnectionLayer::mTurn = 0;
+bool* ConnectionLayer::mListStatus = NULL;
 
 ConnectionLayer::ConnectionLayer(void)
 	: mClient(NULL)
@@ -45,6 +46,9 @@ void ConnectionLayer::newConnect(cocos2d::Object *sender)
 	mClient->on("init", CC_CALLBACK_2(ConnectionLayer::receiverUsername, this));
 	//nhan user gan nhat
 	mClient->on("username", CC_CALLBACK_2(ConnectionLayer::lastUsername, this));
+
+  //trang thai room
+	mClient->on("status", CC_CALLBACK_2(ConnectionLayer::roomStatus, this));
 
 	//nhan trang thai cua nhung user khoi tao truoc
 	mClient->on("initState", CC_CALLBACK_2(ConnectionLayer::receiverState, this));
@@ -142,7 +146,21 @@ void ConnectionLayer::lastUsername(SIOClient *client, const std::string& data) {
 	
 }
 
+void ConnectionLayer::roomStatus(SIOClient *client, const std::string& data)
+{
+  log("ALL Status: %s", data.c_str());
+  if(!data.empty())
+  {
+    //Neu la this player thi return
+    if(RoomDisplayLayer::getRoomStatus())
+      return;
 
+    exportListData(data, mListStatus);
+    RoomDisplayLayer::roomStatus(mListStatus);
+
+    //RoomLayer::roomFull();
+  }
+}
 
 ///////  STATE ////////////////////////////////////////////////////////
 void ConnectionLayer::receiverState(SIOClient *client, const std::string& data) {
@@ -153,6 +171,7 @@ void ConnectionLayer::receiverState(SIOClient *client, const std::string& data) 
   if(!data.empty())
   {
     exportListData(data, mState);
+    RoomLayer::setFirstState();
     
   }
 }
@@ -509,3 +528,20 @@ void ConnectionLayer::exportLastData(std::string pData, std::string& pID, std::s
   pColumn = column.GetString();
 }
 
+void ConnectionLayer::exportListData(std::string pData, bool* &pReturn)
+{
+  pReturn = new bool[9];
+  Document doc;
+	//pData = " {\"name\":\"username\",\"args\":[123]} " ;
+	//{"name":"status","args":[[false,false,false,false,false,false,false,false,false]]}
+	doc.Parse<0>(pData.c_str() );
+	
+	SizeType j = 0;
+	for (int i = 0; i < MAX_ROOM; i++){
+		//Gia tri 0 cua mang
+		Value& data = doc["args"][j][i];
+    CCLog("Status list %s", data.GetBool() == true? "true":"false" );
+
+    pReturn[i] = data.GetBool();
+  }
+}
