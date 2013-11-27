@@ -196,6 +196,10 @@ void ConnectionLayer::receiverNumber(SIOClient *client, const std::string& data)
 	log("START GAME AND RECEIVER NUMBER: %s", data.c_str());
   if(!data.empty())
   {
+    //Neu khong dang choi thi return - khong set number
+    if(!RoomDisplayLayer::getRoomStatus())
+      return;
+
     int number;
     exportLastData(data, number);
 

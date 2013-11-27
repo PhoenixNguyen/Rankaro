@@ -265,13 +265,18 @@ io.sockets.on('connection', function (socket) {
 				//Reset mCount
 				mCount[socket.room] = 0;
 				var number = Math.floor((Math.random()*899)+100);
-				io.sockets.in(socket.room).emit("randomNumber",  number);
+
+				//Khong gui cho thag out khoi room
+				socket.broadcast.to(socket.room).emit("randomNumber",  number);
     		}
     	}
 
     	console.log('Return Room');
         socket.broadcast.to(socket.room).emit('returnroom', socket.id);
         socket.leave(socket.room);
+
+        if(countUser[socket.room] >1)
+        	io.sockets.emit("status", mRoomstatus);
 
         if(countUser[socket.room] == 0)
         	return;

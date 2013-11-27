@@ -428,7 +428,7 @@ void GameLayer::switchLayer(Object* pSender)
   //Delete connection
   GameLayer::mTurn = 0;
   CheckinLayer::mConnect->setTurn(0);
-  CCLog("Turn Xoa%d", CheckinLayer::mConnect->getTurn());
+  CCLog("Turn Xoa%d: ", CheckinLayer::mConnect->getTurn());
   //CheckinLayer::mConnect->mTurn = 0;
   CheckinLayer::mConnect->mUsername.clear();
   CheckinLayer::mConnect->mState.clear();
