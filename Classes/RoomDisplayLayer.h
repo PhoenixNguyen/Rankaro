@@ -25,8 +25,8 @@ class RoomDisplayLayer : public cocos2d::Layer
   static bool mRoomStatus;
 
 public:
-  RoomDisplayLayer(void);
-  ~RoomDisplayLayer(void);
+  /*RoomDisplayLayer(void);
+  ~RoomDisplayLayer(void);*/
 
   static cocos2d::Scene* scene();
   static RoomDisplayLayer* create();

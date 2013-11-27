@@ -21,7 +21,7 @@ class ConnectionLayer
 
   CC_SYNTHESIZE(std::string, mLastUsername, LastUsername);
   CC_SYNTHESIZE(int, mNumber, Number);
-  static int mTurn;
+  CC_SYNTHESIZE(int, mTurn, Turn);
   CC_SYNTHESIZE(bool, mRoomStatus, RoomStatus);
   static bool* mListStatus;
 public:

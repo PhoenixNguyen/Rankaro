@@ -22,7 +22,6 @@ USING_NS_CC;
  int GameLayer::mTurn = 0;
  int GameLayer::mNumber = 0;
 
-
 Scene* GameLayer::scene()
 {
   Scene* scene = Scene::create();
@@ -161,7 +160,7 @@ void GameLayer::ccTouchesMoved(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 void GameLayer::ccTouchesEnded(cocos2d::Set* pTouches, cocos2d::Event* pEvent)
 {
   //Kiem tra da gui position chua
-  if(mTurn == (CheckinLayer::mConnect->mTurn)*3)
+  if(mTurn == (CheckinLayer::mConnect->getTurn())*3)
     return;
 
   Touch* touch = (Touch*)pTouches->anyObject();
@@ -425,23 +424,46 @@ void GameLayer::switchLayer(Object* pSender)
       break;
     }
 
-  RoomDisplayLayer::setRoomStatus(false);
+  
   //Delete connection
   GameLayer::mTurn = 0;
-  CheckinLayer::mConnect->mTurn = 0;
+  CheckinLayer::mConnect->setTurn(0);
+  CCLog("Turn Xoa%d", CheckinLayer::mConnect->getTurn());
+  //CheckinLayer::mConnect->mTurn = 0;
+  CheckinLayer::mConnect->mUsername.clear();
+  CheckinLayer::mConnect->mState.clear();
   
-  //free
   CheckinLayer::mConnect->setRoomStatus(false);
+  /*for (int i = 0; i < MAX_ROOM; i++){
+		CheckinLayer::mConnect->mListStatus[i] = false;
+  }*/
 
-  CheckinLayer::mConnect = NULL;
-  delete CheckinLayer::mConnect;
+  //Set room myself
+  RoomDisplayLayer::setRoomStatus(false);
+
+  RoomLayer::mUser = 0;
+  //delete[] RoomLayer::mPlayerList;
+  //free
+  
+
+  //-------------------------------------------------------------Xem xet dua sang man hinh menu
+  //CheckinLayer::mConnect = NULL;
+  //delete CheckinLayer::mConnect;
 
   //Switch to main
-  CCScene* scene = CCScene::create();
+  /*CCScene* scene = CCScene::create();
 	MapScene* newconnect = MapScene::create();
 
 	scene->addChild(newconnect);
-	CCDirector::sharedDirector()->replaceScene(scene);
+	CCDirector::sharedDirector()->replaceScene(scene);*/
+  //-------------------------------------------------------------------------------------------
+
+  //Switch to RoomLayer
+      //Replace Scene
+      CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
+          1.0, RoomDisplayLayer::scene()
+        );
+      CCDirector::sharedDirector()->replaceScene(transition);
 }
 
 void GameLayer::setName()

@@ -17,15 +17,16 @@ RoomLayer* RoomLayer::mLayer = NULL;
 Player* RoomLayer::mPlayerList[4] = {NULL};
 int RoomLayer::mUser = 0;
 
-RoomLayer::RoomLayer(void)
-{
-  
-}
-
-
+//RoomLayer::RoomLayer(void)
+//{
+//  
+//}
+//
+//
 RoomLayer::~RoomLayer(void)
 {
-
+  delete mMenuPlayer;
+  
 }
 
 Scene* RoomLayer::scene()
@@ -90,7 +91,7 @@ void RoomLayer::setFirstUsername()
     ii != CheckinLayer::mConnect->mUsername.end(); ++ii)
 	   {
 		   //log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
-       //CCLog("%s", (*ii).second.c_str());
+       CCLog("%s", (*ii).second.c_str());
        mLayer->addToMenu((*ii).second.c_str(), (*ii).first.c_str(), false);
 	   }
   
@@ -153,6 +154,7 @@ void RoomLayer::sendState(cocos2d::Object* pSender)
       //CCLog("%d :: %s", i, mPlayerList[i]->getID().c_str());
       CheckinLayer::mConnect->sendState(mPlayerList[i]->getID());
       
+      break;
     }
   }
 

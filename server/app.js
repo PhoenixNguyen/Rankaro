@@ -41,6 +41,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 var io = iolib.listen(server);
 io.set("log level", 3);
 /////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------- Khai bao ------------------------------------------------
 var listUser = new Array(9);
 var listState = new Array(9);
 var playerList= new Array(9);
@@ -79,8 +80,15 @@ Array.prototype.inject = function(element) {
     this.push(element)
 }
 
+var mAllClients = [];
+
+//--------------------------- Het khai bao ---------------------------------------------------
+
 io.sockets.on('connection', function (socket) {
 	
+	//Add client to array
+	mAllClients.push(socket);
+
     console.log('connection', socket.id);
 
     //testing simple message
@@ -119,10 +127,12 @@ io.sockets.on('connection', function (socket) {
 		socket.join(data.room);
 
 		//Send list user init
-		socket.emit("init", listUser[data.room]);
-		console.log("INIT LIST USER ", listUser[data.room]);
-		//Send state init
-		socket.emit("initState", listState[socket.room]);
+		if(listUser[data.room].length != 0){
+			socket.emit("init", listUser[data.room]);
+			console.log("INIT LIST USER ", listUser[data.room]);
+			//Send state init
+			socket.emit("initState", listState[socket.room]);
+		}
 		
 		
 
@@ -228,15 +238,15 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.in(socket.room).emit("discn", data);
 	});
 
-    socket.on('disconnect', function () {
-    	//Send number - truong hop deadlock khong gui duoc number khi player disconnect
+	socket.on('returnroom', function(){
+		//Send number - truong hop deadlock khong gui duoc number khi player disconnect
     	//so player gui len = so player -1 va 1 trong so do khong phai bi disconnect
     	//So player gui len trong 1 turn: (countPosition/3)/mTurn va countPosition%3=0
     	console.log("mTurn ", mTurn[socket.room]);
     	console.log("So player gui len: ", mCount[socket.room]);
     	console.log("So player -1:  ", countUser[socket.room]-1);
     	console.log("countPosition:  ", countPosition[socket.room]);
-    	if(mCount[socket.room] == countUser[socket.room]-1){
+    	if(mCount[socket.room] == (countUser[socket.room]-1) && countUser[socket.room] > 1){
     		console.log("Thoa 1");
     		var i;
     		var tmp = 0;
@@ -259,8 +269,8 @@ io.sockets.on('connection', function (socket) {
     		}
     	}
 
-    	console.log('disconnect socket');
-        socket.broadcast.to(socket.room).emit('disconnect', socket.id);
+    	console.log('Return Room');
+        socket.broadcast.to(socket.room).emit('returnroom', socket.id);
         socket.leave(socket.room);
 
         if(countUser[socket.room] == 0)
@@ -282,6 +292,67 @@ io.sockets.on('connection', function (socket) {
 			mRoomstatus[socket.room] = false;
 			io.sockets.emit("status", mRoomstatus);
     	}
+	});
+
+    socket.on('disconnect', function () {
+
+    	console.log('disconnect socket');
+    	var i = mAllClients.indexOf(socket);
+    	delete mAllClients[i];
+
+   //  	//Send number - truong hop deadlock khong gui duoc number khi player disconnect
+   //  	//so player gui len = so player -1 va 1 trong so do khong phai bi disconnect
+   //  	//So player gui len trong 1 turn: (countPosition/3)/mTurn va countPosition%3=0
+   //  	console.log("mTurn ", mTurn[socket.room]);
+   //  	console.log("So player gui len: ", mCount[socket.room]);
+   //  	console.log("So player -1:  ", countUser[socket.room]-1);
+   //  	console.log("countPosition:  ", countPosition[socket.room]);
+   //  	if(mCount[socket.room] == countUser[socket.room]-1){
+   //  		console.log("Thoa 1");
+   //  		var i;
+   //  		var tmp = 0;
+   //  		for(i =0; i< playerList[socket.room].length; i++){
+   //  			if(playerList[socket.room][i] == socket.id){
+   //  				tmp++;
+   //  			}
+   //  		}
+
+   //  		if(tmp == 0){
+   //  			console.log("Thoa 2");
+   //  			//Huy playerlist
+			// 	playerList[socket.room].length = 0;
+			// 	//Tang so turn
+			// 	mTurn[socket.room]++;
+			// 	//Reset mCount
+			// 	mCount[socket.room] = 0;
+			// 	var number = Math.floor((Math.random()*899)+100);
+			// 	io.sockets.in(socket.room).emit("randomNumber",  number);
+   //  		}
+   //  	}
+
+   //  	console.log('disconnect socket');
+   //      socket.broadcast.to(socket.room).emit('disconnect', socket.id);
+   //      socket.leave(socket.room);
+
+   //      if(countUser[socket.room] == 0)
+   //      	return;
+
+   //  	countUser[socket.room]--;
+
+   //  	if(countUser[socket.room] == 0){
+   //  		//RESET
+			// listUser[socket.room].length = 0;
+			// listState[socket.room].length = 0;
+			// playerList[socket.room].length = 0;
+			// countUser[socket.room] = 0;
+			// countReady[socket.room] = 0;
+			// countPosition[socket.room] =  0;
+			// countEnd[socket.room] = 0;
+			// mTurn[socket.room] = 0;
+			// mCount[socket.room] = 0;
+			// mRoomstatus[socket.room] = false;
+			// io.sockets.emit("status", mRoomstatus);
+   //  	}
         
     });
 });

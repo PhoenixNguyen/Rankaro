@@ -17,7 +17,6 @@ using namespace rapidjson;
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-int ConnectionLayer::mTurn = 0;
 bool* ConnectionLayer::mListStatus = NULL;
 
 ConnectionLayer::ConnectionLayer(void)
@@ -26,6 +25,7 @@ ConnectionLayer::ConnectionLayer(void)
 {
 	//set the clients to NULL until we are ready to connect
 	newConnect(NULL);
+  setTurn(0);
 	
 
 }
@@ -65,7 +65,7 @@ void ConnectionLayer::newConnect(cocos2d::Object *sender)
 	mClient->on("endGame", CC_CALLBACK_2(ConnectionLayer::endGame, this));
 
   //Receiver player disconnect
-	mClient->on("disconnect", CC_CALLBACK_2(ConnectionLayer::receiverDisconnect, this));
+	mClient->on("returnroom", CC_CALLBACK_2(ConnectionLayer::receiverDisconnect, this));
 	
 }
 
@@ -151,11 +151,12 @@ void ConnectionLayer::roomStatus(SIOClient *client, const std::string& data)
   log("ALL Status: %s", data.c_str());
   if(!data.empty())
   {
-    //Neu la this player thi return
+    //Lay ve list room status
+    exportListData(data, mListStatus);
+
+    //Neu la this player thi return neu khong se loi vi dang choi==
     if(RoomDisplayLayer::getRoomStatus())
       return;
-
-    exportListData(data, mListStatus);
     RoomDisplayLayer::roomStatus(mListStatus);
 
     //RoomLayer::roomFull();
@@ -198,13 +199,16 @@ void ConnectionLayer::receiverNumber(SIOClient *client, const std::string& data)
     int number;
     exportLastData(data, number);
 
-    if(mTurn == 0)
+    CCLog("TURN: %d", getTurn());
+    if(getTurn() == 0)
       RoomLayer::startGame();
 	   
     GameLayer::setNumber(number);
 
     //Tang so turn. turn hien tai = mTurn -1
-    mTurn++;
+    CCLog("TURN2: %d", getTurn());
+    setTurn(getTurn()+1);
+    CCLog("TURN3: %d", getTurn());
   }
 }
 
@@ -261,7 +265,8 @@ void ConnectionLayer::disconnectPlayer(std::string pName, std::string pID)
 {
 
 	if(mClient != NULL){
-    mClient->disconnect();
+    mClient->emit("returnroom","[{\"id\":\"1\"}]");
+    //mClient->disconnect();
   }
 }
 

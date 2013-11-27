@@ -6,14 +6,18 @@ cocos2d::Sprite* RoomDisplayLayer::mSpriteList[9] = {NULL};
 RoomDisplayLayer* RoomDisplayLayer::mLayer = NULL;
 bool RoomDisplayLayer::mRoomStatus = false;
 
-RoomDisplayLayer::RoomDisplayLayer(void)
-{
-}
-
-
-RoomDisplayLayer::~RoomDisplayLayer(void)
-{
-}
+//RoomDisplayLayer::RoomDisplayLayer(void)
+//{
+//}
+//
+//
+//RoomDisplayLayer::~RoomDisplayLayer(void)
+//{
+//  for(int i=0; i< 9; i++)
+//    mSpriteList[i] = NULL;
+//  mLayer = NULL;
+//  mRoomStatus = false;
+//}
 
 Scene* RoomDisplayLayer::scene()
 {

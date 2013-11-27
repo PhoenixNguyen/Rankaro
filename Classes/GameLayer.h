@@ -36,7 +36,7 @@ class GameLayer : public cocos2d::Layer
   //Turn number
   static int mTurn;
 public:
-  
+  /*~GameLayer();*/
   static cocos2d::Scene* scene();
   static GameLayer* create();
   virtual bool init();

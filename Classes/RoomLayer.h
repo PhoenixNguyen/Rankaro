@@ -32,7 +32,7 @@ public:
 
   static int mUser;
   static RoomLayer* mLayer;
-  RoomLayer(void);
+  //RoomLayer(void);
   ~RoomLayer(void);
 
   static cocos2d::Scene* scene();
