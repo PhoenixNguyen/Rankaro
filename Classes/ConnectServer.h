@@ -25,6 +25,8 @@ class ConnectionLayer
   CC_SYNTHESIZE(bool, mRoomStatus, RoomStatus);
   CC_SYNTHESIZE(int, mRoom, Room);
   static bool* mListStatus;
+  int* mListNumberInRoom;
+
 public:
   std::map<std::string, std::string> mUsername;
   std::map<std::string, std::string> mState;
@@ -85,6 +87,8 @@ public:
 
   //Room status
   void roomStatus(cocos2d::extension::SIOClient *client, const std::string& data);
+  //number in room
+  void numberInRoom(cocos2d::extension::SIOClient *client, const std::string& data);
 
 	//receiver number
 	void receiverNumber(cocos2d::extension::SIOClient *client, const std::string& data);
@@ -116,6 +120,8 @@ public:
   //return list status room
   void exportListData(std::string pData, bool* &pReturn);
 
+  //Number in room
+  void exportListData(std::string pData, int* &pReturn);
 };
 
 void runSocketIOTest();

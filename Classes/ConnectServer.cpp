@@ -49,6 +49,8 @@ void ConnectionLayer::newConnect(cocos2d::Object *sender)
 
   //trang thai room
 	mClient->on("status", CC_CALLBACK_2(ConnectionLayer::roomStatus, this));
+  //number in room
+  mClient->on("countuser", CC_CALLBACK_2(ConnectionLayer::numberInRoom, this));
 
 	//nhan trang thai cua nhung user khoi tao truoc
 	mClient->on("initState", CC_CALLBACK_2(ConnectionLayer::receiverState, this));
@@ -166,6 +168,22 @@ void ConnectionLayer::roomStatus(SIOClient *client, const std::string& data)
   }
 }
 
+void ConnectionLayer::numberInRoom(SIOClient *client, const std::string& data)
+{
+  log("Number in room: %s", data.c_str());
+  if(!data.empty())
+  {
+    //Lay ve list room status
+    exportListData(data, mListNumberInRoom);
+
+    //Neu la this player thi return neu khong se loi vi dang choi==
+    if(RoomDisplayLayer::getRoomStatus())
+      return;
+    RoomDisplayLayer::addNumberInRoom(mListNumberInRoom);
+
+    //RoomLayer::roomFull();
+  }
+}
 ///////  STATE ////////////////////////////////////////////////////////
 void ConnectionLayer::receiverState(SIOClient *client, const std::string& data) {
 
@@ -520,5 +538,23 @@ void ConnectionLayer::exportListData(std::string pData, bool* &pReturn)
     CCLog("Status list %s", data.GetBool() == true? "true":"false" );
 
     pReturn[i] = data.GetBool();
+  }
+}
+
+void ConnectionLayer::exportListData(std::string pData, int* &pReturn)
+{
+  pReturn = new int[9];
+  Document doc;
+	//pData = " {\"name\":\"username\",\"args\":[123]} " ;
+	//{"name":"status","args":[[false,false,false,false,false,false,false,false,false]]}
+	doc.Parse<0>(pData.c_str() );
+	
+	SizeType j = 0;
+	for (int i = 0; i < MAX_ROOM; i++){
+		//Gia tri 0 cua mang
+		Value& data = doc["args"][j][i];
+    CCLog("Status list %d", data.GetInt());
+
+    pReturn[i] = data.GetInt();
   }
 }

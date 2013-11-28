@@ -123,12 +123,16 @@ function deleteClient(socket){
 
 	}
 }
-/////////////// Out Room display ////////////////////////////////////////
+/////////////// Out your Room  ////////////////////////////////////////
 function outRoom(socket){
 		console.log("OUT ROOM")
 		socket.roomStatus = false;
-		if(countUser[socket.room] >= 1)
+		if(countUser[socket.room] >= 1){
+			
 			countUser[socket.room] --;
+			//Send user number to client
+			io.sockets.emit('countuser', countUser);
+		}
 		if(socket.state && countReady[socket.room] >=1){
 			countReady[socket.room] --;
 			socket.state = false;
@@ -209,13 +213,16 @@ function returnRoom(socket){
     socket.broadcast.to(socket.room).emit('returnroom', socket.id);
     socket.leave(socket.room);
 
-    if(countUser[socket.room] >1)
-    	io.sockets.emit("status", mRoomstatus);
-
-    if(countUser[socket.room] == 0)
-    	return;
+    // if(countUser[socket.room] == 0)
+    // 	return;
 
 	countUser[socket.room]--;
+	//Send user number to client
+	io.sockets.emit('countuser', countUser);
+	//Send list status
+	//if(countUser[socket.room] >0)
+    	io.sockets.emit("status", mRoomstatus);
+
 
 	if(countUser[socket.room] == 0){
 		resetValues(socket);
@@ -267,8 +274,10 @@ io.sockets.on('connection', function (socket) {
 		//set name for client
 		socket.name = data.name;
 
+		
+		//Send user number to client
+		socket.emit('countuser', countUser);
 		socket.emit("status", mRoomstatus);
-
     });
 	
 	
@@ -282,6 +291,9 @@ io.sockets.on('connection', function (socket) {
 			return;
 		}
 		countUser[data.room] ++;
+		//Send user number to client
+		io.sockets.emit('countuser', countUser);
+		socket.emit("status", mRoomstatus);
 
 		console.log('ROOM: ');
         console.log(data.room);
@@ -343,6 +355,8 @@ io.sockets.on('connection', function (socket) {
 			mRoomstatus[socket.room] = true;
 			socket.running = true;
 			socket.roomStatus = false;
+
+			io.sockets.emit('countuser', countUser);
 			io.sockets.emit("status", mRoomstatus);
 		}
 	

@@ -20,6 +20,7 @@
 class RoomDisplayLayer : public cocos2d::Layer
 {
   static cocos2d::Sprite* mSpriteList[9];
+  static cocos2d::Sprite* mSpriteListNumber[9];
   static RoomDisplayLayer* mLayer;
   //CC_SYNTHESIZE(bool, mRoomStatus, RoomStatus);
   static bool mRoomStatus;
@@ -32,11 +33,12 @@ public:
   static RoomDisplayLayer* create();
   virtual bool init();
 
-  void addRoom();
+  static void addRoom();
   void ccTouchesEnded(cocos2d::Set* pTouched, cocos2d::Event* pEvent);
 
-  static void roomStatus(bool*);
+  static void roomStatus(bool* pBool);
   static void addSprite(int pNumber, bool pStatus = true);
+  static void addNumberInRoom(int* pNumber);
 
   static bool getRoomStatus();
   static void setRoomStatus(bool);
