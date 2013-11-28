@@ -285,6 +285,7 @@ void RoomLayer::removePlayer(std::string pID)
       delete mPlayerList[i];
       mPlayerList[i] = NULL;
       
+      RoomLayer::mUser --;
       break;
     }
   }

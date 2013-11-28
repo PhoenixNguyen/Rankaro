@@ -154,6 +154,9 @@ io.sockets.on('connection', function (socket) {
 		console.log("STATE: ");
 		console.log(data);
 		
+		//Gan socket state
+		socket.state = true;
+
 		countReady[socket.room] ++;
 		listState[socket.room].inject(data);
 		io.sockets.in(socket.room).emit("state", data);
@@ -179,6 +182,8 @@ io.sockets.on('connection', function (socket) {
 	socket.on('position', function(data) {
 		countPosition[socket.room] ++;
 		
+		socket.broadcast.to(socket.room).emit("position",data);
+
 		//Set player da gui position trong 1 turn
 		if(countPosition[socket.room]%3 ==0){
 
@@ -186,25 +191,20 @@ io.sockets.on('connection', function (socket) {
 			playerList[socket.room][mCount[socket.room]++] = data.id;
 			console.log("player: ", mCount[socket.room]-1);
 			console.log("ID: ", data.id);
+		
+			//Send number next turn
+			if(mCount[socket.room] == countUser[socket.room]){
+				//Huy playerlist
+				playerList[socket.room].length = 0;
+				//Tang so turn
+				mTurn[socket.room]++;
+				//Reset mCount
+				mCount[socket.room] = 0;
+				var number = Math.floor((Math.random()*899)+100);
+				io.sockets.in(socket.room).emit("randomNumber",  number);
+				console.log("SEND NUMBER 1: ", number);
+			}
 		}
-
-		// console.log("POSITION:");
-		// console.log(data.pos);
-		
-		socket.broadcast.to(socket.room).emit("position",data);
-		
-		//Send number next turn
-		if(mCount[socket.room] == countUser[socket.room]){
-			//Huy playerlist
-			playerList[socket.room].length = 0;
-			//Tang so turn
-			mTurn[socket.room]++;
-			//Reset mCount
-			mCount[socket.room] = 0;
-			var number = Math.floor((Math.random()*899)+100);
-			io.sockets.in(socket.room).emit("randomNumber",  number);
-		}
-		
 	});
 
 	console.log("countEnd: ");
@@ -242,8 +242,10 @@ io.sockets.on('connection', function (socket) {
 		console.log("OUT ROOM")
 		if(countUser[socket.room] >= 1)
 			countUser[socket.room] --;
-		if(countReady[socket.room] >=1)
+		if(socket.state && countReady[socket.room] >=1){
 			countReady[socket.room] --;
+			socket.state = false;
+		}
 
 		//Delete user from listUser
 		//console.log("IDDDD: ", listUser[socket.room][0].id);
@@ -306,9 +308,14 @@ io.sockets.on('connection', function (socket) {
 
 				//Khong gui cho thag out khoi room
 				socket.broadcast.to(socket.room).emit("randomNumber",  number);
+				console.log("SEND NUMBER 2: ", number);
     		}
     	}
 
+    	//reset mCount do giam so user
+    	if(mCount[socket.room] >= 1)
+    		mCount[socket.room]--;
+    	
     	console.log('Return Room');
         socket.broadcast.to(socket.room).emit('returnroom', socket.id);
         socket.leave(socket.room);
