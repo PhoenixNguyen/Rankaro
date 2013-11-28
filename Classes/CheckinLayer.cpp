@@ -73,7 +73,21 @@ bool CheckinLayer::init()
                                          menu_selector(CheckinLayer::sendName));
   mSend->setPosition(WIDTH/2, HEIGHT/4 - 30);
 
-  Menu* menu = Menu::create(mSend, NULL);
+   ////// Return to main Menu //////////////////////////////////////////////////////////////////////////////////
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+  Point origin = Director::getInstance()->getVisibleOrigin();
+
+  MenuItemImage *closeItem = MenuItemImage::create(
+                                      "CloseNormal.png",
+                                      "CloseSelected.png",
+                                      CC_CALLBACK_1(CheckinLayer::switchLayer, this));
+    
+  closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+                              origin.y + closeItem->getContentSize().height/2));
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+  Menu* menu = Menu::create(mSend, closeItem, NULL);
   menu->setPosition(CCPointZero);
   addChild(menu, 2);
   
@@ -95,6 +109,18 @@ void CheckinLayer::sendName(Object* pSender)
   //Replace Scene
   CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
       1.0, RoomDisplayLayer::scene()
+    );
+    
+    CCDirector::sharedDirector()->replaceScene(transition);
+}
+
+
+void CheckinLayer::switchLayer(cocos2d::Object* psender)
+{
+  CheckinLayer::mConnect->sendDisconnect(std::string("11"));
+  //Replace Scene
+  CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
+    1.0, MapScene::create()
     );
     
     CCDirector::sharedDirector()->replaceScene(transition);

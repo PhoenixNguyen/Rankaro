@@ -16,10 +16,11 @@
 #include "MapScene.h"
 #include "Player.h"
 #include "CheckinLayer.h"
+#include "RoomDisplayLayer.h"
 
 class RoomLayer : public cocos2d::Layer
 {
-  
+  static cocos2d::LabelBMFont* mLabelList[];
   static cocos2d::MenuItem* mMenuPlayer[];
 
   static cocos2d::Menu* mMenu;
@@ -55,6 +56,12 @@ public:
 
   //Room full
   static void roomFull();
+
+  //switch layer
+  void switchLayer(cocos2d::Object* pSender);
+
+  //Remove player
+  static void removePlayer(std::string pID);
 };
 
 #endif

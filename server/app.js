@@ -238,6 +238,44 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.in(socket.room).emit("discn", data);
 	});
 
+	socket.on('outroom', function(){
+		console.log("OUT ROOM")
+		if(countUser[socket.room] >= 1)
+			countUser[socket.room] --;
+		if(countReady[socket.room] >=1)
+			countReady[socket.room] --;
+
+		//Delete user from listUser
+		//console.log("IDDDD: ", listUser[socket.room][0].id);
+		for(var i= 0; i< listUser[socket.room].length; i++){
+			if(listUser[socket.room][i].id == socket.id){
+				listUser[socket.room].splice(i, 1);
+
+				console.log("Xoa");
+				break;
+			}
+
+		}
+		
+    	//Delete state from list state
+		for(var i= 0; i< listState[socket.room].length; i++){
+			if(listState[socket.room][i].id == socket.id){
+				listState[socket.room].splice(i, 1);
+
+				console.log("Xoa");
+				break;
+			}
+
+		}
+		
+		// socket.broadcast.to(socket.room).emit('returnroom', socket.id);
+		socket.broadcast.to(socket.room).emit("outroom", socket.id);
+        socket.leave(socket.room);
+        socket.emit("status", mRoomstatus);
+
+        console.log("END OUT ROOM")
+	});
+
 	socket.on('returnroom', function(){
 		//Send number - truong hop deadlock khong gui duoc number khi player disconnect
     	//so player gui len = so player -1 va 1 trong so do khong phai bi disconnect

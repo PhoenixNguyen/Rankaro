@@ -54,10 +54,17 @@ public:
 
 	cocos2d::extension::SIOClient *mClient, *_sioEndpoint;
 	
-  //Disconnect player
+  //Disconnect to server
+  void sendDisconnect(std::string pName);
+
+  //return to room
   void disconnectPlayer(std::string pName, std::string pID);
   //Receiver player disconnect
   void receiverDisconnect(cocos2d::extension::SIOClient *client, const std::string& data);
+
+  //Send out room
+  void sendOutRoom(std::string pname);
+  void receiverOutRoom(cocos2d::extension::SIOClient *client, const std::string& data);
 
   //Send End game
   void sendEndGame();

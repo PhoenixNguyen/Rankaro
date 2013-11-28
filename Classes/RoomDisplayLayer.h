@@ -41,6 +41,7 @@ public:
   static bool getRoomStatus();
   static void setRoomStatus(bool);
 
+  void switchLayer(cocos2d::Object* pSender);
 };
 
 #endif

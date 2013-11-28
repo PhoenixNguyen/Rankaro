@@ -108,10 +108,10 @@ void GameLayer::setNumber(int pNumber)
 
 void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
 {
-  for(int i= 0; i< RoomLayer::mUser; i++)
+  for(int i= 0; i< 4; i++)
   {
     //Get MySelf
-    if(RoomLayer::mPlayerList[i]->getMySelf())
+    if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getMySelf())
     {
       if(RoomLayer::mPlayerList[i]->getPlayerScoreArray(pRow, pColumn) != -1)
         return;
@@ -227,14 +227,17 @@ void GameLayer::createRect()
 void GameLayer::viewScore()
 {
   //Sort with score
-  setSTT();
+  //setSTT();
   String* player0 = NULL;
   String* player1 = NULL;
   String* player2 = NULL;
   String* player3 = NULL;
 
-  for(int i= 0; i< RoomLayer::mUser; i++)
+  for(int i= 0; i< 4; i++)
   {
+    if(RoomLayer::mPlayerList[i] == NULL)
+      continue;
+
     //Get MySelf
     switch(RoomLayer::mPlayerList[i]->getSTT())
     {
@@ -318,9 +321,9 @@ void GameLayer::viewScore()
 
 void GameLayer::setPositionPlayer(std::string pID, std::string pNumber, std::string pRow, std::string pColumn)
 {
-  for(int i= 0; i< RoomLayer::mUser; i++)
+  for(int i= 0; i< 4; i++)
   {
-    if(RoomLayer::mPlayerList[i]->getID() == pID)
+    if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getID() == pID)
     {
       
       RoomLayer::mPlayerList[i]->setPlayerScoreArray(std::stoi(pNumber), std::stoi(pRow), std::stoi(pColumn));
@@ -336,13 +339,21 @@ void GameLayer::setPositionPlayer(std::string pID, std::string pNumber, std::str
 
 void GameLayer::setSTT()
 {
-
-  for(int i= 0; i < (RoomLayer::mUser-1) ; i++)
+  int tmp1 = 0;
+  for(int i= 0; i < 3 ; i++)
   {
+    //Neu tong so thang player co san - 1= tmp1
+    if(tmp1 == (RoomLayer::mUser -1))
+      return;
+
+    if(RoomLayer::mPlayerList[i] == NULL)
+      continue;
+    tmp1++;
+
     int max = i;
-    for(int j = i+1; j < RoomLayer::mUser; j++)
+    for(int j = i+1; j < 4; j++)
     {
-      if(RoomLayer::mPlayerList[j]->getScore() > RoomLayer::mPlayerList[max]->getScore())
+      if(RoomLayer::mPlayerList[j] != NULL && RoomLayer::mPlayerList[j]->getScore() > RoomLayer::mPlayerList[max]->getScore())
       {
         max = j;
       }
@@ -361,9 +372,9 @@ void GameLayer::setSTT()
 
 void GameLayer::setEndGame()
 {
-  for(int i= 0; i < (RoomLayer::mUser) ; i++)
+  for(int i= 0; i < 4 ; i++)
   {
-    if(RoomLayer::mPlayerList[i]->getMySelf()){
+    if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getMySelf()){
       String* status;
       if(RoomLayer::mPlayerList[i]->getSTT() == 0)
         status = String::createWithFormat("YOU WIN ^^");
@@ -414,17 +425,21 @@ void GameLayer::exitGame()
 void GameLayer::switchLayer(Object* pSender)
 {
   //Disconnect server
-  for(int i = 0; i< RoomLayer::mUser; i++)
-    if(RoomLayer::mPlayerList[i]->getMySelf())
+  for(int i = 0; i< 4; i++)
+    if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getMySelf())
     {
       CheckinLayer::mConnect->disconnectPlayer(RoomLayer::mPlayerList[i]->getName(), 
       RoomLayer::mPlayerList[i]->getID());
-
+      
       //Thoat
       break;
     }
 
-  
+  for(int i= 0; i< 4; i++)
+  {
+    //delete RoomLayer::mPlayerList[i];
+    RoomLayer::mPlayerList[i] = NULL;
+  }
   //Delete connection
   GameLayer::mTurn = 0;
   CheckinLayer::mConnect->setTurn(0);
@@ -433,6 +448,7 @@ void GameLayer::switchLayer(Object* pSender)
   CheckinLayer::mConnect->mUsername.clear();
   CheckinLayer::mConnect->mState.clear();
   
+  //delete - khong co y nghia
   CheckinLayer::mConnect->setRoomStatus(false);
   /*for (int i = 0; i < MAX_ROOM; i++){
 		CheckinLayer::mConnect->mListStatus[i] = false;
@@ -459,18 +475,18 @@ void GameLayer::switchLayer(Object* pSender)
   //-------------------------------------------------------------------------------------------
 
   //Switch to RoomLayer
-      //Replace Scene
-      CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
-          1.0, RoomDisplayLayer::scene()
-        );
-      CCDirector::sharedDirector()->replaceScene(transition);
+  //Replace Scene
+  CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
+      1.0, RoomDisplayLayer::scene()
+    );
+  CCDirector::sharedDirector()->replaceScene(transition);
 }
 
 void GameLayer::setName()
 {
-  for(int i= 0; i < (RoomLayer::mUser) ; i++)
+  for(int i= 0; i < 4 ; i++)
   {
-    if(RoomLayer::mPlayerList[i]->getMySelf()){
+    if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getMySelf()){
       String* status;
       status = String::createWithFormat(RoomLayer::mPlayerList[i]->getName().c_str());
 
@@ -493,9 +509,9 @@ void GameLayer::setName()
 
 void GameLayer::setPlayerDisconnect(std::string pID)
 {
-  for(int i= 0; i < (RoomLayer::mUser) ; i++)
+  for(int i= 0; i < 4 ; i++)
   {
-    if(RoomLayer::mPlayerList[i]->getID() == pID)
+    if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getID() == pID)
     {
       RoomLayer::mPlayerList[i]->setDisconnect(true);
       viewScore();

@@ -35,6 +35,9 @@ public:
   //Init Connection
   static ConnectionLayer* mConnect;
 
+  //switch Layer
+  void switchLayer(cocos2d::Object* psender);
+
 };
 
 #endif

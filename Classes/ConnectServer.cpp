@@ -66,6 +66,9 @@ void ConnectionLayer::newConnect(cocos2d::Object *sender)
 
   //Receiver player disconnect
 	mClient->on("returnroom", CC_CALLBACK_2(ConnectionLayer::receiverDisconnect, this));
+
+  //Receiver player out room
+	mClient->on("outroom", CC_CALLBACK_2(ConnectionLayer::receiverOutRoom, this));
 	
 }
 
@@ -264,7 +267,16 @@ void ConnectionLayer::onMenuTestClientDisconnectClicked(cocos2d::Object *sender)
     mClient->disconnect();
   }
 }
+//Disconnect to server
+void ConnectionLayer::sendDisconnect(std::string pName)
+{
 
+	if(mClient != NULL){
+    mClient->disconnect();
+  }
+}
+
+//Return room
 void ConnectionLayer::disconnectPlayer(std::string pName, std::string pID)
 {
 
@@ -286,6 +298,29 @@ void ConnectionLayer::receiverDisconnect(cocos2d::extension::SIOClient *client, 
 
   }
 }
+
+//Send out room
+void ConnectionLayer::sendOutRoom(std::string pname)
+{
+
+	if(mClient != NULL){
+    mClient->emit("outroom","[{\"id\":\"1\"}]");
+    //mClient->disconnect();
+  }
+}
+
+void ConnectionLayer::receiverOutRoom(cocos2d::extension::SIOClient *client, const std::string& data)
+{
+  if(!data.empty())
+  {
+    std::string id;
+    exportLastData(data, id);
+
+    RoomLayer::removePlayer(id);
+
+  }
+}
+
 
 // Delegate methods
 
@@ -349,73 +384,6 @@ void runSocketIOTest()
     Director::getInstance()->replaceScene(scene);
     layer->release();
 }
-/**
-*
-*
-*Return list
-**/
-//void ConnectionLayer::exportList(std::string pData, std::map<std::string, std::string>& pList)
-//{
-//	std::map<std::string, std::string> username;
-//	Document doc;
-//	pData = " {\"name\":\"init\",\"args\":[[{\"name\":\"Duy Phuong\",\"id\":\"jDG33J_vilx5RHWvkLan\"},{\"name\":\"Hoang Phuong\",\"id\":\"TUd5gXsInDnxt_COkLao\"},{\"name\":\"Duy Phuong\",\"id\":\"_DYMTQjePZsAImTRkLap\"}]]} " ;
-//	std::size_t n = std::count(pData.begin(), pData.end(), ':');
-//	log("So lan lap nam la: %d", n/2 - 1);
-//	
-//	//std::count_if (s.begin(), s.end(), _1 == '_') 
-//		//doc.Parse<0>(data.c_str()); //
-//	doc.Parse<0>(pData.c_str() );
-//	
-//	SizeType j = 0;
-//	for (SizeType i = 0; i < (n/2 - 1); i++){
-//		//Gia tri 0 cua mang
-//		Value& name = doc["args"][j][i]["name"];
-//		log("NAME %d: %s", i + 1, name.GetString() );
-//		Value& id = doc["args"][j][i]["id"];
-//		log("ID %d: %s", i + 1, id.GetString() );
-//
-//		username.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
-//		
-//	}
-//
-//	for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
-//	   {
-//	       //cout << (*ii).first << ": " << (*ii).second << endl;
-//		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
-//	   }
-//}
-
-//void ConnectionLayer::exportLast(std::string pData, std::map<std::string, std::string>& pList)
-//{
-//	std::map<std::string, std::string> username;
-//	Document doc;
-//	pData = " {\"name\":\"username\",\"args\":[{\"name\":\"Duy Phuong\",\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
-//	//std::size_t n = std::count(pData.begin(), pData.end(), ':');
-//	//log("So lan lap nam la: %d", n/2 - 1);
-//	
-//	//std::count_if (s.begin(), s.end(), _1 == '_') 
-//		//doc.Parse<0>(data.c_str()); //
-//	doc.Parse<0>(pData.c_str() );
-//	
-//	SizeType j = 0;
-//	//for (SizeType i = 0; i < (n/2 - 1); i++){
-//		//Gia tri 0 cua mang
-//		Value& name = doc["args"][j]["name"];
-//		log("LAST THE NAME %s", name.GetString() );
-//		Value& id = doc["args"][j]["id"];
-//		log("LAST THE ID %s", id.GetString() );
-//
-//		username.insert(std::pair<std::string,std::string>(id.GetString(), name.GetString() ));
-//		
-//	//}
-//
-//	for( std::map<std::string, std::string>::iterator ii=username.begin(); ii!=username.end(); ++ii)
-//	   {
-//	       //cout << (*ii).first << ": " << (*ii).second << endl;
-//		   log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
-//	   }
-//}
-
 
 /**
 *

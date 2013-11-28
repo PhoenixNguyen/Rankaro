@@ -16,6 +16,7 @@ MenuItem* RoomLayer::mMenuPlayer[4] = {NULL};
 RoomLayer* RoomLayer::mLayer = NULL;
 Player* RoomLayer::mPlayerList[4] = {NULL};
 int RoomLayer::mUser = 0;
+LabelBMFont* RoomLayer::mLabelList[4] = {NULL};
 
 //RoomLayer::RoomLayer(void)
 //{
@@ -63,6 +64,24 @@ bool RoomLayer::init()
   addChild(BackgroundGame::create(this), 1);
 
  // ////////////////////////////////////////////////////////////////////
+  ////// Return to display room //////////////////////////////////////////////////////////////////////////////////
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+  Point origin = Director::getInstance()->getVisibleOrigin();
+
+  MenuItemImage *closeItem = MenuItemImage::create(
+                                      "CloseNormal.png",
+                                      "CloseSelected.png",
+                                      CC_CALLBACK_1(RoomLayer::switchLayer, this));
+    
+  closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+                              origin.y + closeItem->getContentSize().height/2));
+
+  //// create menu, it's an autorelease object
+  Menu* menu = Menu::create(closeItem, NULL);
+  menu->setPosition(Point::ZERO);
+  this->addChild(menu, 2);
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   mMenu = Menu::create(NULL);
   mMenu->setPosition(CCPointZero);
@@ -105,52 +124,59 @@ void RoomLayer::addToMenu(std::string pName, std::string pID, bool pMySelf = fal
   //////////////////////////////////////////////////////////////////
   //Player mUser + 1
   //Init Player
-  mPlayerList[mUser] = new Player();
-  mPlayerList[mUser]->setID(pID);
-  mPlayerList[mUser]->setName(pName);
-  mPlayerList[mUser]->setMySelf(pMySelf);
-  mPlayerList[mUser]->setNumber(mUser);
-  mPlayerList[mUser]->setSTT(mUser);
-  mPlayerList[mUser]->setScore(0);
-  mPlayerList[mUser]->setDisconnect(false);
-  mPlayerList[mUser]->createScoreArray();
+  for(int dem=0; dem< 4; dem++)
+  {
+    if(mPlayerList[dem] != NULL)
+      continue;
 
-  const char* player1 = pName.c_str();
+    mPlayerList[dem] = new Player();
+    mPlayerList[dem]->setID(pID);
+    mPlayerList[dem]->setName(pName);
+    mPlayerList[dem]->setMySelf(pMySelf);
+    mPlayerList[dem]->setNumber(dem);
+    mPlayerList[dem]->setSTT(dem);
+    mPlayerList[dem]->setScore(0);
+    mPlayerList[dem]->setDisconnect(false);
+    mPlayerList[dem]->createScoreArray();
+
+    const char* player1 = pName.c_str();
   
-  LabelBMFont* label;
-	label = LabelBMFont::create(player1, "fonts/Arial.fnt");
-	label->setScale(0.5);
+    //LabelBMFont* label;
+	  mLabelList[dem] = LabelBMFont::create(player1, "fonts/Arial.fnt");
+	  mLabelList[dem]->setScale(0.5);
 
-  label->setPosition(Point(WIDTH/4, 3*HEIGHT/4 - mUser*100));
-  this->addChild(label, 2);
-  label->runAction(ScaleTo::create(0.5, 1.0) );
+    mLabelList[dem]->setPosition(Point(WIDTH/4, 3*HEIGHT/4 - dem*100));
+    this->addChild(mLabelList[dem], 2);
+    mLabelList[dem]->runAction(ScaleTo::create(0.5, 1.0) );
 
-  //String * player = String::createWithFormat("mMenuPlayer%d", mUser);
-  //Map Player with ID
-  //mPlayer.insert(std::pair<std::string, int>(pID, mUser));
+    //String * player = String::createWithFormat("mMenuPlayer%d", mUser);
+    //Map Player with ID
+    //mPlayer.insert(std::pair<std::string, int>(pID, mUser));
 
-  //CCLog("1. IDDDDDD %s", pID.c_str());
-  RoomLayer::mMenuPlayer[mUser] = MenuItemImage::create("room/Ready.png",
-                                         "room/Readyed.png",
-                                         "room/Readyed.png",
-                                         this,
-                                         menu_selector(RoomLayer::sendState));
-  RoomLayer::mMenuPlayer[mUser]->setPosition(3* WIDTH/4, 3*HEIGHT/4 - mUser*100);
+    //CCLog("1. IDDDDDD %s", pID.c_str());
+    RoomLayer::mMenuPlayer[dem] = MenuItemImage::create("room/Ready.png",
+                                           "room/Readyed.png",
+                                           "room/Readyed.png",
+                                           this,
+                                           menu_selector(RoomLayer::sendState));
+    RoomLayer::mMenuPlayer[dem]->setPosition(3* WIDTH/4, 3*HEIGHT/4 - dem*100);
 
-  if(!pMySelf)
-    mMenuPlayer[mUser]->setVisible(false);
-  ////////////////////////////////////////////////////////////////////
-  mMenu->addChild(RoomLayer::mMenuPlayer[mUser]);
+    if(!pMySelf)
+      mMenuPlayer[dem]->setVisible(false);
+    ////////////////////////////////////////////////////////////////////
+    mMenu->addChild(RoomLayer::mMenuPlayer[dem]);
 
-  //
-  mUser ++;
+    //
+    mUser ++;
+    break;
+  }
 }
 void RoomLayer::sendState(cocos2d::Object* pSender)
 {
   
   //CCLog("2. IDDDDDD %s", mLayer->getMyID().c_str());
-  for(int i= 0; i< mUser; i++){
-    if(mPlayerList[i]->getMySelf()){
+  for(int i= 0; i< 4; i++){
+    if(mPlayerList[i] != NULL && mPlayerList[i]->getMySelf()){
       //CCLog("%d :: %s", i, mPlayerList[i]->getID().c_str());
       CheckinLayer::mConnect->sendState(mPlayerList[i]->getID());
       
@@ -164,10 +190,10 @@ void RoomLayer::sendState(cocos2d::Object* pSender)
 
 void RoomLayer::setLastState(std::string pID)
 {
-  for(int i= 0; i< mUser; i++)
+  for(int i= 0; i< 4; i++)
 	   {
 	      
-       if(mPlayerList[i]->getID() == pID)
+       if(mPlayerList[i] != NULL && mPlayerList[i]->getID() == pID)
        {
          mMenuPlayer[mPlayerList[i]->getNumber()]->setVisible(true);
          mMenuPlayer[mPlayerList[i]->getNumber()]->setEnabled(false);
@@ -182,13 +208,13 @@ void RoomLayer::setFirstState()
   for( std::map<std::string, std::string>::iterator i=CheckinLayer::mConnect->mState.begin(); 
     i != CheckinLayer::mConnect->mState.end(); ++i)
 	{  
-      for(int ii= 0; ii< mUser; ii++)
+      for(int ii= 0; ii< 4; ii++)
 	    {
 	           //cout << (*ii).first << ": " << (*ii).second << endl;
 		       //log("MAPPPPPPPPPPPPPPP ID: %s NAME: %s", (*ii).first.c_str(), (*ii).second.c_str());
            //CCLog("%s", (*ii).second.c_str());
            //mLayer->addToMenu((*ii).second.c_str(), (*ii).first.c_str(), false);
-        if(mPlayerList[ii]->getID() == (*i).first)
+        if(mPlayerList[ii] != NULL && mPlayerList[ii]->getID() == (*i).first)
            {
              mMenuPlayer[mPlayerList[ii]->getNumber()]->setVisible(true);
              mMenuPlayer[mPlayerList[ii]->getNumber()]->setEnabled(false);
@@ -212,4 +238,54 @@ void RoomLayer::startGame()
 
   CCDirector::sharedDirector()->replaceScene(transition);
 
+}
+
+void RoomLayer::switchLayer(cocos2d::Object* pSender)
+{
+  //Delete all players
+  for(int i= 0; i< 4; i++){
+    if(mPlayerList[i] != NULL){
+      
+      delete mPlayerList[i];
+      mPlayerList[i] = NULL;
+      
+    }
+  }
+  
+  //Switch to Reg name
+  //Replace Scene
+  CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
+    0.0, RoomDisplayLayer::scene()
+    );
+  CCDirector::sharedDirector()->replaceScene(transition);
+
+  CheckinLayer::mConnect->sendOutRoom(std::string("11"));
+
+  ////Reset value
+  
+
+  CheckinLayer::mConnect->mUsername.clear();
+  CheckinLayer::mConnect->mState.clear();
+
+  //CheckinLayer::mConnect->setRoomStatus(false);
+  ////this player Ra khoi room
+  RoomDisplayLayer::setRoomStatus(false);
+
+  RoomLayer::mUser =0;
+
+}
+
+void RoomLayer::removePlayer(std::string pID)
+{
+  for(int i= 0; i< 4; i++){
+    if(mPlayerList[i] != NULL && mPlayerList[i]->getID() == pID){
+      mLayer->mMenu->removeChild(mMenuPlayer[mPlayerList[i]->getNumber()], true);
+      mLayer->removeChild(mLabelList[i]);
+      //CCLog("%d :: %s", i, mPlayerList[i]->getID().c_str());
+      delete mPlayerList[i];
+      mPlayerList[i] = NULL;
+      
+      break;
+    }
+  }
 }
