@@ -63,6 +63,17 @@ bool RoomLayer::init()
   setMyself(true);
   addChild(BackgroundGame::create(this), 1);
 
+  /////////////////// Greetings /////////////////////////////////////////////////////////////////////////
+  String* room = String::createWithFormat("Waiting for more players - Room 0%d", CheckinLayer::mConnect->getRoom()+1);
+  LabelBMFont* label;
+  label = LabelBMFont::create(room->getCString(), "fonts/Arial.fnt");
+	label->setScale(0.5);
+
+  label->setPosition(Point(WIDTH/2, 3*HEIGHT/4 +80));
+
+  addChild(label, 2);
+  label->runAction(ScaleTo::create(0.5, 1.0) );
+
  // ////////////////////////////////////////////////////////////////////
   ////// Return to display room //////////////////////////////////////////////////////////////////////////////////
   Size visibleSize = Director::getInstance()->getVisibleSize();

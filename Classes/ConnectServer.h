@@ -23,6 +23,7 @@ class ConnectionLayer
   CC_SYNTHESIZE(int, mNumber, Number);
   CC_SYNTHESIZE(int, mTurn, Turn);
   CC_SYNTHESIZE(bool, mRoomStatus, RoomStatus);
+  CC_SYNTHESIZE(int, mRoom, Room);
   static bool* mListStatus;
 public:
   std::map<std::string, std::string> mUsername;

@@ -59,9 +59,9 @@ bool CheckinLayer::init()
   mEditBox = EditBox::create(Size(300, 50), Scale9Sprite::create("input/Input.png"));
   mEditBox->setPosition(Point(WIDTH/2, HEIGHT/3));
   mEditBox->setFontColor(ccRED);
-
-  mEditBox->setPlaceHolder("Your name ...");
-  mEditBox->setMaxLength(20);
+  mEditBox->setPlaceHolder("(1-5 character)");
+  mEditBox->setPlaceholderFontSize(5);
+  mEditBox->setMaxLength(5);
   //mEditBox->setReturnType(1);
   //mEditBox->setDelegate(this);
   addChild(mEditBox, 2);
@@ -97,9 +97,13 @@ bool CheckinLayer::init()
 
 void CheckinLayer::sendName(Object* pSender)
 {
-  mSend->setEnabled(false);
   const char* name = mEditBox->getText();
   CCLog("%s", name);
+  if(strcmp(name, "") == 0 || strlen(name) > 5)
+    return;
+
+  mSend->setEnabled(false);
+  
 
   //Send to server
   mConnect->regUsername(name);

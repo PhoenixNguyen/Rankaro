@@ -49,6 +49,16 @@ bool RoomDisplayLayer::init()
   if(!Layer::create())
     return false;
 
+  /////////////////// Greetings /////////////////////////////////////////////////////////////////////////
+  LabelBMFont* label;
+  label = LabelBMFont::create("Welcome you to the room, choose anyroom you like -_-", "fonts/Arial.fnt");
+	label->setScale(0.5);
+
+  label->setPosition(Point(WIDTH/2, 3*HEIGHT/4 +80));
+
+  addChild(label, 2);
+  label->runAction(ScaleTo::create(0.5, 1.0) );
+
   ////// Return to setname //////////////////////////////////////////////////////////////////////////////////
   Size visibleSize = Director::getInstance()->getVisibleSize();
   Point origin = Director::getInstance()->getVisibleOrigin();
@@ -117,6 +127,7 @@ void RoomDisplayLayer::ccTouchesEnded(cocos2d::Set* pTouched, cocos2d::Event* pE
 
       String* tmp = String::createWithFormat("%d", i);
       CCLog("Room: %d", i);
+      CheckinLayer::mConnect->setRoom(i);
       //Send room
       CheckinLayer::mConnect->regRoom(tmp->getCString());
 
