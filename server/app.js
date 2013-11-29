@@ -213,14 +213,14 @@ function returnRoom(socket){
     socket.broadcast.to(socket.room).emit('returnroom', socket.id);
     socket.leave(socket.room);
 
-    // if(countUser[socket.room] == 0)
-    // 	return;
+    if(countUser[socket.room] == 0)
+    	return;
 
 	countUser[socket.room]--;
 	//Send user number to client
 	io.sockets.emit('countuser', countUser);
 	//Send list status
-	//if(countUser[socket.room] >0)
+	if(countUser[socket.room] >0)
     	io.sockets.emit("status", mRoomstatus);
 
 

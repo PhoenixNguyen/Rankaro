@@ -6,6 +6,8 @@ cocos2d::Sprite* RoomDisplayLayer::mSpriteListNumber[9] = {NULL};
 cocos2d::Sprite* RoomDisplayLayer::mSpriteList[9] = {NULL};
 RoomDisplayLayer* RoomDisplayLayer::mLayer = NULL;
 bool RoomDisplayLayer::mRoomStatus = false;
+LabelBMFont* RoomDisplayLayer::mLabel[9] = {NULL};
+cocos2d::CCLabelTTF* RoomDisplayLayer::mLabel2[9] = {NULL};
 
 //RoomDisplayLayer::RoomDisplayLayer(void)
 //{
@@ -205,14 +207,24 @@ void RoomDisplayLayer::addNumberInRoom(int* pNumber)
           row =1;
     int column = i%3+1;
 
-    LabelBMFont* label;
-    label = LabelBMFont::create(std::to_string(pNumber[i]).c_str(), "fonts/Arial.fnt");
-	  label->setScale(0.5);
+    //Show
+    mLayer->removeChild(mLabel2[i]);
+    mLabel2[i] = CCLabelTTF::create(std::to_string(pNumber[i]).c_str(), "Helvetica", 12, 
+                                      CCSizeMake(245, 32), kCCTextAlignmentCenter);
+    mLabel2[i]->setColor(ccc3(255,192,203));
+    mLabel2[i]->setFontSize(35);
+    mLabel2[i]->setPosition(Point(column *WIDTH/4 - 90, row*HEIGHT/4));
+    mLayer->addChild( mLabel2[i], 2);
 
-    label->setPosition(Point(column *WIDTH/4 -90, row*HEIGHT/4));
+    /*LabelBMFont* label;*/
+    /*mLayer->removeChild(mLabel[i]);
+    mLabel[i] = LabelBMFont::create(std::to_string(pNumber[i]).c_str(), "fonts/Arial.fnt");
+	  mLabel[i]->setScale(0.5);
 
-    mLayer->addChild(label, 2);
-    label->runAction(ScaleTo::create(0.5, 1.0) );
+    mLabel[i]->setPosition(Point(column *WIDTH/4 -90, row*HEIGHT/4));
+
+    mLayer->addChild(mLabel[i], 2);
+    mLabel[i]->runAction(ScaleTo::create(0.5, 1.0) );*/
 
     
   }

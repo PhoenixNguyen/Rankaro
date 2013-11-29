@@ -24,7 +24,8 @@ class RoomDisplayLayer : public cocos2d::Layer
   static RoomDisplayLayer* mLayer;
   //CC_SYNTHESIZE(bool, mRoomStatus, RoomStatus);
   static bool mRoomStatus;
-
+  static cocos2d::LabelBMFont* mLabel[9];
+  static cocos2d::CCLabelTTF* mLabel2[9];
 public:
   /*RoomDisplayLayer(void);
   ~RoomDisplayLayer(void);*/
