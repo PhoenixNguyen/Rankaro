@@ -14,6 +14,7 @@
 #include "BackgroundGame.h"
 #include "MenuStart.h"
 #include "ConnectServer.h"
+#include "SoundLoader.h"
 
 class MapScene;
 class MapLayer : public cocos2d::Layer

@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "CheckinLayer.h"
 #include "RoomDisplayLayer.h"
+#include "SoundLoader.h"
 
 class RoomLayer : public cocos2d::Layer
 {

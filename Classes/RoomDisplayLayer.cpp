@@ -125,6 +125,8 @@ void RoomDisplayLayer::ccTouchesEnded(cocos2d::Set* pTouched, cocos2d::Event* pE
   {
     if(mSpriteList[i]->getBoundingBox().containsPoint(point))
     {
+      SoundLoader::playEffect("music/click.wav");
+
       //Neu room dang hoat dong thi khong vao duoc
       if(CheckinLayer::mConnect->mListStatus[i])
         return;
@@ -241,6 +243,8 @@ void RoomDisplayLayer::setRoomStatus(bool pStatus)
 
 void RoomDisplayLayer::switchLayer(cocos2d::Object* pSender)
 {
+  SoundLoader::playEffect("music/click.wav");
+
   CheckinLayer::mConnect->sendDisconnect(std::string("11"));
   //Switch to Reg name
   //Replace Scene

@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "Config.h"
 #include "CheckinLayer.h"
+#include "SoundLoader.h"
 
 class MenuStart : public cocos2d::MenuItem
 {

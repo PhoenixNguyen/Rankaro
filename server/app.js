@@ -109,7 +109,7 @@ function resetTimeoutPlayer(socket){
 				//disconnect client
 				console.log("disconnect");
 				socket.disconnect();
-			},20000);
+			},120000);
 
 			//console.log("Set timout");
 			break;

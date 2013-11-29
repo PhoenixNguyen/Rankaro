@@ -16,6 +16,7 @@
 #include "MapScene.h"
 #include "Player.h"
 #include "CheckinLayer.h"
+#include "SoundLoader.h"
 
 class RoomDisplayLayer : public cocos2d::Layer
 {

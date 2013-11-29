@@ -14,6 +14,7 @@
 #include "MenuStart.h"
 #include "CheckinLayer.h"
 #include "ConnectServer.h"
+#include "SoundLoader.h"
 
 class MapLayer;
 class ConnectionLayer;

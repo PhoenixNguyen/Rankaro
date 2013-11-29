@@ -52,6 +52,8 @@ bool GameLayer::init()
   if(!Layer::create())
     return false;
 
+  SoundLoader::playMusic("music/background_game.wav", true);
+
   mNumber = 0;
   //Khoi tao mang score
   mCal = new CaculateScore();
@@ -115,6 +117,9 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
     {
       if(RoomLayer::mPlayerList[i]->getPlayerScoreArray(pRow, pColumn) != -1)
         return;
+
+      SoundLoader::playEffect("music/put_down.wav");
+
       RoomLayer::mPlayerList[i]->setPlayerScoreArray(pNumber, pRow, pColumn);
 
       String* name = String::createWithFormat("number/node%d.png", pNumber);
@@ -128,6 +133,9 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
       mTurn++;
 
       int score = mCal->detection(RoomLayer::mPlayerList[i]->getPlayerScoreArray());
+      if(score > RoomLayer::mPlayerList[i]->getScore())
+        SoundLoader::playEffect("music/increase.wav");
+
       RoomLayer::mPlayerList[i]->setScore(score);
 
       CCLog("SCORE: %d", RoomLayer::mPlayerList[i]->getScore());
@@ -372,6 +380,8 @@ void GameLayer::setSTT()
 
 void GameLayer::setEndGame()
 {
+  SoundLoader::playEffect("music/end_game.wav");
+
   for(int i= 0; i < 4 ; i++)
   {
     if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getMySelf()){
@@ -424,6 +434,9 @@ void GameLayer::exitGame()
 
 void GameLayer::switchLayer(Object* pSender)
 {
+  SoundLoader::playEffect("music/click.wav");
+  SoundLoader::playMusic("music/background_start.wav", true);
+
   //Disconnect server
   for(int i = 0; i< 4; i++)
     if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getMySelf())

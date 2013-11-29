@@ -34,13 +34,15 @@ bool MapLayer::init(MapScene* pMapScene)
   {
     return false;
   }
-
+  //Load music
+  //SoundLoader::preloadMusic();
+  SoundLoader::playMusic("music/background_start.wav", true);
+ 
   mMapScene = pMapScene;
   addChild(BackgroundGame::create("numbers.jpg", this), 1);
 
   addChild(MenuStart::create(this), 2);
 
-  
 
   return true;
 }

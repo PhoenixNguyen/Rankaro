@@ -37,7 +37,5 @@ bool MapScene::init()
   addChild(mMapLayer, 1);
 
   
-
-
   return true;
 }

@@ -97,6 +97,8 @@ bool CheckinLayer::init()
 
 void CheckinLayer::sendName(Object* pSender)
 {
+  SoundLoader::playEffect("music/click.wav");
+
   const char* name = mEditBox->getText();
   CCLog("%s", name);
   if(strcmp(name, "") == 0 || strlen(name) > 5)
@@ -121,6 +123,8 @@ void CheckinLayer::sendName(Object* pSender)
 
 void CheckinLayer::switchLayer(cocos2d::Object* psender)
 {
+  SoundLoader::playEffect("music/click.wav");
+
   CheckinLayer::mConnect->sendDisconnect(std::string("11"));
   //Replace Scene
   CCTransitionCrossFade* transition = CCTransitionCrossFade::create(

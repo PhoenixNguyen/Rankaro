@@ -88,7 +88,8 @@ bool MenuStart::init(Object* pTarget)
 void MenuStart::startGame(Object* pSender)
 {
   //Replace Scene to input name layer
-  
+  SoundLoader::playEffect("music/click.wav");
+
     CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
       0.5, CheckinLayer::scene()
     );
@@ -99,11 +100,14 @@ void MenuStart::startGame(Object* pSender)
 
 void MenuStart::help(Object* pSender)
 {
-
+  SoundLoader::playEffect("music/click.wav");
 }
 void MenuStart::contact(Object* pSender)
-{}
+{
+  SoundLoader::playEffect("music/click.wav");
+}
 void MenuStart::exitGame(Object* pSender)
 {
+  SoundLoader::playEffect("music/click.wav");
   CCDirector::sharedDirector()->end();
 }

@@ -184,7 +184,8 @@ void RoomLayer::addToMenu(std::string pName, std::string pID, bool pMySelf = fal
 }
 void RoomLayer::sendState(cocos2d::Object* pSender)
 {
-  
+  SoundLoader::playEffect("music/click.wav");
+
   //CCLog("2. IDDDDDD %s", mLayer->getMyID().c_str());
   for(int i= 0; i< 4; i++){
     if(mPlayerList[i] != NULL && mPlayerList[i]->getMySelf()){
@@ -253,6 +254,8 @@ void RoomLayer::startGame()
 
 void RoomLayer::switchLayer(cocos2d::Object* pSender)
 {
+  SoundLoader::playEffect("music/click.wav");
+
   //Delete all players
   for(int i= 0; i< 4; i++){
     if(mPlayerList[i] != NULL){

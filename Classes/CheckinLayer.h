@@ -17,6 +17,7 @@
 #include "MapLayer.h"
 #include "ConnectServer.h"
 #include "RoomDisplayLayer.h"
+#include "SoundLoader.h"
 
 class ConnectionLayer;
 class CheckinLayer : public cocos2d::Layer

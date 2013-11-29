@@ -17,6 +17,7 @@
 #include "RoomLayer.h"
 #include "MapScene.h"
 #include "proj.win32\main.h"
+#include "SoundLoader.h"
 
 class GameLayer : public cocos2d::Layer
 {
