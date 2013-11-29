@@ -56,7 +56,7 @@ bool GameLayer::init()
   //Khoi tao mang score
   mCal = new CaculateScore();
 
-  addChild(BackgroundGame::create(this), 1);
+  addChild(BackgroundGame::create("fight.jpg", this), 1);
 
   mTileMap = TMXTiledMap::create("tilemap/map.tmx");
   mTileMap->setPosition(48, 24);

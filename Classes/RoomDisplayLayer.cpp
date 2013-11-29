@@ -86,7 +86,7 @@ bool RoomDisplayLayer::init()
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-  addChild(BackgroundGame::create(this), 0);
+  addChild(BackgroundGame::create("background.jpg", this), 0);
 
   //add room to choose
   addRoom();

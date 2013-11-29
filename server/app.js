@@ -45,10 +45,17 @@ io.set("log level", 3);
 var listUser = new Array(9);
 var listState = new Array(9);
 var playerList= new Array(9);
+
+var mPlayerInRoom = new Array(9);
+var mPlayerIsRunning = new Array(9);
+
 for(var i= 0; i< 9; i++){
 	listUser[i] = new Array();
 	listState[i] = new Array();
 	playerList[i] = new Array();
+
+	mPlayerInRoom[i] = new Array();
+	mPlayerIsRunning[i] = new Array();
 }
 
 /////
@@ -83,6 +90,7 @@ Array.prototype.inject = function(element) {
 var mAllClients = [];
 var mTimeoutList = [];
 
+
 //--------------------------- Het khai bao ---------------------------------------------------
 
 //myVar = setTimeout(function(){alert("Hello")},3000);
@@ -101,9 +109,9 @@ function resetTimeoutPlayer(socket){
 				//disconnect client
 				console.log("disconnect");
 				socket.disconnect();
-			},120000);
+			},20000);
 
-			console.log("Set timout");
+			//console.log("Set timout");
 			break;
 		}
 
@@ -126,7 +134,11 @@ function deleteClient(socket){
 /////////////// Out your Room  ////////////////////////////////////////
 function outRoom(socket){
 		console.log("OUT ROOM")
-		socket.roomStatus = false;
+		//socket.roomStatus = null;
+		//console.log("Room Status", socket.roomStatus);
+		if(countUser[socket.room] == 1)
+			mPlayerInRoom[socket.room].length = 0;
+
 		if(countUser[socket.room] >= 1){
 			
 			countUser[socket.room] --;
@@ -171,7 +183,9 @@ function outRoom(socket){
 
 /////////////////// Return room from gamelayer /////////////////////////////////
 function returnRoom(socket){
-	socket.running = false;
+	console.log("RETURN ROOM")
+	//socket.running = null;
+	//socket.running = false;
 	//Send number - truong hop deadlock khong gui duoc number khi player disconnect
 	//so player gui len = so player -1 va 1 trong so do khong phai bi disconnect
 	//So player gui len trong 1 turn: (countPosition/3)/mTurn va countPosition%3=0
@@ -243,11 +257,14 @@ function resetValues(socket){
 	mCount[socket.room] = 0;
 	mRoomstatus[socket.room] = false;
 	io.sockets.emit("status", mRoomstatus);
+	mPlayerInRoom[socket.room].length = 0;
 }
 
 
 ///////////////////////// Receiver request from client //////////////////
 io.sockets.on('connection', function (socket) {
+
+	//console.log('SOCKET', socket);
 	//Add client to array
 	mAllClients.push(socket);
 	
@@ -304,6 +321,13 @@ io.sockets.on('connection', function (socket) {
 		socket.join(data.room);
 
 		socket.roomStatus = true;
+		socket.isRunning = false;
+		//add player into room array
+		mPlayerInRoom[data.room].inject(socket);
+		console.log("LENGTH: ", mPlayerInRoom[socket.room].length);
+		//console.log("SOCKET: ", );mPlayerInRoom[socket.room][0]
+
+		console.log("Room Status", socket.roomStatus);
 		//Send list user init
 		if(listUser[data.room].length != 0){
 			socket.emit("init", listUser[data.room]);
@@ -353,8 +377,24 @@ io.sockets.on('connection', function (socket) {
 			
 			io.sockets.in(socket.room).emit("randomNumber",  number);
 			mRoomstatus[socket.room] = true;
-			socket.running = true;
-			socket.roomStatus = false;
+
+			for(var i= 0; i< mPlayerInRoom[socket.room].length; i++){
+				mPlayerInRoom[socket.room][i].roomStatus = false;
+				mPlayerInRoom[socket.room][i].isRunning = true;
+
+			}
+			// for(var i= 0; i< socket.length; i++){
+			// 	console.log("Socket in Room: ", i);
+			// 	if(socket[i].room == socket.room){
+
+			// 		socket[i].running = true;
+			// 		socket[i].roomStatus = false;
+			// 		console.log("Socket in Room: ", i);
+			// 	}
+
+			// }
+			
+			console.log("Room Status", socket.roomStatus);
 
 			io.sockets.emit('countuser', countUser);
 			io.sockets.emit("status", mRoomstatus);
@@ -442,17 +482,37 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
     	console.log('disconnect socket');
-	    deleteClient(socket);
+    	//Khong the delete user - xem xet chuyen tao connection khi create user
+    	//- Moi user la 1 connection
+	    //deleteClient(socket);
 
-    	if(socket.roomStatus){
-    		//outroom
-			outRoom(socket);
-    	}
+	    if(!mPlayerInRoom[socket.room])
+	    	return;
 
-    	if(socket.running){
-			//Return room
-			returnRoom(socket);
-    	}
+	    for(var i= 0; i< mPlayerInRoom[socket.room].length; i++){
+
+	    		if(mPlayerInRoom[socket.room][i].id = socket.id){
+
+	    			//Neu dang trong room thi out room
+	    			if(mPlayerInRoom[socket.room][i].roomStatus){
+	    				console.log("OUT : ", i);
+	    				//Reset
+	    				//mPlayerInRoom[socket.room][i].roomStatus = false;
+	    				outRoom(socket);
+	    				
+	    			}
+	    			else
+	    				if(mPlayerInRoom[socket.room][i].isRunning){
+	    					console.log("OUT : ", i);
+	    					//Reset
+	    					//mPlayerInRoom[socket.room][i].isRunning = false;
+	    					returnRoom(socket);
+	    					
+	    				}
+
+	    			break;			
+	    		}
+		}
 
     });
 });

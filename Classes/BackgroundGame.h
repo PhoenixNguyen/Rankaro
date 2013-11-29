@@ -19,8 +19,8 @@ public:
   BackgroundGame(void);
   ~BackgroundGame(void);
 
-  static BackgroundGame* create(cocos2d::Layer* pLayer);
-  bool init(cocos2d::Layer* pLayer);
+  static BackgroundGame* create(const char* pName,cocos2d::Layer* pLayer);
+  bool init(const char* pName, cocos2d::Layer* pLayer);
 
 
 };

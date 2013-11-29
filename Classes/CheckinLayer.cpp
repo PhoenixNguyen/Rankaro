@@ -54,7 +54,7 @@ bool CheckinLayer::init()
   //Connect server
   mConnect = new ConnectionLayer();
 
-  addChild(BackgroundGame::create(this), 1);
+  addChild(BackgroundGame::create("background.jpg", this), 1);
 
   mEditBox = EditBox::create(Size(300, 50), Scale9Sprite::create("input/Input.png"));
   mEditBox->setPosition(Point(WIDTH/2, HEIGHT/3));

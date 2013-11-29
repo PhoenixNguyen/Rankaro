@@ -61,7 +61,7 @@ bool RoomLayer::init()
   
   mUser = 0;
   setMyself(true);
-  addChild(BackgroundGame::create(this), 1);
+  addChild(BackgroundGame::create("room.jpg", this), 1);
 
   /////////////////// Greetings /////////////////////////////////////////////////////////////////////////
   String* room = String::createWithFormat("Waiting for more players - Room 0%d", CheckinLayer::mConnect->getRoom()+1);

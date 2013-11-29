@@ -19,11 +19,12 @@ BackgroundGame::~BackgroundGame(void)
 {
 }
 
-BackgroundGame* BackgroundGame::create(Layer* pLayer)
+BackgroundGame* BackgroundGame::create(const char* pName, Layer* pLayer)
 {
   BackgroundGame* pBackgroundGame = new BackgroundGame();
-  if(pBackgroundGame && pBackgroundGame->init(pLayer))
+  if(pBackgroundGame && pBackgroundGame->init(pName, pLayer))
   {
+    pBackgroundGame->setPosition(Point(WIDTH/2, HEIGHT/2));
     pBackgroundGame->autorelease();
     return pBackgroundGame;
 
@@ -34,13 +35,14 @@ BackgroundGame* BackgroundGame::create(Layer* pLayer)
     return NULL;
   }
 }
-bool BackgroundGame::init(Layer* pLayer)
+bool BackgroundGame::init(const char* pName, Layer* pLayer)
 {
-  if(!CCSprite::initWithFile("background.jpg"))
+  if(!Sprite::initWithFile(pName))
   {
+
     return false;
   }
-
+  
   return true;
 
 }

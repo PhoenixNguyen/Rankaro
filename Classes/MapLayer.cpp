@@ -36,7 +36,7 @@ bool MapLayer::init(MapScene* pMapScene)
   }
 
   mMapScene = pMapScene;
-  addChild(BackgroundGame::create(this), 1);
+  addChild(BackgroundGame::create("numbers.jpg", this), 1);
 
   addChild(MenuStart::create(this), 2);
 
