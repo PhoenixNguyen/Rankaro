@@ -234,96 +234,29 @@ void GameLayer::createRect()
 
 void GameLayer::viewScore()
 {
-  //Sort with score
-  //setSTT();
   String* player0 = NULL;
-  String* player1 = NULL;
-  String* player2 = NULL;
-  String* player3 = NULL;
 
   for(int i= 0; i< 4; i++)
   {
     if(RoomLayer::mPlayerList[i] == NULL)
       continue;
 
-    //Get MySelf
-    switch(RoomLayer::mPlayerList[i]->getSTT())
-    {
- 
-    case 0:
       player0 = String::createWithFormat("%s :: %d", RoomLayer::mPlayerList[i]->getName().c_str(), 
                                                             RoomLayer::mPlayerList[i]->getScore());
       //CCLog("SCORE: %s", player->getCString());
       //LabelBMFont* label0;
-      mLayer->removeChild(mLabel[0]);
-      mLabel[0] = LabelBMFont::create(player0->getCString(), "fonts/Arial.fnt");
+      mLayer->removeChild(mLabel[i]);
+      mLabel[i] = LabelBMFont::create(player0->getCString(), "fonts/Arial.fnt");
       if(RoomLayer::mPlayerList[i]->getDisconnect())
-        mLabel[0]->setOpacity(50);
+        mLabel[i]->setOpacity(50);
 
-	    mLabel[0]->setScale(0.5);
+	    mLabel[i]->setScale(0.5);
 
-      mLabel[0]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 +50));
+      mLabel[i]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 +50 - 50*i));
 
-      mLayer->addChild(mLabel[0], 2);
-      mLabel[0]->runAction(ScaleTo::create(0.5, 1.0) );
+      mLayer->addChild(mLabel[i], 2);
+      mLabel[i]->runAction(ScaleTo::create(0.5, 1.0) );
 
-      break;
-
-    case 1:
-      player1 = String::createWithFormat("%s :: %d", RoomLayer::mPlayerList[i]->getName().c_str(), 
-                                                            RoomLayer::mPlayerList[i]->getScore());
-      //CCLog("SCORE: %s", player->getCString());
-      //LabelBMFont* label1;
-      mLayer->removeChild(mLabel[1]);
-      mLabel[1] = LabelBMFont::create(player1->getCString(), "fonts/Arial.fnt");
-      if(RoomLayer::mPlayerList[i]->getDisconnect())
-        mLabel[1]->setOpacity(50);
-
-	    mLabel[1]->setScale(0.5);
-
-      mLabel[1]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4));
-
-      mLayer->addChild(mLabel[1], 2);
-      mLabel[1]->runAction(ScaleTo::create(0.5, 1.0) );
-
-      break;
-    case 2:
-      player2 = String::createWithFormat("%s :: %d", RoomLayer::mPlayerList[i]->getName().c_str(), 
-                                                            RoomLayer::mPlayerList[i]->getScore());
-      //CCLog("SCORE: %s", player->getCString());
-      //LabelBMFont* label2;
-      mLayer->removeChild(mLabel[2]);
-      mLabel[2] = LabelBMFont::create(player2->getCString(), "fonts/Arial.fnt");
-      if(RoomLayer::mPlayerList[i]->getDisconnect())
-        mLabel[2]->setOpacity(50);
-
-	    mLabel[2]->setScale(0.5);
-
-      mLabel[2]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 50));
-
-      mLayer->addChild(mLabel[2], 2);
-      mLabel[2]->runAction(ScaleTo::create(0.5, 1.0) );
-
-      break;
-    case 3:
-      player3 = String::createWithFormat("%s :: %d", RoomLayer::mPlayerList[i]->getName().c_str(), 
-                                                            RoomLayer::mPlayerList[i]->getScore());
-      //CCLog("SCORE: %s", player->getCString());
-      //LabelBMFont* label3;
-      mLayer->removeChild(mLabel[3]);
-      mLabel[3] = LabelBMFont::create(player3->getCString(), "fonts/Arial.fnt");
-      if(RoomLayer::mPlayerList[i]->getDisconnect())
-        mLabel[3]->setOpacity(50);
-
-	    mLabel[3]->setScale(0.5);
-
-      mLabel[3]->setPosition(Point(3*WIDTH/4, 3*HEIGHT/4 - 100));
-
-      mLayer->addChild(mLabel[3], 2);
-      mLabel[3]->runAction(ScaleTo::create(0.5, 1.0) );
-
-      break;
-    }
   }
 }
 
@@ -350,30 +283,26 @@ void GameLayer::setSTT()
   int tmp1 = 0;
   for(int i= 0; i < 3 ; i++)
   {
-    //Neu tong so thang player co san - 1= tmp1
-    if(tmp1 == (RoomLayer::mUser -1))
-      return;
-
+   
     if(RoomLayer::mPlayerList[i] == NULL)
       continue;
     tmp1++;
-
+//
     int max = i;
     for(int j = i+1; j < 4; j++)
     {
       if(RoomLayer::mPlayerList[j] != NULL && RoomLayer::mPlayerList[j]->getScore() > RoomLayer::mPlayerList[max]->getScore())
       {
+        //Diem lon nhat thi set = i
+        RoomLayer::mPlayerList[j]->setSTT(i);
+        RoomLayer::mPlayerList[i]->setSTT(j);
         max = j;
       }
+      else
+        if(RoomLayer::mPlayerList[j] != NULL && RoomLayer::mPlayerList[j]->getScore() <= RoomLayer::mPlayerList[max]->getScore())
+          RoomLayer::mPlayerList[j]->setSTT(j);
     }
       
-     RoomLayer::mPlayerList[max]->setSTT(i);
-     RoomLayer::mPlayerList[i]->setSTT(max);
-     CCLog("Name %s", RoomLayer::mPlayerList[max]->getName().c_str());
-     CCLog("Score %d", RoomLayer::mPlayerList[max]->getScore());
-     CCLog("STT %d", RoomLayer::mPlayerList[max]->getSTT());
-     if(i == max)
-       RoomLayer::mPlayerList[i+1]->setSTT(i+1);
   }
 
 }
@@ -381,6 +310,9 @@ void GameLayer::setSTT()
 void GameLayer::setEndGame()
 {
   SoundLoader::playEffect("music/end_game.wav");
+
+  //Sort with score
+  setSTT();
 
   for(int i= 0; i < 4 ; i++)
   {
@@ -463,30 +395,12 @@ void GameLayer::switchLayer(Object* pSender)
   
   //delete - khong co y nghia
   CheckinLayer::mConnect->setRoomStatus(false);
-  /*for (int i = 0; i < MAX_ROOM; i++){
-		CheckinLayer::mConnect->mListStatus[i] = false;
-  }*/
-
+  
   //Set room myself
   RoomDisplayLayer::setRoomStatus(false);
 
   RoomLayer::mUser = 0;
-  //delete[] RoomLayer::mPlayerList;
-  //free
   
-
-  //-------------------------------------------------------------Xem xet dua sang man hinh menu
-  //CheckinLayer::mConnect = NULL;
-  //delete CheckinLayer::mConnect;
-
-  //Switch to main
-  /*CCScene* scene = CCScene::create();
-	MapScene* newconnect = MapScene::create();
-
-	scene->addChild(newconnect);
-	CCDirector::sharedDirector()->replaceScene(scene);*/
-  //-------------------------------------------------------------------------------------------
-
   //Switch to RoomLayer
   //Replace Scene
   CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
