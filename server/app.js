@@ -451,7 +451,7 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.in(socket.room).emit("endGame", end);
 
 			//RESET
-			resetValues(socket);
+			//resetValues(socket);
 		}
 	});
 	//Receiver disconnected command
