@@ -16,3 +16,10 @@ proj.win32/HelloCpp.sdf
 proj.win32/HelloCpp.sdf
 proj.win32/HelloCpp.v11.suo
 proj.win32/HelloCpp.opensdf
+
+proj.ios/RankaroGame.xcodeproj/xcuserdata/*
+proj.ios/RankaroGame.xcodeproj/project.xcworkspace/xcuserdata/*
+proj.win32/RankaroGame.sdf
+proj.win32/RankaroGame.sdf
+proj.win32/RankaroGame.v11.suo
+proj.win32/RankaroGame.opensdf
