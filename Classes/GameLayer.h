@@ -16,7 +16,6 @@
 #include "Player.h"
 #include "RoomLayer.h"
 #include "MapScene.h"
-#include "proj.win32\main.h"
 #include "SoundLoader.h"
 
 class GameLayer : public cocos2d::Layer
@@ -61,7 +60,7 @@ public:
   static int getNumber();
   static void setNumber(int);
 
-  static void setPositionPlayer(std::string pID, std::string pNumber, std::string pRow, std::string pColumn);
+  static void setPositionPlayer(std::string pID, int pNumber, int pRow, int pColumn);
 
   //Set STT
   static void setSTT();

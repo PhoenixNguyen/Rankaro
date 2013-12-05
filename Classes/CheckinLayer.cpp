@@ -17,8 +17,8 @@ ConnectionLayer* CheckinLayer::mConnect = NULL;
 
 CheckinLayer::~CheckinLayer(void)
 {
-  if(mConnect != NULL)
-    CheckinLayer::mConnect->release();
+  /*if(mConnect != NULL)
+    CheckinLayer::mConnect->release();*/
 
 }
 
@@ -55,6 +55,14 @@ bool CheckinLayer::init()
   mConnect = new ConnectionLayer();
 
   addChild(BackgroundGame::create("background.jpg", this), 1);
+
+  mTextField = TextFieldTTF::textFieldWithPlaceHolder("<click here for input>",
+        "Thonburi",
+        36);
+	
+  mTextField->setPosition(Point(WIDTH/2, HEIGHT/2));
+	addChild(mTextField, 2);
+	CCLog("TEXT FIELD: %s", mTextField->getString());
 
   mEditBox = EditBox::create(Size(300, 50), Scale9Sprite::create("input/Input.png"));
   mEditBox->setPosition(Point(WIDTH/2, HEIGHT/3));
@@ -97,11 +105,15 @@ bool CheckinLayer::init()
 
 void CheckinLayer::sendName(Object* pSender)
 {
+  if(mConnect == NULL)
+	  mConnect = new ConnectionLayer();
+  if(mConnect == NULL)
+	  return;
   SoundLoader::playEffect("music/click.wav");
 
   const char* name = mEditBox->getText();
   CCLog("%s", name);
-  if(strcmp(name, "") == 0 || strlen(name) > 5)
+  if(strcmp(name, "") == 0 || strlen(name) > 6)
     return;
 
   mSend->setEnabled(false);
@@ -133,3 +145,4 @@ void CheckinLayer::switchLayer(cocos2d::Object* psender)
     
     CCDirector::sharedDirector()->replaceScene(transition);
 }
+

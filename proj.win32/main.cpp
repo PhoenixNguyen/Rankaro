@@ -15,7 +15,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     // create the application instance
     AppDelegate app;
     EGLView* eglView = EGLView::getInstance();
-    eglView->setViewName("RankaroGame");
+    eglView->setViewName("Rankaro Puzzle!!!");
     eglView->setFrameSize(800, 480);
     return Application::getInstance()->run();
 }

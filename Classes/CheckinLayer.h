@@ -11,7 +11,6 @@
 
 #include "cocos2d.h"
 #include "BackgroundGame.h"
-#include "GUI\CCEditBox\CCEditBox.h"
 #include "RoomLayer.h"
 #include "Config.h"
 #include "MapLayer.h"
@@ -24,6 +23,7 @@ class CheckinLayer : public cocos2d::Layer
 {
   cocos2d::extension::EditBox* mEditBox;
   cocos2d::MenuItem* mSend;
+  cocos2d::TextFieldTTF* mTextField;
 public:
   ~CheckinLayer(void);
 
@@ -39,6 +39,8 @@ public:
   //switch Layer
   void switchLayer(cocos2d::Object* psender);
 
+
+	
 };
 
 #endif

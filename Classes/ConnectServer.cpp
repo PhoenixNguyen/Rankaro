@@ -6,7 +6,7 @@
 //
 //
 
-
+#include <algorithm>
 #include "ConnectServer.h"
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -38,7 +38,7 @@ ConnectionLayer::~ConnectionLayer(void)
 void ConnectionLayer::newConnect(cocos2d::Object *sender)
 {
 	//create a client by using this static method, url does not need to contain the protocol
-	mClient = SocketIO::connect(*this, "http://localhost:3000"); //"ws://channon.us:3000"http://localhost:3000
+	mClient = SocketIO::connect(*this, "http://socketiodemo.nodejitsu.com:80"); //"ws://channon.us:3000"http://localhost:3000
 	//you may set a tag for the client for reference in callbacks
 	mClient->setTag("Test Client");
 
@@ -114,7 +114,7 @@ void ConnectionLayer::sendPosition(std::string pID, std::string pNumber, std::st
 {
 	//Send username to server
 	if(mClient != NULL) 
-    mClient->emit("position","[{\"id\":\""+pID+"\",\"number\":\""+pNumber+"\",\"row\":\""+pRow+"\",\"column\":\""+pCoLumn+"\"}]");
+    mClient->emit("position","[{\"id\":\""+pID+"\",\"number\":"+pNumber+",\"row\":"+pRow+",\"column\":"+pCoLumn+"}]");
 		
 
 }
@@ -244,9 +244,9 @@ void ConnectionLayer::receiverPosition(SIOClient *client, const std::string& dat
   if(!data.empty())
   {
     std::string id;
-    std::string number;
-    std::string row;
-    std::string column;
+    int number;
+    int row;
+    int column;
 
     exportLastData(data, id, number, row, column);
     GameLayer::setPositionPlayer(id, number, row, column);
@@ -497,8 +497,8 @@ void ConnectionLayer::exportLastData(std::string pData, std::string& pReturn)
     pReturn = data.GetString();
 }
 
-void ConnectionLayer::exportLastData(std::string pData, std::string& pID, std::string& pNumber, 
-                                     std::string& pRow, std::string& pColumn)
+void ConnectionLayer::exportLastData(std::string pData, std::string& pID, int& pNumber, 
+                                     int& pRow, int& pColumn)
 {
 	Document doc;
 	//pData = " {\"name\":\"username\",\"args\":[{\"name\":\"Duy Phuong\",\"id\":\"nOJqkJ2_c75tgP6Zlvyh\"}]} " ;
@@ -511,16 +511,16 @@ void ConnectionLayer::exportLastData(std::string pData, std::string& pID, std::s
 	Value& id = doc["args"][j]["id"];
 	log("LAST THE ID %s", id.GetString() );
 	Value& number = doc["args"][j]["number"];
-	log("LAST THE NUMBER %s", id.GetString() );
+	log("LAST THE NUMBER %d", number.GetInt() );
   Value& row = doc["args"][j]["row"];
-	log("LAST THE Row %s", row.GetString() );
+	log("LAST THE Row %d", row.GetInt() );
 	Value& column = doc["args"][j]["column"];
-	log("LAST THE column %s", column.GetString() );
+	log("LAST THE column %d", column.GetInt() );
 
   pID = id.GetString();
-  pNumber = number.GetString();
-  pRow = row.GetString();
-  pColumn = column.GetString();
+  pNumber = number.GetInt();
+  pRow = row.GetInt();
+  pColumn = column.GetInt();
 }
 
 void ConnectionLayer::exportListData(std::string pData, bool* &pReturn)

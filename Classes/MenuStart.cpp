@@ -48,7 +48,7 @@ bool MenuStart::init(Object* pTarget)
                                         this,
                                         menu_selector(MenuStart::startGame));
     
-	startGame->setPosition(Point(WIDTH/2, HEIGHT-100));
+  startGame->setPosition(Point(WIDTH/2, HEIGHT - HEIGHT/5));
 
   //Help
   MenuItemImage *help = MenuItemImage::create(
@@ -57,7 +57,7 @@ bool MenuStart::init(Object* pTarget)
                                         this,
                                         menu_selector(MenuStart::help));
     
-	help->setPosition(Point(WIDTH/2, HEIGHT-200));
+	help->setPosition(Point(WIDTH/2, HEIGHT - HEIGHT/5 - 100));
 
   //Contact
   MenuItemImage *contact = MenuItemImage::create(
@@ -66,7 +66,7 @@ bool MenuStart::init(Object* pTarget)
                                         this,
                                         menu_selector(MenuStart::contact));
     
-	contact->setPosition(Point(WIDTH/2, HEIGHT-300));
+	contact->setPosition(Point(WIDTH/2, HEIGHT - HEIGHT/5 - 200));
 
   //Quit
   MenuItemImage *quit = MenuItemImage::create(
@@ -75,7 +75,7 @@ bool MenuStart::init(Object* pTarget)
                                         this,
                                         menu_selector(MenuStart::exitGame));
     
-	quit->setPosition(Point(WIDTH/2, HEIGHT-400));
+	quit->setPosition(Point(WIDTH/2, HEIGHT - HEIGHT/5 -300));
 
     // create menu, it's an autorelease object
     Menu* menu = Menu::create(startGame, help, contact, quit, NULL);

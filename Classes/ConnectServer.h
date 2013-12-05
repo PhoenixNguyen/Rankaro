@@ -115,7 +115,7 @@ public:
   void exportLastData(std::string pData, std::string& pReturn);
 
   //return last data - position
-  void exportLastData(std::string pData, std::string& pID, std::string& pNumber, std::string& pRow, std::string& pColumn);
+  void exportLastData(std::string pData, std::string& pID, int& pNumber, int& pRow, int& pColumn);
 
   //return list status room
   void exportListData(std::string pData, bool* &pReturn);

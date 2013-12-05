@@ -10,9 +10,9 @@ proj.android/obj/local/*
 proj.android/assets/*
 proj.android/gen/*
 proj.android/libs/armeabi/*
-proj.ios/RankaroGame.xcodeproj/xcuserdata/*
-proj.ios/RankaroGame.xcodeproj/project.xcworkspace/xcuserdata/*
+proj.ios/HelloCpp.xcodeproj/xcuserdata/*
+proj.ios/HelloCpp.xcodeproj/project.xcworkspace/xcuserdata/*
 proj.win32/HelloCpp.sdf
-proj.win32/RankaroGame.sdf
-proj.win32/RankaroGame.v11.suo
-proj.win32/RankaroGame.opensdf
+proj.win32/HelloCpp.sdf
+proj.win32/HelloCpp.v11.suo
+proj.win32/HelloCpp.opensdf

@@ -211,7 +211,7 @@ void RoomDisplayLayer::addNumberInRoom(int* pNumber)
 
     //Show
     mLayer->removeChild(mLabel2[i]);
-    mLabel2[i] = CCLabelTTF::create(std::to_string(pNumber[i]).c_str(), "Helvetica", 12, 
+	mLabel2[i] = CCLabelTTF::create(String::createWithFormat("%d",pNumber[i])->getCString(), "Helvetica", 12, 
                                       CCSizeMake(245, 32), kCCTextAlignmentCenter);
     mLabel2[i]->setColor(ccc3(255,192,203));
     mLabel2[i]->setFontSize(35);

@@ -1,4 +1,4 @@
-APPNAME="RankaroGame"
+APPNAME="RankaroBuild"
 
 # options
 

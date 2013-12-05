@@ -1,4 +1,4 @@
-EXECUTABLE = RankaroGame
+EXECUTABLE = RankaroBuild
 
 INCLUDES = -I.. -I../Classes
 

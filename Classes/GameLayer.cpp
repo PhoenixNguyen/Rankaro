@@ -61,7 +61,7 @@ bool GameLayer::init()
   addChild(BackgroundGame::create("fight.jpg", this), 1);
 
   mTileMap = TMXTiledMap::create("tilemap/map.tmx");
-  mTileMap->setPosition(48, 24);
+  mTileMap->setPosition(TILE_X, TILE_Y/2);
 
   mTileLayer = mTileMap->getLayer("Layer1");
   this->addChild(mTileMap, 2);
@@ -143,7 +143,9 @@ void GameLayer::setPositionNumber(int pNumber, int pRow, int pColumn)
 
       //Send MyPosition
       CheckinLayer::mConnect->sendPosition(RoomLayer::mPlayerList[i]->getID(), 
-        std::to_string(pNumber), std::to_string(pRow), std::to_string(pColumn));
+		  String::createWithFormat("%d", pNumber)->getCString(), 
+		  String::createWithFormat("%d", pRow)->getCString(), 
+		  String::createWithFormat("%d", pColumn)->getCString());
 
       //Send End game
       CCLog("mTurn: %d", mTurn);
@@ -260,15 +262,14 @@ void GameLayer::viewScore()
   }
 }
 
-void GameLayer::setPositionPlayer(std::string pID, std::string pNumber, std::string pRow, std::string pColumn)
+void GameLayer::setPositionPlayer(std::string pID, int pNumber, int pRow, int pColumn)
 {
   for(int i= 0; i< 4; i++)
   {
     if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getID() == pID)
-    {
-      
-      RoomLayer::mPlayerList[i]->setPlayerScoreArray(std::stoi(pNumber), std::stoi(pRow), std::stoi(pColumn));
-      RoomLayer::mPlayerList[i]->setScore(mCal->detection(RoomLayer::mPlayerList[i]->getPlayerScoreArray()));
+    {	  
+		RoomLayer::mPlayerList[i]->setPlayerScoreArray(pNumber, pRow, pColumn);
+		RoomLayer::mPlayerList[i]->setScore(mCal->detection(RoomLayer::mPlayerList[i]->getPlayerScoreArray()));
 
       viewScore();
       //thoat
@@ -414,13 +415,15 @@ void GameLayer::setName()
   for(int i= 0; i < 4 ; i++)
   {
     if(RoomLayer::mPlayerList[i] != NULL && RoomLayer::mPlayerList[i]->getMySelf()){
-      String* status;
-      status = String::createWithFormat(RoomLayer::mPlayerList[i]->getName().c_str());
+      /*String* status;
+      status = String::createWithFormat(RoomLayer::mPlayerList[i]->getName().c_str());*/
+		char status[128] = {0};
+	  sprintf(status, "%s", RoomLayer::mPlayerList[i]->getName().c_str());
 
       //CCLog("SCORE: %s", player->getCString());
       LabelBMFont* label = NULL;
       //mLayer->removeChild(label);
-      label = LabelBMFont::create(status->getCString(), "fonts/Arial.fnt");
+      label = LabelBMFont::create(status, "fonts/Arial.fnt");
 	    label->setScale(0.5);
 
       label->setPosition(Point(TILE_X*(MAP_X+ 5.5), TILE_Y + TILE_Y*2));
