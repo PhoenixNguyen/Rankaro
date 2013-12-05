@@ -14,7 +14,7 @@ USING_NS_CC_EXT;
 
 ConnectionLayer* CheckinLayer::mConnect = NULL;
 
-
+CheckinLayer::CheckinLayer(){}
 CheckinLayer::~CheckinLayer(void)
 {
   /*if(mConnect != NULL)
@@ -69,9 +69,11 @@ bool CheckinLayer::init()
   mEditBox->setFontColor(ccRED);
   mEditBox->setPlaceHolder("(1-5 character)");
   mEditBox->setPlaceholderFontSize(5);
-  mEditBox->setMaxLength(5);
-  //mEditBox->setReturnType(1);
+  mEditBox->setMaxLength(7);
+  //mEditBox->setReturnType(kKeyboardReturnTypeDone);
   //mEditBox->setDelegate(this);
+	mEditBox->setReturnType(EditBox::KeyboardReturnType::DONE);
+	mEditBox->setDelegate(this);
   addChild(mEditBox, 2);
 
   mSend = MenuItemImage::create("input/send.png",
@@ -126,7 +128,7 @@ void CheckinLayer::sendName(Object* pSender)
   MapScene::mConnect->lastUsername(MapScene::mConnect->mClient, data);*/
   //Replace Scene
   CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
-      0.0, RoomDisplayLayer::scene()
+      2.0, RoomDisplayLayer::scene()
     );
     
     CCDirector::sharedDirector()->replaceScene(transition);
@@ -146,3 +148,24 @@ void CheckinLayer::switchLayer(cocos2d::Object* psender)
     CCDirector::sharedDirector()->replaceScene(transition);
 }
 
+
+void CheckinLayer::editBoxEditingDidBegin(cocos2d::extension::EditBox* editBox)
+{
+    log("editBox %p DidBegin !", editBox);
+}
+
+void CheckinLayer::editBoxEditingDidEnd(cocos2d::extension::EditBox* editBox)
+{
+    log("editBox %p DidEnd !", editBox);
+}
+
+void CheckinLayer::editBoxTextChanged(cocos2d::extension::EditBox* editBox, const std::string& text)
+{
+    log("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+}
+
+void CheckinLayer::editBoxReturn(EditBox* editBox)
+{
+    log("editBox %p was returned !",editBox);
+    
+}
