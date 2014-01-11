@@ -137,7 +137,8 @@ void CheckinLayer::sendName(Object* pSender)
   MapScene::mConnect->lastUsername(MapScene::mConnect->mClient, data);*/
   //Replace Scene
   CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
-      1.5, RoomDisplayLayer::scene()
+
+      2.0, RoomDisplayLayer::scene()
     );
   CCDirector::sharedDirector()->replaceScene(transition);
 }

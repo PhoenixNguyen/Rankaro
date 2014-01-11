@@ -91,7 +91,8 @@ void MenuStart::startGame(Object* pSender)
   SoundLoader::playEffect("music/click.wav");
 
     CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
-      0.0, CheckinLayer::scene()
+
+      2.0, CheckinLayer::scene()
     );
     
     CCDirector::sharedDirector()->replaceScene(transition);
