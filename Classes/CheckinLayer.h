@@ -17,16 +17,17 @@
 #include "ConnectServer.h"
 #include "RoomDisplayLayer.h"
 #include "SoundLoader.h"
+#include "cocos-ext.h"
 
 class ConnectionLayer;
-class CheckinLayer : public cocos2d::Layer
+class CheckinLayer : public cocos2d::Layer , public cocos2d::extension::EditBoxDelegate
 {
   cocos2d::extension::EditBox* mEditBox;
   cocos2d::MenuItem* mSend;
   cocos2d::TextFieldTTF* mTextField;
 public:
   ~CheckinLayer(void);
-
+	CheckinLayer();
   static cocos2d::Scene* scene();
   static CheckinLayer* create();
   virtual bool init();
@@ -38,8 +39,12 @@ public:
 
   //switch Layer
   void switchLayer(cocos2d::Object* psender);
+	void addSendMenu();
 
-
+	virtual void editBoxEditingDidBegin(cocos2d::extension::EditBox* editBox);
+  virtual void editBoxEditingDidEnd(cocos2d::extension::EditBox* editBox);
+  virtual void editBoxTextChanged(cocos2d::extension::EditBox* editBox, const std::string& text);
+  virtual void editBoxReturn(cocos2d::extension::EditBox* editBox);
 	
 };
 

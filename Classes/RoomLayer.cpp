@@ -245,10 +245,13 @@ void RoomLayer::roomFull()
 
 void RoomLayer::startGame()
 {
-  CCTransitionCrossFade* transition = CCTransitionCrossFade::create(1,
+  /*CCTransitionCrossFade* transition = CCTransitionCrossFade::create(1,
                       GameLayer::scene());
 
   CCDirector::sharedDirector()->replaceScene(transition);
+*/
+	CCDirector::sharedDirector()->replaceScene(
+		CCTransitionZoomFlipX::create(0.5, GameLayer::scene() ));
 
 }
 

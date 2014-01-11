@@ -14,7 +14,7 @@ USING_NS_CC_EXT;
 
 ConnectionLayer* CheckinLayer::mConnect = NULL;
 
-
+CheckinLayer::CheckinLayer(){}
 CheckinLayer::~CheckinLayer(void)
 {
   /*if(mConnect != NULL)
@@ -64,17 +64,33 @@ bool CheckinLayer::init()
 	addChild(mTextField, 2);
 	CCLog("TEXT FIELD: %s", mTextField->getString());
 
-  mEditBox = EditBox::create(Size(300, 50), Scale9Sprite::create("input/Input.png"));
+	mEditBox = EditBox::create(Size(300, 50), Scale9Sprite::create("input/Input.png"));
   mEditBox->setPosition(Point(WIDTH/2, HEIGHT/3));
   mEditBox->setFontColor(ccRED);
-  mEditBox->setPlaceHolder("(1-5 character)");
+  mEditBox->setPlaceHolder("(1-6 character)");
   mEditBox->setPlaceholderFontSize(5);
-  mEditBox->setMaxLength(5);
-  //mEditBox->setReturnType(1);
+  mEditBox->setMaxLength(7);
+  //mEditBox->setReturnType(kKeyboardReturnTypeDone);
   //mEditBox->setDelegate(this);
+	mEditBox->setReturnType(EditBox::KeyboardReturnType::DONE);
+	mEditBox->setDelegate(this);
   addChild(mEditBox, 2);
+  
+	this->runAction(CCSequence::create(
+		CCDelayTime::create(2.5f),
+		CCCallFunc::create(this,
+		callfunc_selector(CheckinLayer::addSendMenu)),
+		NULL));
+  
+  return true;
 
-  mSend = MenuItemImage::create("input/send.png",
+}
+
+void CheckinLayer::addSendMenu()
+{
+	
+	//////////////////////
+	mSend = MenuItemImage::create("input/send.png",
                                          "input/sent.png",
                                          "input/sent.png",
                                          this,
@@ -94,27 +110,22 @@ bool CheckinLayer::init()
                               origin.y + closeItem->getContentSize().height/2));
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-  Menu* menu = Menu::create(mSend, closeItem, NULL);
+	Menu* menu = Menu::create(mSend, closeItem, NULL);
   menu->setPosition(CCPointZero);
   addChild(menu, 2);
-  
-  return true;
 
 }
-
 void CheckinLayer::sendName(Object* pSender)
 {
-  if(mConnect == NULL)
-	  mConnect = new ConnectionLayer();
-  if(mConnect == NULL)
-	  return;
   SoundLoader::playEffect("music/click.wav");
 
   const char* name = mEditBox->getText();
   CCLog("%s", name);
-  if(strcmp(name, "") == 0 || strlen(name) > 6)
-    return;
+  if(strcmp(name, "") == 0 ){
+    name = strdup("Demo!");
+	}
+	if(strlen(name) > 7)
+		return;
 
   mSend->setEnabled(false);
   
@@ -126,10 +137,9 @@ void CheckinLayer::sendName(Object* pSender)
   MapScene::mConnect->lastUsername(MapScene::mConnect->mClient, data);*/
   //Replace Scene
   CCTransitionCrossFade* transition = CCTransitionCrossFade::create(
-      0.0, RoomDisplayLayer::scene()
+      1.5, RoomDisplayLayer::scene()
     );
-    
-    CCDirector::sharedDirector()->replaceScene(transition);
+  CCDirector::sharedDirector()->replaceScene(transition);
 }
 
 
@@ -146,3 +156,24 @@ void CheckinLayer::switchLayer(cocos2d::Object* psender)
     CCDirector::sharedDirector()->replaceScene(transition);
 }
 
+
+void CheckinLayer::editBoxEditingDidBegin(cocos2d::extension::EditBox* editBox)
+{
+    log("editBox %p DidBegin !", editBox);
+}
+
+void CheckinLayer::editBoxEditingDidEnd(cocos2d::extension::EditBox* editBox)
+{
+    log("editBox %p DidEnd !", editBox);
+}
+
+void CheckinLayer::editBoxTextChanged(cocos2d::extension::EditBox* editBox, const std::string& text)
+{
+    log("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+}
+
+void CheckinLayer::editBoxReturn(EditBox* editBox)
+{
+    log("editBox %p was returned !",editBox);
+    
+}

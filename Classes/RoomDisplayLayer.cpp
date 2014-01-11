@@ -216,7 +216,7 @@ void RoomDisplayLayer::addNumberInRoom(int* pNumber)
     mLabel2[i]->setColor(ccc3(255,192,203));
     mLabel2[i]->setFontSize(35);
     mLabel2[i]->setPosition(Point(column *WIDTH/4 - 90, row*HEIGHT/4));
-    mLayer->addChild( mLabel2[i], 2);
+    mLayer->addChild( mLabel2[i], 4);
 
     /*LabelBMFont* label;*/
     /*mLayer->removeChild(mLabel[i]);

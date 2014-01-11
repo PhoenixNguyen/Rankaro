@@ -38,7 +38,7 @@ ConnectionLayer::~ConnectionLayer(void)
 void ConnectionLayer::newConnect(cocos2d::Object *sender)
 {
 	//create a client by using this static method, url does not need to contain the protocol
-	mClient = SocketIO::connect(*this, "http://socketiodemo.nodejitsu.com:80"); //"ws://channon.us:3000"http://localhost:3000
+	mClient = SocketIO::connect(*this, "http://localhost:8080"); //"ws://channon.us:3000"http://localhost:3000 //http://socketiodemo.nodejitsu.com:80
 	//you may set a tag for the client for reference in callbacks
 	mClient->setTag("Test Client");
 
